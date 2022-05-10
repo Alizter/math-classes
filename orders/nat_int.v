@@ -112,7 +112,7 @@ Proof. rewrite commutativity. now apply le_iff_lt_plus_1. Qed.
 Section another_semiring.
   Context `{FullPseudoSemiRingOrder R2} `{PropHolds ((1 : R2) ≶ 0)} `{!SemiRing_Morphism (f : R → R2)}.
 
-  Instance: OrderPreserving f.
+  #[global] Instance: OrderPreserving f.
   Proof.
     repeat (split; try apply _).
     intros x y E. apply nat_int_le_plus in E. destruct E as [z E].

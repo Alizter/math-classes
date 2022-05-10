@@ -126,13 +126,13 @@ Add Ring StdQ : (rings.stdlib_ring_theory StdQ).
 
 Global Instance dy_equiv: Equiv Dyadic := λ x y, DtoStdQ x = DtoStdQ y.
 
-Instance: Setoid Dyadic.
+#[global] Instance: Setoid Dyadic.
 Proof. now apply (setoids.projected_setoid DtoStdQ). Qed.
 
-Instance: Proper ((=) ==> (=)) DtoStdQ.
+#[global] Instance: Proper ((=) ==> (=)) DtoStdQ.
 Proof. now repeat red. Qed.
 
-Instance: Injective DtoStdQ.
+#[global] Instance: Injective DtoStdQ.
 Proof. now repeat (split; try apply _). Qed.
 
 Global Instance: Ring Dyadic.
@@ -152,7 +152,7 @@ Proof.
   now rewrite E1, E2.
 Qed.
 
-Instance: SemiRing_Morphism DtoStdQ.
+#[global] Instance: SemiRing_Morphism DtoStdQ.
 Proof.
   repeat (split; try apply _).
      exact DtoQ_slow_preserves_plus.
@@ -161,7 +161,7 @@ Proof.
   exact DtoQ_slow_preserves_1.
 Qed.
 
-Instance: Setoid_Morphism dy_inject.
+#[global] Instance: Setoid_Morphism dy_inject.
 Proof.
   split; try apply _.
   intros x y E.
@@ -278,20 +278,20 @@ Qed.
 Global Instance dy_le: Le Dyadic := λ x y, DtoStdQ x ≤ DtoStdQ y.
 Global Instance dy_lt: Lt Dyadic := orders.dec_lt.
 
-Instance: Proper ((=) ==> (=) ==> iff) dy_le.
+#[global] Instance: Proper ((=) ==> (=) ==> iff) dy_le.
 Proof.
   intros [x1m x1e] [y1m y1e] E1 [x2m x2e] [y2m y2e] E2.
   unfold dy_le, equiv, dy_equiv, DtoQ_slow in *. simpl in *.
   now rewrite E1, E2.
 Qed.
 
-Instance: SemiRingOrder dy_le.
+#[global] Instance: SemiRingOrder dy_le.
 Proof. now apply (rings.projected_ring_order DtoStdQ). Qed.
 
-Instance: TotalRelation dy_le.
+#[global] Instance: TotalRelation dy_le.
 Proof. now apply (maps.projected_total_order DtoStdQ). Qed.
 
-Instance: OrderEmbedding DtoStdQ.
+#[global] Instance: OrderEmbedding DtoStdQ.
 Proof. now repeat (split; try apply _). Qed.
 
 Global Instance: ZeroProduct Dyadic.
@@ -423,7 +423,7 @@ Section embed_rationals.
   Notation DtoQ_slow' := (DtoQ_slow ZtoQ).
   Notation StdQtoQ := (rationals_to_rationals StdQ Q).
 
-  Instance: Params (@DtoQ_slow) 6 := {}.
+  #[global] Instance: Params (@DtoQ_slow) 6 := {}.
   Lemma DtoQ_slow_correct : DtoQ_slow' = StdQtoQ ∘ DtoStdQ.
   Proof.
     intros x y E. unfold compose. rewrite <- E. clear y E.

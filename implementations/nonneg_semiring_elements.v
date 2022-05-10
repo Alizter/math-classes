@@ -35,13 +35,13 @@ Next Obligation. apply le_0_1. Qed.
 (* * Equalitity *)
 Local Ltac unfold_equivs := unfold equiv, sig_equiv in *; simpl in *.
 
-Instance: Proper ((=) ==> (=) ==> (=)) NonNeg_plus.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) NonNeg_plus.
 Proof.
   intros [x1 Ex1] [y1 Ey1] E1 [x2 Ex2] [y2 Ey2] E2. unfold_equivs.
   now rewrite E1, E2.
 Qed.
 
-Instance: Proper ((=) ==> (=) ==> (=)) NonNeg_mult.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) NonNeg_mult.
 Proof.
   intros [x1 Ex1] [y1 Ey1] E1 [x2 Ex2] [y2 Ey2] E2. unfold_equivs.
   now rewrite E1, E2.
@@ -51,7 +51,7 @@ Qed.
 Global Instance: SemiRing (R⁺).
 Proof. repeat (split; try apply _); repeat intro; unfold_equivs; ring. Qed.
 
-Instance: Proper ((=) ==> (=)) NonNeg_inject.
+#[global] Instance: Proper ((=) ==> (=)) NonNeg_inject.
 Proof. now repeat intro. Qed.
 
 Global Instance: SemiRing_Morphism NonNeg_inject.
@@ -77,7 +77,7 @@ Global Instance NonNeg_lt: Lt (R⁺) := λ x y, 'x < 'y.
 Global Instance: Proper ((=) ==> (=) ==> iff) NonNeg_le.
 Proof. intros x1 y1 E1 x2 y2 E2. unfold NonNeg_le. now rewrite E1, E2. Qed.
 
-Instance: PartialOrder NonNeg_le.
+#[global] Instance: PartialOrder NonNeg_le.
 Proof. now apply (maps.projected_partial_order NonNeg_inject). Qed.
 
 Global Instance: OrderEmbedding NonNeg_inject.

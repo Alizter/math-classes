@@ -114,7 +114,7 @@ Section contents.
 
   Require varieties.open_terms.
 
-  Instance: Equiv V := eq.
+  #[global] Instance: Equiv V := eq.
 
   Goal ∀ (x y: uaTerm), open_terms.ee msig msig monoids.Laws (ne_list.one tt) x y →
    ` (simplify x) ≡ ` (simplify y).

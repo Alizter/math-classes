@@ -11,9 +11,9 @@ Require Import
 *)
 Class PropHolds (P : Prop) := prop_holds: P.
 
-Hint Extern 0 (PropHolds _) => assumption : typeclass_instances.
+#[global] Hint Extern 0 (PropHolds _) => assumption : typeclass_instances.
 
-Instance: Proper (iff ==> iff) PropHolds.
+#[global] Instance: Proper (iff ==> iff) PropHolds.
 Proof. now repeat intro. Qed.
 
 Ltac solve_propholds :=

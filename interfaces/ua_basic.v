@@ -56,7 +56,7 @@ Section with_sorts.
    intros ? y ???? y0 ?. transitivity (y y0); firstorder.
   Qed.
 
-  Hint Unfold op_type.
+  #[global] Hint Unfold op_type.
 
   Global Instance sig_type_trans' `{∀ s, Symmetric (e s)} `{∀ s, Transitive (e s)} {o}: Transitive (op_type_equiv o).
   Proof with auto.
@@ -83,7 +83,7 @@ End with_sorts.
 Arguments op_type {Sorts} _ _.
 
 (* Avoid eager application *)
-Hint Extern 0 (Equiv (op_type _ _ )) => eapply @op_type_equiv : typeclass_instances.
+#[global] Hint Extern 0 (Equiv (op_type _ _ )) => eapply @op_type_equiv : typeclass_instances.
 
 Inductive Signature: Type :=
   { sorts: Set

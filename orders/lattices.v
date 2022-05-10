@@ -9,7 +9,7 @@ because that would cause loops.
 Section join_semilattice_order.
   Context `{JoinSemiLatticeOrder L}.
 
-  Instance: Setoid L := po_setoid.
+  #[global] Instance: Setoid L := po_setoid.
 
   Lemma join_ub_3_r x y z : z ≤ x ⊔ y ⊔ z.
   Proof. now apply join_ub_r. Qed.
@@ -25,7 +25,7 @@ Section join_semilattice_order.
   Lemma join_ub_3_assoc_r x y z : z ≤ x ⊔ (y ⊔ z).
   Proof. transitivity (y ⊔ z); now apply join_ub_r. Qed.
 
-  Instance: Proper ((=) ==> (=) ==> (=)) (⊔).
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) (⊔).
   Proof.
     intros ? ? E1 ? ? E2. apply (antisymmetry (≤)); apply join_lub.
        rewrite E1. now apply join_ub_l.
@@ -34,7 +34,7 @@ Section join_semilattice_order.
     rewrite <-E2. now apply join_ub_r.
   Qed.
 
-  Instance join_sl_order_join_sl: JoinSemiLattice L.
+  #[global] Instance join_sl_order_join_sl: JoinSemiLattice L.
   Proof.
     repeat (split; try apply _).
       intros x y z. apply (antisymmetry (≤)).
@@ -93,7 +93,7 @@ End bounded_join_semilattice.
 Section meet_semilattice_order.
   Context `{MeetSemiLatticeOrder L}.
 
-  Instance: Setoid L := po_setoid.
+  #[global] Instance: Setoid L := po_setoid.
 
   Lemma meet_lb_3_r x y z : x ⊓ y ⊓ z ≤ z.
   Proof. now apply meet_lb_r. Qed.
@@ -109,7 +109,7 @@ Section meet_semilattice_order.
   Lemma meet_lb_3_assoc_r x y z : x ⊓ (y ⊓ z) ≤ z.
   Proof. transitivity (y ⊓ z); now apply meet_lb_r. Qed.
 
-  Instance: Proper ((=) ==> (=) ==> (=)) (⊓).
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) (⊓).
   Proof.
     intros ? ? E1 ? ? E2. apply (antisymmetry (≤)); apply meet_glb.
        rewrite <-E1. now apply meet_lb_l.
@@ -118,7 +118,7 @@ Section meet_semilattice_order.
     rewrite E2. now apply meet_lb_r.
   Qed.
 
-  Instance meet_sl_order_meet_sl: MeetSemiLattice L.
+  #[global] Instance meet_sl_order_meet_sl: MeetSemiLattice L.
   Proof.
     repeat (split; try apply _).
       intros x y z. apply (antisymmetry (≤)).
@@ -167,24 +167,24 @@ End meet_semilattice_order.
 Section lattice_order.
   Context `{LatticeOrder L}.
 
-  Instance: JoinSemiLattice L := join_sl_order_join_sl.
-  Instance: MeetSemiLattice L := meet_sl_order_meet_sl.
+  #[global] Instance: JoinSemiLattice L := join_sl_order_join_sl.
+  #[global] Instance: MeetSemiLattice L := meet_sl_order_meet_sl.
 
-  Instance: Absorption (⊓) (⊔).
+  #[global] Instance: Absorption (⊓) (⊔).
   Proof.
     intros x y. apply (antisymmetry (≤)).
      now apply meet_lb_l.
     apply meet_le. easy. now apply join_ub_l.
   Qed.
 
-  Instance: Absorption (⊔) (⊓).
+  #[global] Instance: Absorption (⊔) (⊓).
   Proof.
     intros x y. apply (antisymmetry (≤)).
      apply join_le. easy. now apply meet_lb_l.
     now apply join_ub_l.
   Qed.
 
-  Instance lattice_order_lattice: Lattice L.
+  #[global] Instance lattice_order_lattice: Lattice L.
   Proof. split; try apply _. Qed.
 
   Lemma meet_join_distr_l_le x y z : (x ⊓ y) ⊔ (x ⊓ z) ≤ x ⊓ (y ⊔ z).

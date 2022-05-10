@@ -27,7 +27,7 @@ Section contents.
   Local Obligation Tactic := idtac.
   Global Program Instance: CatComp Object := λ _ _ _, compose.
 
-  Instance: ∀ x y z: Object, Proper ((=) ==> (=) ==> (=)) (comp x y z).
+  #[global] Instance: ∀ x y z: Object, Proper ((=) ==> (=) ==> (=)) (comp x y z).
   Proof. repeat intro. simpl. firstorder. Qed.
 
   Global Instance: Category Object.

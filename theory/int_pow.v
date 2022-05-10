@@ -150,7 +150,7 @@ Proof.
   rewrite E. ring.
 Qed.
 
-Instance int_pow_ne_0 (x : A) (n : B) : PropHolds (x ≠ 0) → PropHolds (x ^ n ≠ 0).
+#[global] Instance int_pow_ne_0 (x : A) (n : B) : PropHolds (x ≠ 0) → PropHolds (x ^ n ≠ 0).
 Proof.
   intros nonneg. unfold PropHolds.
   revert n. apply biinduction.
@@ -195,7 +195,7 @@ Qed.
 Context `{Apart A} `{!TrivialApart A} `{!FullPseudoSemiRingOrder (A:=A) Ale Alt}.
 Context `{Apart B} `{!TrivialApart B} `{!FullPseudoSemiRingOrder (A:=B) Ble Blt}.
 
-Instance int_pow_pos (x : A) (n : B) : PropHolds (0 < x) → PropHolds (0 < x ^ n).
+#[global] Instance int_pow_pos (x : A) (n : B) : PropHolds (0 < x) → PropHolds (0 < x ^ n).
 Proof.
   intros nonneg. unfold PropHolds.
   revert n. apply biinduction.
@@ -211,7 +211,7 @@ Proof.
   apply not_symmetry. now apply orders.lt_ne.
 Qed.
 
-Instance int_pow_nonneg (x : A) (n : B) : PropHolds (0 ≤ x) → PropHolds (0 ≤ x ^ n).
+#[global] Instance int_pow_nonneg (x : A) (n : B) : PropHolds (0 ≤ x) → PropHolds (0 ≤ x ^ n).
 Proof.
   intros E1. red in E1.
   destruct (orders.le_equiv_lt _ _ E1) as [E2|E2].
@@ -259,7 +259,7 @@ Qed.
 (* Making these instances Global is not useful, we don't have PropHolds (1 ≤ x)
   instances and it will only slow down instance resolution (it increases the
   compilation time of dyadics from 1:35 to 2:28). *)
-Instance int_pow_exp_le:
+#[global] Instance int_pow_exp_le:
   ∀ x : A, PropHolds (1 ≤ x) → OrderPreserving (x^).
 Proof.
   repeat (split; try apply _).
@@ -273,7 +273,7 @@ Proof.
   now apply int_pow_ge_1.
 Qed.
 
-Instance int_pow_exp_lt:
+#[global] Instance int_pow_exp_lt:
   ∀ x : A, PropHolds (1 < x) → StrictlyOrderPreserving (x^).
 Proof.
   repeat (split; try apply _).
@@ -289,7 +289,7 @@ Proof.
   now apply nat_int.le_iff_lt_S.
 Qed.
 
-Instance int_pow_exp_le_back:
+#[global] Instance int_pow_exp_le_back:
   ∀ x : A, PropHolds (1 < x) → OrderReflecting (x^).
 Proof.
   split; try apply _. intros n m E1.
@@ -301,11 +301,11 @@ Proof.
   now apply (strictly_order_preserving (x^)).
 Qed.
 
-Instance int_pow_exp_lt_back:
+#[global] Instance int_pow_exp_lt_back:
   ∀ x : A, PropHolds (1 < x) → StrictlyOrderReflecting (x^).
 Proof. intros ? E1. apply _. Qed.
 
-Instance int_pow_inj:
+#[global] Instance int_pow_inj:
   ∀ x : A, PropHolds (1 < x) → Injective (x^).
 Proof.
   repeat (split; try apply _). intros n m E.
@@ -314,9 +314,9 @@ Qed.
 End int_pow_properties.
 
 (* Due to bug #2528 *)
-Hint Extern 18 (PropHolds (_ ^ _ ≠ 0)) => eapply @int_pow_ne_0 : typeclass_instances.
-Hint Extern 18 (PropHolds (0 ≤ _ ^ _)) => eapply @int_pow_nonneg : typeclass_instances.
-Hint Extern 18 (PropHolds (0 < _ ^ _)) => eapply @int_pow_pos : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (_ ^ _ ≠ 0)) => eapply @int_pow_ne_0 : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (0 ≤ _ ^ _)) => eapply @int_pow_nonneg : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (0 < _ ^ _)) => eapply @int_pow_pos : typeclass_instances.
 
 Section preservation.
   Context

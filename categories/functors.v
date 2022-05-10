@@ -49,16 +49,16 @@ Section contents.
     Global Program Instance e: Equiv (F ⟶ G) :=
       λ m n, ∀ x: A, m x = n x.
 
-    Instance e_refl: Reflexive e.
+    #[global] Instance e_refl: Reflexive e.
     Proof. intro a; red; reflexivity. Qed.
 
-    Instance e_sym: Symmetric e.
+    #[global] Instance e_sym: Symmetric e.
     Proof. intros m n Hmn a. red in Hmn. rewrite Hmn. reflexivity. Qed.
 
-    Instance e_trans: Transitive e.
+    #[global] Instance e_trans: Transitive e.
     Proof. intros m n o Hmn Hno a. red in Hmn, Hno. rewrite Hmn, Hno. reflexivity. Qed.
 
-    Instance: Equivalence e := {}.
+    #[global] Instance: Equivalence e := {}.
     Global Instance: Setoid (F ⟶ G) := {}.
   End arrow_setoid.
 
@@ -72,13 +72,13 @@ Section contents.
     simpl. rewrite (Hx a), (Hy a). reflexivity.
   Qed.
 
-  Instance: ∀ x y: Object A B, LeftIdentity (comp x y y) cat_id.
+  #[global] Instance: ∀ x y: Object A B, LeftIdentity (comp x y y) cat_id.
   Proof. repeat intro. simpl. apply left_identity. Qed.
 
-  Instance: ∀ x y: Object A B, RightIdentity (comp x x y) cat_id.
+  #[global] Instance: ∀ x y: Object A B, RightIdentity (comp x x y) cat_id.
   Proof. repeat intro. simpl. apply right_identity. Qed.
 
-  Instance: ArrowsAssociative (Object A B).
+  #[global] Instance: ArrowsAssociative (Object A B).
   Proof. repeat intro. simpl. apply associativity. Qed.
 
   Global Instance: Category (Object A B) := {}.

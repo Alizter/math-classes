@@ -86,7 +86,7 @@ Proof.
   now rewrite nat_pow_exp_plus.
 Qed.
 
-Instance nat_pow_ne_0 `{!NoZeroDivisors A} `{!PropHolds ((1:A) ≠ 0)} (x : A) (n : B) :
+#[global] Instance nat_pow_ne_0 `{!NoZeroDivisors A} `{!PropHolds ((1:A) ≠ 0)} (x : A) (n : B) :
   PropHolds (x ≠ 0) → PropHolds (x ^ n ≠ 0).
 Proof.
   pattern n. apply naturals.induction; clear n.
@@ -99,9 +99,9 @@ Qed.
 
 Context `{Apart A} `{!FullPseudoSemiRingOrder (A:=A) Ale Alt} `{PropHolds (1 ≶ 0)}.
 
-Instance: StrongSetoid A := pseudo_order_setoid.
+#[global] Instance: StrongSetoid A := pseudo_order_setoid.
 
-Instance nat_pow_apart_0 (x : A) (n : B) : PropHolds (x ≶ 0) → PropHolds (x ^ n ≶ 0).
+#[global] Instance nat_pow_apart_0 (x : A) (n : B) : PropHolds (x ≶ 0) → PropHolds (x ^ n ≶ 0).
 Proof.
   pattern n. apply naturals.induction; clear n.
     solve_proper.
@@ -111,7 +111,7 @@ Proof.
   apply (strong_left_cancellation (.*.) x). now apply E.
 Qed.
 
-Instance nat_pow_nonneg (x : A) (n : B) : PropHolds (0 ≤ x) → PropHolds (0 ≤ x ^ n).
+#[global] Instance nat_pow_nonneg (x : A) (n : B) : PropHolds (0 ≤ x) → PropHolds (0 ≤ x ^ n).
 Proof.
   intros. pattern n. apply naturals.induction; clear n.
     solve_proper.
@@ -119,7 +119,7 @@ Proof.
   intros. rewrite nat_pow_S. apply _.
 Qed.
 
-Instance nat_pow_pos (x : A) (n : B) : PropHolds (0 < x) → PropHolds (0 < x ^ n).
+#[global] Instance nat_pow_pos (x : A) (n : B) : PropHolds (0 < x) → PropHolds (0 < x ^ n).
 Proof.
   rewrite !lt_iff_le_apart.
   intros [? ?]. split.
@@ -139,10 +139,10 @@ Qed.
 End nat_pow_properties.
 
 (* Due to bug #2528 *)
-Hint Extern 18 (PropHolds (_ ^ _ ≠ 0)) => eapply @nat_pow_ne_0 : typeclass_instances.
-Hint Extern 18 (PropHolds (_ ^ _ ≶ 0)) => eapply @nat_pow_apart_0 : typeclass_instances.
-Hint Extern 18 (PropHolds (0 ≤ _ ^ _)) => eapply @nat_pow_nonneg : typeclass_instances.
-Hint Extern 18 (PropHolds (0 < _ ^ _)) => eapply @nat_pow_pos : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (_ ^ _ ≠ 0)) => eapply @nat_pow_ne_0 : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (_ ^ _ ≶ 0)) => eapply @nat_pow_apart_0 : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (0 ≤ _ ^ _)) => eapply @nat_pow_nonneg : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (0 < _ ^ _)) => eapply @nat_pow_pos : typeclass_instances.
 
 Section preservation.
   Context `{Naturals B} `{SemiRing A1} `{!NatPowSpec A1 B pw1} `{SemiRing A2} `{!NatPowSpec A2 B pw2}
@@ -188,7 +188,7 @@ Section nat_pow_default.
     | S n => x * @pow _ _ nat_pow_rec x n
     end.
 
-  Instance: Proper ((=) ==> (=) ==> (=)) nat_pow_peano.
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) nat_pow_peano.
   Proof.
     intros ? ? E a ? [].
     induction a; try easy.

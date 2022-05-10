@@ -22,7 +22,7 @@ Notation Z := (SRpair N).
 Global Instance SRpair_to_ring: IntegersToRing Z :=
   λ _ _ _ _ _ _ z, naturals_to_semiring N _ (pos z) + - naturals_to_semiring N _ (neg z).
 
-(* Hint Rewrite preserves_0 preserves_1 preserves_mult preserves_plus: preservation.
+(* #[global] Hint Rewrite preserves_0 preserves_1 preserves_mult preserves_plus: preservation.
   doesn't work for some reason, so we use: *)
 Ltac preservation :=
    repeat (rewrite rings.preserves_plus || rewrite rings.preserves_mult || rewrite rings.preserves_0 || rewrite rings.preserves_1).
@@ -35,7 +35,7 @@ Section for_another_ring.
   Notation n_to_sr := (naturals_to_semiring N R).
   Notation z_to_r := (integers_to_ring Z R).
 
-  Instance: Proper ((=) ==> (=)) z_to_r.
+  #[global] Instance: Proper ((=) ==> (=)) z_to_r.
   Proof.
     intros [xp xn] [yp yn].
     change (xp + yn = yp + xn → n_to_sr xp - n_to_sr xn = n_to_sr yp - n_to_sr yn). intros E.
@@ -72,7 +72,7 @@ Section for_another_ring.
 
     Definition g : N → R := f ∘ cast N (SRpair N).
 
-    Instance: SemiRing_Morphism g.
+    #[global] Instance: SemiRing_Morphism g.
     Proof. unfold g. repeat (split; try apply _). Qed.
 
     Lemma same_morphism: z_to_r = f.
@@ -85,7 +85,7 @@ Section for_another_ring.
   End for_another_morphism.
 End for_another_ring.
 
-Instance: Initial (rings.object Z).
+#[global] Instance: Initial (rings.object Z).
 Proof. apply integer_initial. intros. now apply same_morphism. Qed.
 
 Global Instance: Integers Z := {}.

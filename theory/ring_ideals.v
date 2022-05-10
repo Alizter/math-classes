@@ -21,19 +21,19 @@ Section ideal_congruence.
   Add Ring A2 : (rings.stdlib_ring_theory A).
 
   (* If P is an ideal, we can easily derive some further closedness properties: *)
-  Hint Resolve (ideal_closed_plus_negate) (ideal_closed_mult_l) (ideal_closed_mult_r).
+  #[global] Hint Resolve (ideal_closed_plus_negate) (ideal_closed_mult_l) (ideal_closed_mult_r).
 
   Lemma ideal_closed_0 : P 0.
   Proof. destruct ideal_NonEmpty as [[x Px]]. rewrite <-(plus_negate_r x). intuition. Qed.
-  Hint Resolve ideal_closed_0.
+  #[global] Hint Resolve ideal_closed_0.
 
   Lemma ideal_closed_negate x : P x → P (-x).
   Proof. intros. rewrite <- rings.plus_0_l. intuition. Qed.
-  Hint Resolve ideal_closed_negate.
+  #[global] Hint Resolve ideal_closed_negate.
 
   Lemma ideal_closed_plus x y : P x → P y → P (x + y).
   Proof. intros. assert (x + y = -(-x + -y)) as E by ring. rewrite E. intuition. Qed.
-  Hint Resolve ideal_closed_plus.
+  #[global] Hint Resolve ideal_closed_plus.
 
   Global Instance: RingCongruence A (λ x y, P (x - y)).
   Proof.
@@ -64,7 +64,7 @@ Section ideal_congruence.
 (*
   Let hint := rings.encode_operations R.
 
-  Instance: Congruence rings.sig (λ _, congr_equiv).
+  #[global] Instance: Congruence rings.sig (λ _, congr_equiv).
   Proof. constructor; intros; apply _. Qed.
 *)
 End ideal_congruence.

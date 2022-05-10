@@ -30,7 +30,7 @@ End laws.
 Definition theory: EquationalTheory := Build_EquationalTheory sig Laws.
 Definition Object := varieties.Object theory.
 
-Local Hint Extern 3 => progress simpl : typeclass_instances.
+Local #[global] Hint Extern 3 => progress simpl : typeclass_instances.
 
 Definition forget: Object → setoids.Object :=
   @product.project unit
@@ -45,7 +45,7 @@ Definition forget: Object → setoids.Object :=
  Algebra/InVariety/HomoMorphism type classes instantiated with the above
  signature and theory. *)
 
-Instance encode_operations A `{!SgOp A} `{!MonUnit A}: AlgebraOps sig (λ _, A) :=
+#[global] Instance encode_operations A `{!SgOp A} `{!MonUnit A}: AlgebraOps sig (λ _, A) :=
   λ o, match o with mult => (&) | one => mon_unit: A end.
 
 Section decode_operations.
@@ -119,7 +119,7 @@ Proof.
  apply (preserves theory x y f one).
 Qed.
 
-Instance id_monoid_morphism `{Monoid A}: Monoid_Morphism (@id A).
+#[global] Instance id_monoid_morphism `{Monoid A}: Monoid_Morphism (@id A).
 Proof. repeat (split; try apply _); easy. Qed.
 
 (* Finally, we use these encoding/decoding functions to specialize some universal results: *)
@@ -129,7 +129,7 @@ Section specialized.
      `{Equiv C} `{MonUnit C} `{SgOp C}
     (f : A → B) (g : B → C).
 
-  Instance compose_monoid_morphism:
+  #[global] Instance compose_monoid_morphism:
     Monoid_Morphism f → Monoid_Morphism g → Monoid_Morphism (g ∘ f).
   Proof.
     intros. pose proof (encode_morphism_and_ops (f:=f)) as P.
@@ -149,5 +149,5 @@ Section specialized.
   Qed.
 End specialized.
 
-Hint Extern 4 (Monoid_Morphism (_ ∘ _)) => class_apply @compose_monoid_morphism : typeclass_instances.
-Hint Extern 4 (Monoid_Morphism (_⁻¹)) => class_apply @invert_monoid_morphism : typeclass_instances.
+#[global] Hint Extern 4 (Monoid_Morphism (_ ∘ _)) => class_apply @compose_monoid_morphism : typeclass_instances.
+#[global] Hint Extern 4 (Monoid_Morphism (_⁻¹)) => class_apply @invert_monoid_morphism : typeclass_instances.

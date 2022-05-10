@@ -52,7 +52,7 @@ Section pseudo_injective.
 
   Local Existing Instance pseudo_order_setoid.
 
-  Instance pseudo_order_embedding_ext `{!StrictOrderEmbedding (f : A → B)} :
+  #[global] Instance pseudo_order_embedding_ext `{!StrictOrderEmbedding (f : A → B)} :
     StrongSetoid_Morphism f.
   Proof.
     split; try apply _.
@@ -241,24 +241,24 @@ Proof.
   intros F. destruct E. now apply P2.
 Qed.
 
-Instance id_order_morphism `{PartialOrder A} : Order_Morphism (@id A).
+#[global] Instance id_order_morphism `{PartialOrder A} : Order_Morphism (@id A).
 Proof. pose proof po_setoid. repeat (split; try apply _). Qed.
 
-Instance id_order_preserving `{PartialOrder A} : OrderPreserving (@id A).
+#[global] Instance id_order_preserving `{PartialOrder A} : OrderPreserving (@id A).
 Proof. split; try apply _. easy. Qed.
 
-Instance id_order_reflecting `{PartialOrder A} : OrderReflecting (@id A).
+#[global] Instance id_order_reflecting `{PartialOrder A} : OrderReflecting (@id A).
 Proof. split; try apply _. easy. Qed.
 
 Section composition.
   Context `{Equiv A} `{Equiv B} `{Equiv C}
     `{Le A} `{Le B} `{Le C} (f : A → B) (g : B → C).
 
-  Instance compose_order_morphism:
+  #[global] Instance compose_order_morphism:
     Order_Morphism f → Order_Morphism g → Order_Morphism (g ∘ f).
   Proof. split; [ apply _ | apply (order_morphism_po_a f) | apply (order_morphism_po_b g) ]. Qed.
 
-  Instance compose_order_preserving:
+  #[global] Instance compose_order_preserving:
     OrderPreserving f → OrderPreserving g → OrderPreserving (g ∘ f).
   Proof.
     repeat (split; try apply _).
@@ -266,7 +266,7 @@ Section composition.
     now do 2 apply (order_preserving _).
   Qed.
 
-  Instance compose_order_reflecting:
+  #[global] Instance compose_order_reflecting:
     OrderReflecting f → OrderReflecting g → OrderReflecting (g ∘ f).
   Proof.
     split; try apply _.
@@ -274,14 +274,14 @@ Section composition.
     now do 2 apply (order_reflecting _) in E.
   Qed.
 
-  Instance compose_order_embedding:
+  #[global] Instance compose_order_embedding:
     OrderEmbedding f → OrderEmbedding g → OrderEmbedding (g ∘ f) := {}.
 End composition.
 
-Hint Extern 4 (Order_Morphism (_ ∘ _)) => class_apply @compose_order_morphism : typeclass_instances.
-Hint Extern 4 (OrderPreserving (_ ∘ _)) => class_apply @compose_order_preserving : typeclass_instances.
-Hint Extern 4 (OrderReflecting (_ ∘ _)) => class_apply @compose_order_reflecting : typeclass_instances.
-Hint Extern 4 (OrderEmbedding (_ ∘ _)) => class_apply @compose_order_embedding : typeclass_instances.
+#[global] Hint Extern 4 (Order_Morphism (_ ∘ _)) => class_apply @compose_order_morphism : typeclass_instances.
+#[global] Hint Extern 4 (OrderPreserving (_ ∘ _)) => class_apply @compose_order_preserving : typeclass_instances.
+#[global] Hint Extern 4 (OrderReflecting (_ ∘ _)) => class_apply @compose_order_reflecting : typeclass_instances.
+#[global] Hint Extern 4 (OrderEmbedding (_ ∘ _)) => class_apply @compose_order_embedding : typeclass_instances.
 
 Section propers.
   Context `{Equiv A} `{Equiv B} `{Le A} `{Le B}.

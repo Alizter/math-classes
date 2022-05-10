@@ -4,7 +4,7 @@ Require Import
 Class Decision P := decide: sumbool P (¬P).
 Arguments decide _ {Decision}.
 
-Instance: ∀ P, Decision P → Stable P.
+#[global] Instance: ∀ P, Decision P → Stable P.
 Proof. firstorder. Qed.
 
 Ltac case_decide := match goal with
@@ -66,7 +66,7 @@ Program Definition decision_from_bool_decide {P b} (prf : b ≡ true ↔ P) :
 Next Obligation. now apply prf. Qed.
 Next Obligation. rewrite <-prf. discriminate. Qed.
 
-Program Instance prod_eq_dec `(A_dec : ∀ x y : A, Decision (x ≡ y))
+#[global] Program Instance prod_eq_dec `(A_dec : ∀ x y : A, Decision (x ≡ y))
      `(B_dec : ∀ x y : B, Decision (x ≡ y)) : ∀ x y : A * B, Decision (x ≡ y) := λ x y,
   match A_dec (fst x) (fst y) with
   | left _ => match B_dec (snd x) (snd y) with left _ => left _ | right _ => right _ end
@@ -74,33 +74,33 @@ Program Instance prod_eq_dec `(A_dec : ∀ x y : A, Decision (x ≡ y))
   end.
 Solve Obligations with (program_simpl; f_equal; firstorder).
 
-Program Instance and_dec `(P_dec : Decision P) `(Q_dec : Decision Q) : Decision (P ∧ Q) :=
+#[global] Program Instance and_dec `(P_dec : Decision P) `(Q_dec : Decision Q) : Decision (P ∧ Q) :=
   match P_dec with
   | left _ => match Q_dec with left _ => left _ | right _ => right _ end
   | right _ => right _
   end.
 Solve Obligations with (program_simpl; tauto).
 
-Program Instance or_dec `(P_dec : Decision P) `(Q_dec : Decision Q) : Decision (P ∨ Q) :=
+#[global] Program Instance or_dec `(P_dec : Decision P) `(Q_dec : Decision Q) : Decision (P ∨ Q) :=
   match P_dec with
   | left _ => left _
   | right _ => match Q_dec with left _ => left _ | right _ => right _ end
   end.
 Solve Obligations with (program_simpl; firstorder).
 
-Program Instance is_Some_dec `(x : option A) : Decision (is_Some x) :=
+#[global] Program Instance is_Some_dec `(x : option A) : Decision (is_Some x) :=
   match x with
   | None => right _
   | Some _ => left _
   end.
 
-Program Instance is_None_dec `(x : option A) : Decision (is_None x) :=
+#[global] Program Instance is_None_dec `(x : option A) : Decision (is_None x) :=
   match x with
   | None => left _
   | Some _ => right _
   end.
 
-Program Instance option_eq_dec `(A_dec : ∀ x y : A, Decision (x ≡ y))
+#[global] Program Instance option_eq_dec `(A_dec : ∀ x y : A, Decision (x ≡ y))
      : ∀ x y : option A, Decision (x ≡ y) := λ x y,
   match x with
   | Some r =>
@@ -115,5 +115,5 @@ Program Instance option_eq_dec `(A_dec : ∀ x y : A, Decision (x ≡ y))
     end
   end.
 
-Program Instance True_dec: Decision True := left _.
-Program Instance False_dec: Decision False := right _.
+#[global] Program Instance True_dec: Decision True := left _.
+#[global] Program Instance False_dec: Decision False := right _.

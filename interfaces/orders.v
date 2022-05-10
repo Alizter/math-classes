@@ -125,8 +125,8 @@ Section order_maps.
     ; strict_order_embedding_reflecting :> StrictlyOrderReflecting }.
 End order_maps.
 
-Hint Extern 4 (?f _ ≤ ?f _) => apply (order_preserving f).
-Hint Extern 4 (?f _ < ?f _) => apply (strictly_order_preserving f).
+#[global] Hint Extern 4 (?f _ ≤ ?f _) => apply (order_preserving f).
+#[global] Hint Extern 4 (?f _ < ?f _) => apply (strictly_order_preserving f).
 
 (*
 We define various classes to describe the order on the lower part of the
@@ -166,8 +166,8 @@ Class FullPseudoSemiRingOrder `{Equiv A} `{Apart A} `{Plus A}
   ; full_pseudo_srorder_le_iff_not_lt_flip : ∀ x y, x ≤ y ↔ ¬y < x }.
 
 (* Due to bug #2528 *)
-Hint Extern 7 (PropHolds (0 < _ * _)) => eapply @pos_mult_compat : typeclass_instances.
-Hint Extern 7 (PropHolds (0 ≤ _ * _)) => eapply @nonneg_mult_compat : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 < _ * _)) => eapply @pos_mult_compat : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 ≤ _ * _)) => eapply @nonneg_mult_compat : typeclass_instances.
 
 (*
 Alternatively, we could have defined the standard notion of a RingOrder:

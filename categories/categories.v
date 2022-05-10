@@ -11,7 +11,7 @@ Record Object := object
 
 Arguments object _ {Arrows_inst Equiv_inst CatId_inst CatComp_inst Category_inst}.
 Existing Instance Arrows_inst.
-Hint Extern 0 (Equiv (_ ⟶ _)) => eapply @Equiv_inst : typeclass_instances.
+#[global] Hint Extern 0 (Equiv (_ ⟶ _)) => eapply @Equiv_inst : typeclass_instances.
 Existing Instance CatId_inst.
 Existing Instance CatComp_inst.
 Existing Instance Category_inst.
@@ -33,8 +33,8 @@ Arguments map_obj {x y} _ _.
 Existing Instance Fmap_inst.
 Existing Instance Functor_inst.
 
-Instance: Arrows Object := Arrow.
-(* Hint Extern 4 (Arrows Object) => exact Arrow: typeclass_instances. *)
+#[global] Instance: Arrows Object := Arrow.
+(* #[global] Hint Extern 4 (Arrows Object) => exact Arrow: typeclass_instances. *)
   (* Matthieu is adding [Existing Instance (c: T).], which is nicer. *)
 
 Section contents.
@@ -93,7 +93,7 @@ Section contents.
     Proof. split; assumption. Qed.
   End more_arrows.
 
-  Instance obj_iso (x: Object): Equiv x := @iso x _ _ _ _.
+  #[global] Instance obj_iso (x: Object): Equiv x := @iso x _ _ _ _.
 
   Typeclasses Transparent Arrows.
   Global Instance: ∀ (x y: Object) (a: x ⟶ y), Setoid_Morphism (map_obj a).
@@ -165,7 +165,7 @@ Section contents.
      likely due to Coq bug #2229. *)
   Next Obligation. split; apply left_identity. Qed.
 
-  Instance: ∀ x y: Object, LeftIdentity (comp x _ y) cat_id.
+  #[global] Instance: ∀ x y: Object, LeftIdentity (comp x _ y) cat_id.
   Proof.
    intros ?? a.
    exists (id_lr_arrows _ _ a).
@@ -173,7 +173,7 @@ Section contents.
    rewrite right_identity, left_identity. reflexivity.
   Qed.
 
-  Instance: ∀ x y: Object, RightIdentity (comp x _ y) cat_id.
+  #[global] Instance: ∀ x y: Object, RightIdentity (comp x _ y) cat_id.
   Proof.
    intros ?? a.
    exists (id_lr_arrows _ _ a).
@@ -189,7 +189,7 @@ Section contents.
     Next Obligation. unfold uncurry. simpl. split; repeat rewrite preserves_id; try apply _; apply left_identity. Qed.
   End associativity.
 
-  Instance: ArrowsAssociative Object.
+  #[global] Instance: ArrowsAssociative Object.
     Proof.
      repeat intro.
      exists (associativity_arrows _ _ _ _ z0 y0 x0).

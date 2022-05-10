@@ -121,9 +121,9 @@ Arguments Mult {V}.
 (*
 Require Import monads canonical_names.
 
-Instance: MonadReturn Expr := fun _ => Var.
+#[global] Instance: MonadReturn Expr := fun _ => Var.
 
-Instance expr_bind: MonadBind Expr := fun A B =>
+#[global] Instance expr_bind: MonadBind Expr := fun A B =>
   fix F (m: Expr A) (f: A → Expr B): Expr B :=
     match m with
     | Zero => Zero
@@ -144,25 +144,25 @@ Section eqs.
       | _, _ => False
       end.
 
-  Instance: Reflexive expr_eq.
+  #[global] Instance: Reflexive expr_eq.
   Proof. intro. induction x; simpl; intuition. Qed.
 
-  Instance: Symmetric expr_eq.
+  #[global] Instance: Symmetric expr_eq.
   Proof. intro. induction x; destruct y; simpl in *; intuition. Qed.
 
-  Instance: Transitive expr_eq.
+  #[global] Instance: Transitive expr_eq.
   Admitted.
 
   Global Instance expr_equivalence: Equivalence expr_eq.
 
 End eqs.
 
-Instance: ∀ `{Equiv A}, Proper ((=) ==> (=)) (ret Expr).
+#[global] Instance: ∀ `{Equiv A}, Proper ((=) ==> (=)) (ret Expr).
  repeat intro.
  assumption.
 Qed.
 
-Instance bind_proper: ∀ `{Equiv A} `{Equiv B},
+#[global] Instance bind_proper: ∀ `{Equiv A} `{Equiv B},
  Proper ((=) ==> pointwise_relation A (=) ==> (=)) (@expr_bind A B).
 Proof.
  intros A H B H0 x y E.
@@ -188,7 +188,7 @@ Proof.
 Admitted.
 
 
-Instance: Monad Expr.
+#[global] Instance: Monad Expr.
   *)
 
 
@@ -209,7 +209,7 @@ Fixpoint eval {V} (vs: Vars V) (e: Expr V): Value :=
   | Var v => vs v
   end.
 
-Instance eval_proper V: Proper (pointwise_relation _ eq ==> eq ==> eq) (@eval V).
+#[global] Instance eval_proper V: Proper (pointwise_relation _ eq ==> eq ==> eq) (@eval V).
 Proof.
  repeat intro. subst.
  induction y0; simpl.

@@ -45,7 +45,7 @@ Proof.
   now rewrite E1, E2.
 Qed.
 
-Instance: Proper ((=) ==> (=)) Pos_inject.
+#[global] Instance: Proper ((=) ==> (=)) Pos_inject.
 Proof. now repeat intro. Qed.
 
 Global Instance: Injective Pos_inject.

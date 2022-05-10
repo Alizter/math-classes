@@ -36,7 +36,7 @@ Section subalgebras.
 
   Definition carrier s := sig (P s).
 
-  Hint Extern 4 => progress unfold carrier: typeclass_instances.
+  #[global] Hint Extern 4 => progress unfold carrier: typeclass_instances.
 
   (* We can implement closed operations in the new algebra: *)
 
@@ -79,7 +79,7 @@ Section subalgebras.
   Qed.
 
   (* Which is mono because proj is injective. *)
-  Instance: `{Injective (proj i)}.
+  #[global] Instance: `{Injective (proj i)}.
   Proof.
     split.
      firstorder.
@@ -97,4 +97,4 @@ Section subalgebras.
   Qed. (* this really should be completely automatic. *)
 End subalgebras.
 
-Hint Extern 10 (Equiv (carrier _ _)) => apply @sig_equiv : typeclass_instances.
+#[global] Hint Extern 10 (Equiv (carrier _ _)) => apply @sig_equiv : typeclass_instances.

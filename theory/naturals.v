@@ -45,7 +45,7 @@ Proof.
   now rewrite <-(to_semiring_twice f g id x), <-(to_semiring_twice f g id y), E.
 Qed.
 
-Instance naturals_to_naturals_injective `{Naturals N} `{Naturals N2} (f: N → N2) `{!SemiRing_Morphism f}:
+#[global] Instance naturals_to_naturals_injective `{Naturals N} `{Naturals N2} (f: N → N2) `{!SemiRing_Morphism f}:
   Injective f | 15.
 Proof. now apply (to_semiring_injective (naturals_to_semiring N2 N) _). Qed.
 
@@ -59,7 +59,7 @@ Section retract_is_nat.
   Section for_another_semirings.
     Context `{SemiRing R}.
 
-    Instance: SemiRing_Morphism (naturals_to_semiring N R ∘ f⁻¹) := {}.
+    #[global] Instance: SemiRing_Morphism (naturals_to_semiring N R ∘ f⁻¹) := {}.
 
     Context (h :  SR → R) `{!SemiRing_Morphism h}.
 
@@ -73,7 +73,7 @@ Section retract_is_nat.
   End for_another_semirings.
 
   (* If we make this an instance, instance resolution will loop *)
-  Program Instance retract_is_nat: Naturals SR (U:=retract_is_nat_to_sr).
+  #[global] Program Instance retract_is_nat: Naturals SR (U:=retract_is_nat_to_sr).
   Next Obligation. unfold naturals_to_semiring, retract_is_nat_to_sr. apply _. Qed.
   Next Obligation. apply natural_initial. intros. now apply same_morphism. Qed.
 End retract_is_nat.
@@ -143,12 +143,12 @@ Section borrowed_from_nat.
   Global Instance: ∀ z : N, PropHolds (z ≠ 0) → RightCancellation (.*.) z.
   Proof. intros ? ?. apply (right_cancel_from_left (.*.)). Qed.
 
-  Instance nat_nontrivial: PropHolds ((1:N) ≠ 0).
+  #[global] Instance nat_nontrivial: PropHolds ((1:N) ≠ 0).
   Proof.
     now rapply (from_nat_stmt (1 === 0 -=> Ext _ False) no_vars).
   Qed.
 
-  Instance nat_nontrivial_apart `{Apart N} `{!TrivialApart N} :
+  #[global] Instance nat_nontrivial_apart `{Apart N} `{!TrivialApart N} :
     PropHolds ((1:N) ≶ 0).
   Proof. apply strong_setoids.ne_apart. solve_propholds. Qed.
 
@@ -203,5 +203,5 @@ End with_a_ring.
 End contents.
 
 (* Due to bug #2528 *)
-Hint Extern 6 (PropHolds (1 ≠ 0)) => eapply @nat_nontrivial : typeclass_instances.
-Hint Extern 6 (PropHolds (1 ≶ 0)) => eapply @nat_nontrivial_apart : typeclass_instances.
+#[global] Hint Extern 6 (PropHolds (1 ≠ 0)) => eapply @nat_nontrivial : typeclass_instances.
+#[global] Hint Extern 6 (PropHolds (1 ≶ 0)) => eapply @nat_nontrivial_apart : typeclass_instances.

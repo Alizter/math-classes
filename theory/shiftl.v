@@ -129,7 +129,7 @@ Proof.
   apply E1. now rewrite ?shiftl_S, E2.
 Qed.
 
-Instance shiftl_ne_0 x n :
+#[global] Instance shiftl_ne_0 x n :
   PropHolds (x ≠ 0) → PropHolds (x ≪ n ≠ 0).
 Proof.
   intros E1 E2. apply E1.
@@ -181,13 +181,13 @@ Lemma shiftl_le_flip_l `{Negate B} `{!Ring B} (x y : A) (n : B) :
   x ≪ (-n) ≤ y  ↔  x ≤ y ≪ n.
 Proof. now rewrite <-shiftl_le_flip_r, rings.negate_involutive. Qed.
 
-Instance shiftl_nonneg (x : A) (n : B) : PropHolds (0 ≤ x) → PropHolds (0 ≤ x ≪ n).
+#[global] Instance shiftl_nonneg (x : A) (n : B) : PropHolds (0 ≤ x) → PropHolds (0 ≤ x ≪ n).
 Proof.
   intro. rewrite <-(shiftl_base_0 n).
   now apply (order_preserving (≪ n)).
 Qed.
 
-Instance shiftl_pos (x : A) (n : B) : PropHolds (0 < x) → PropHolds (0 < x ≪ n).
+#[global] Instance shiftl_pos (x : A) (n : B) : PropHolds (0 < x) → PropHolds (0 < x ≪ n).
 Proof.
   intro. rewrite <-(shiftl_base_0 n).
   now apply (strictly_order_preserving (≪ n)).
@@ -195,9 +195,9 @@ Qed.
 End shiftl.
 
 (* Due to bug #2528 *)
-Hint Extern 18 (PropHolds (_ ≪ _ ≠ 0)) => eapply @shiftl_ne_0 : typeclass_instances.
-Hint Extern 18 (PropHolds (0 ≤ _ ≪ _)) => eapply @shiftl_nonneg : typeclass_instances.
-Hint Extern 18 (PropHolds (0 < _ ≪ _)) => eapply @shiftl_pos : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (_ ≪ _ ≠ 0)) => eapply @shiftl_ne_0 : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (0 ≤ _ ≪ _)) => eapply @shiftl_nonneg : typeclass_instances.
+#[global] Hint Extern 18 (PropHolds (0 < _ ≪ _)) => eapply @shiftl_pos : typeclass_instances.
 
 Section preservation.
   Context `{SemiRing B} `{!Biinduction B}

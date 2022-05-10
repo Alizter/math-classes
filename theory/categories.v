@@ -77,13 +77,13 @@ Section contents.
     Definition iso: Equiv X := λ x y, ex (uncurry (@iso_arrows x y)).
     Definition isoT: X → X → Type := λ x y, sig (uncurry (@iso_arrows x y)).
 
-    Program Instance: Reflexive iso := λ x, ex_intro _ (cat_id, cat_id) _.
+    #[global] Program Instance: Reflexive iso := λ x, ex_intro _ (cat_id, cat_id) _.
     Next Obligation. split; apply left_identity. Qed.
 
-    Instance: Symmetric iso.
+    #[global] Instance: Symmetric iso.
     Proof. intros ? ? [[f f'] ?]. exists (f', f). unfold uncurry. apply (hetero_symmetric). assumption. Qed.
 
-    Instance: Transitive iso.
+    #[global] Instance: Transitive iso.
     Proof with assumption.
      intros ? ? ? [[f f'] [U V]] [[g g'] [W Z]].
      exists (g ◎ f, f' ◎ g').

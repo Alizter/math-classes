@@ -65,7 +65,7 @@ Section rationals_and_another_rationals.
     now apply lt_le.
   Qed.
 
-  Instance morphism_order_preserving: OrderPreserving f.
+  #[global] Instance morphism_order_preserving: OrderPreserving f.
   Proof. apply semirings.preserving_preserves_nonneg. apply f_preserves_nonneg. Qed.
 End rationals_and_another_rationals.
 
@@ -86,9 +86,9 @@ Section rationals_order_isomorphic.
   Qed.
 End rationals_order_isomorphic.
 
-Instance rationals_le `{Rationals Q} : Le Q | 10 := λ x y,
+#[global] Instance rationals_le `{Rationals Q} : Le Q | 10 := λ x y,
   ∃ num, ∃ den, y = x + naturals_to_semiring nat Q num / naturals_to_semiring nat Q den.
-Instance rationals_lt  `{Rationals Q} : Lt Q | 10 := dec_lt.
+#[global] Instance rationals_lt  `{Rationals Q} : Lt Q | 10 := dec_lt.
 
 Section default_order.
   Context `{Rationals Q} `{Apart Q} `{!TrivialApart Q}.
@@ -96,7 +96,7 @@ Section default_order.
   Add Field F: (stdlib_field_theory Q).
   Notation n_to_sr := (naturals_to_semiring nat Q).
 
-  Instance: Proper ((=) ==> (=) ==> iff) rationals_le.
+  #[global] Instance: Proper ((=) ==> (=) ==> iff) rationals_le.
   Proof.
     intros x x' E y y' E'. unfold rationals_le.
     split; intros [n [d d_nonzero]]; exists n, d.
@@ -104,7 +104,7 @@ Section default_order.
     now rewrite E, E'.
   Qed.
 
-  Instance: Reflexive rationals_le.
+  #[global] Instance: Reflexive rationals_le.
   Proof. intro. exists (0:nat), (0:nat). rewrite preserves_0. ring. Qed.
 
   (* rationals_le can actually only happen if the denominator is nonzero: *)
@@ -119,7 +119,7 @@ Section default_order.
     ring.
   Qed.
 
-  Instance: Transitive rationals_le.
+  #[global] Instance: Transitive rationals_le.
   Proof with auto.
     intros x y z E1 E2.
     destruct (rationals_decompose_le x y) as [n1 [d1 [A1 B1]]]...
@@ -131,7 +131,7 @@ Section default_order.
     field. split; now apply injective_ne_0.
   Qed.
 
-  Instance: AntiSymmetric rationals_le.
+  #[global] Instance: AntiSymmetric rationals_le.
   Proof with auto.
     intros x y E1 E2.
     destruct (rationals_decompose_le x y) as [n1 [d1 [A1 B1]]]...
@@ -157,10 +157,10 @@ Section default_order.
     contradiction.
   Qed.
 
-  Instance: PartialOrder rationals_le.
+  #[global] Instance: PartialOrder rationals_le.
   Proof. repeat (split; try apply _). Qed.
 
-  Instance: SemiRingOrder rationals_le.
+  #[global] Instance: SemiRingOrder rationals_le.
   Proof.
     apply from_ring_order.
      repeat (split; try apply _).
@@ -172,7 +172,7 @@ Section default_order.
   Qed.
 
   Notation i_to_r := (integers_to_ring (SRpair nat) Q).
-  Instance: TotalRelation rationals_le.
+  #[global] Instance: TotalRelation rationals_le.
   Proof with auto.
     assert (∀ xn xd yn yd, 0 < xd → 0 < yd → xn * yd ≤ yn * xd → i_to_r xn / i_to_r xd ≤ i_to_r yn / i_to_r yd) as P.
      intros xn xd yn yd.

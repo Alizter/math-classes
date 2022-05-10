@@ -21,7 +21,7 @@ Section contents.
     | ne_list.cons _ _ => λ a b, ∀ u, heq (a u) (b u)
     end.
 
-  Instance heq_proper {o}: Proper ((=) ==> (=) ==> iff) (@heq o).
+  #[global] Instance heq_proper {o}: Proper ((=) ==> (=) ==> iff) (@heq o).
   Proof with intuition.
    intros x y U x0 y0 K.
    induction o; simpl in *.

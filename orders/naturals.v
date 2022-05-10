@@ -8,7 +8,7 @@ Require Export
 Section naturals_order.
 Context `{Naturals N} `{Apart N} `{!TrivialApart N} `{!FullPseudoSemiRingOrder Nle Nlt}.
 
-Instance nat_nonneg x : PropHolds (0 ≤ x).
+#[global] Instance nat_nonneg x : PropHolds (0 ≤ x).
 Proof. now apply (to_semiring_nonneg (f:=id)). Qed.
 
 Lemma nat_le_plus {x y: N}: x ≤ y ↔ ∃ z, y = x + z.
@@ -67,17 +67,17 @@ Section another_ring.
 End another_ring.
 End naturals_order.
 
-Hint Extern 20 (PropHolds (_ ≤ _)) => eapply @nat_nonneg : typeclass_instances.
+#[global] Hint Extern 20 (PropHolds (_ ≤ _)) => eapply @nat_nonneg : typeclass_instances.
 
 (* A default order on the naturals *)
-Instance nat_le `{Naturals N} : Le N | 10 :=  λ x y, ∃ z, x + z = y.
-Instance nat_lt  `{Naturals N} : Lt N | 10 := dec_lt.
+#[global] Instance nat_le `{Naturals N} : Le N | 10 :=  λ x y, ∃ z, x + z = y.
+#[global] Instance nat_lt  `{Naturals N} : Lt N | 10 := dec_lt.
 
 Section default_order.
 Context `{Naturals N} `{Apart N} `{!TrivialApart N}.
 Add Ring N2 : (rings.stdlib_semiring_theory N).
 
-Instance: Proper ((=) ==> (=) ==> iff) nat_le.
+#[global] Instance: Proper ((=) ==> (=) ==> iff) nat_le.
 Proof.
   intros x1 y1 E1 x2 y2 E2.
   split; intros [z p]; exists z.
@@ -85,7 +85,7 @@ Proof.
   now rewrite E1, E2.
 Qed.
 
-Instance: PartialOrder nat_le.
+#[global] Instance: PartialOrder nat_le.
 Proof.
   repeat (split; try apply _).
     intros x. exists 0. ring.
@@ -97,7 +97,7 @@ Proof.
   rewrite <-A, <-B, E1, E2. ring.
 Qed.
 
-Instance: SemiRingOrder nat_le.
+#[global] Instance: SemiRingOrder nat_le.
 Proof.
   repeat (split; try apply _).
      intros x y [a A]. now exists a.
@@ -109,7 +109,7 @@ Qed.
 
 Notation n_to_sr := (naturals_to_semiring N nat).
 
-Instance: TotalRelation nat_le.
+#[global] Instance: TotalRelation nat_le.
 Proof.
   assert (∀ x y, n_to_sr x ≤ n_to_sr y → x ≤ y) as P.
    intros x y E.

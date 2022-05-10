@@ -7,14 +7,14 @@ Require Export
 
 Module BigZ_Integers := ZType_Integers BigZ.
 
-Instance inject_fastN_fastZ: Cast bigN bigZ := BigZ.Pos.
+#[global] Instance inject_fastN_fastZ: Cast bigN bigZ := BigZ.Pos.
 
-Instance: SemiRing_Morphism inject_fastN_fastZ.
+#[global] Instance: SemiRing_Morphism inject_fastN_fastZ.
 Proof. repeat (split; try apply _); intuition. Qed.
 
-Program Instance bigZ_pow: Pow bigZ bigN := λ x n, BigZ.pow x ('n).
+#[global] Program Instance bigZ_pow: Pow bigZ bigN := λ x n, BigZ.pow x ('n).
 
-Instance: NatPowSpec bigZ bigN _.
+#[global] Instance: NatPowSpec bigZ bigN _.
 Proof.
   split; unfold pow, bigZ_pow.
     solve_proper.
@@ -26,9 +26,9 @@ Proof.
   now apply nat_int.to_semiring_nonneg.
 Qed.
 
-Instance fastZ_shiftl: ShiftL bigZ bigN := λ x n, BigZ.shiftl x ('n).
+#[global] Instance fastZ_shiftl: ShiftL bigZ bigN := λ x n, BigZ.shiftl x ('n).
 
-Instance: ShiftLSpec bigZ bigN _.
+#[global] Instance: ShiftLSpec bigZ bigN _.
 Proof.
   apply shiftl_spec_from_nat_pow.
   intros. apply BigZ.shiftl_mul_pow2.

@@ -67,14 +67,14 @@ Next Obligation. now apply (order_reflecting (integers_to_ring _ (SRpair nat))).
 End integers.
 
 (* A default order on the integers *)
-Instance int_le `{Integers Z} : Le Z | 10 :=  λ x y, ∃ z, y = x + naturals_to_semiring nat Z z.
-Instance int_lt  `{Integers Z} : Lt Z | 10 := dec_lt.
+#[global] Instance int_le `{Integers Z} : Le Z | 10 :=  λ x y, ∃ z, y = x + naturals_to_semiring nat Z z.
+#[global] Instance int_lt  `{Integers Z} : Lt Z | 10 := dec_lt.
 
 Section default_order.
 Context `{Integers Int} `{Apart Int} `{!TrivialApart Int}.
 Add Ring Int2 : (rings.stdlib_ring_theory Int).
 
-Instance: Proper ((=) ==> (=) ==> iff) int_le.
+#[global] Instance: Proper ((=) ==> (=) ==> iff) int_le.
 Proof.
   intros x1 y1 E1 x2 y2 E2.
   split; intros [z p]; exists z.
@@ -82,7 +82,7 @@ Proof.
   now rewrite E1, E2.
 Qed.
 
-Instance: PartialOrder int_le.
+#[global] Instance: PartialOrder int_le.
 Proof.
   repeat (split; try apply _).
     intros x. exists (0:nat). rewrite rings.preserves_0. ring.
@@ -97,7 +97,7 @@ Proof.
   rewrite A, B, E1, E2, rings.preserves_0. ring.
 Qed.
 
-Instance: SemiRingOrder int_le.
+#[global] Instance: SemiRingOrder int_le.
 Proof.
   apply from_ring_order.
    repeat (split; try apply _).
@@ -107,7 +107,7 @@ Qed.
 
 Notation i_to_r := (integers_to_ring Int (SRpair nat)).
 
-Instance: TotalRelation int_le.
+#[global] Instance: TotalRelation int_le.
 Proof.
   assert (∀ x y, i_to_r x ≤ i_to_r y → x ≤ y) as P.
    intros x y E.

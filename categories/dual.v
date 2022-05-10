@@ -5,7 +5,7 @@ Section contents.
 
   Context `{c: @Category Object A Aeq Aid Acomp}.
 
-  Instance flipA: Arrows Object := flip A.
+  #[global] Instance flipA: Arrows Object := flip A.
 
   Global Instance: @CatId Object flipA := Aid.
   Global Instance: @CatComp Object flipA := λ _ _ _, flip (Acomp _ _ _).
@@ -14,7 +14,7 @@ Section contents.
   Global Instance: ∀ (x y: Object), Setoid (flipA x y).
   Proof. intros. change (Setoid (A y x)). apply arrow_equiv. Qed.
 
-  Instance: ∀ (x y z: Object), Proper ((=) ==> (=) ==> (=)) (@comp Object flipA _ x y z).
+  #[global] Instance: ∀ (x y z: Object), Proper ((=) ==> (=) ==> (=)) (@comp Object flipA _ x y z).
   Proof.
    intros x y z ? ? E ? ? F.
    change (Acomp z y x x1 x0 = Acomp z y x y1 y0).
@@ -39,7 +39,7 @@ End contents.
    making flipA opaque for resolution would speed things up but require
    a few changes to the scripts to explicitly convert terms to applications
    of flipA. *)
-Hint Cut [_* e (_*) e] : typeclass_instances.
+#[global] Hint Cut [_* e (_*) e] : typeclass_instances.
 
 Section functors.
 

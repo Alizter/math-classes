@@ -26,7 +26,7 @@ Section contents.
     | ne_list.cons _ _ => λ x y, app_tree (App _ _ _ _ x y)
     end.
 
-  Instance: AlgebraOps et OpenTerm0 := λ x, app_tree (Op _ _ x).
+  #[global] Instance: AlgebraOps et OpenTerm0 := λ x, app_tree (Op _ _ x).
 
   (* We define term equivalence on all operation types: *)
 
@@ -47,9 +47,9 @@ Section contents.
 
   (* .. and then take the specialization at arity 0 for Term0: *)
 
-  Instance: ∀ a, Equiv (OpenTerm0 a) := λ a, ee (ne_list.one a).
+  #[global] Instance: ∀ a, Equiv (OpenTerm0 a) := λ a, ee (ne_list.one a).
 
-  Instance: ∀ a, Setoid (OpenTerm0 a).
+  #[global] Instance: ∀ a, Setoid (OpenTerm0 a).
   Proof. split; apply _. Qed.
 
   (* While this fancy congruence is the one we'll use to make our initial object a setoid,
@@ -59,18 +59,18 @@ Section contents.
 
   Let structural_eq a: relation _ := @op_type_equiv unit OpenTerm0 (λ _, eq) a.
 
-  Instance structural_eq_refl a: Reflexive (structural_eq a).
+  #[global] Instance structural_eq_refl a: Reflexive (structural_eq a).
   Proof. induction a; repeat intro. reflexivity. subst. apply IHa. Qed.
 
   (* The implementation is proper: *)
 
-  Instance app_tree_proper: ∀ o, Proper ((=) ==> (=)) (@app_tree o).
+  #[global] Instance app_tree_proper: ∀ o, Proper ((=) ==> (=)) (@app_tree o).
   Proof with auto.
    induction o; repeat intro...
    apply IHo, e_sub...
   Qed.
 
-  Instance: Algebra et OpenTerm0.
+  #[global] Instance: Algebra et OpenTerm0.
   Proof.
    constructor. intro. apply _.
    intro. apply app_tree_proper. reflexivity.

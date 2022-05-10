@@ -6,7 +6,7 @@ Require MathClasses.theory.ua_products.
 Require MathClasses.theory.categories.
 
 (* Remove this *)
-Local Hint Transparent Equiv : typeclass_instances.
+Local #[global] Hint Transparent Equiv : typeclass_instances.
 
 Section contents.
   Context σ `{@Algebra σ v ve vo}.
@@ -14,13 +14,13 @@ Section contents.
   Notation op_type := (op_type (sorts σ)).
   Notation vv := (ua_products.carrier σ bool (λ _: bool, v)).
 
-  Instance hint:
+  #[global] Instance hint:
     @Algebra σ vv (ua_products.product_e σ bool (fun _ : bool => v) (fun _ : bool => ve)) _
       := @ua_products.product_algebra σ bool (λ _, v) _ _ _.
 
   (* Given an equivalence on the algebra's carrier that respects its setoid equality... *)
 
-  Instance hint' (a: sorts σ): Equiv (ua_products.carrier σ bool (fun _: bool => v) a).
+  #[global] Instance hint' (a: sorts σ): Equiv (ua_products.carrier σ bool (fun _: bool => v) a).
   Proof. apply products.dep_prod_equiv. intro. apply _. Defined.
 
   Context (e: ∀ s, relation (v s)).
@@ -37,7 +37,7 @@ Section contents.
   Let lifted_e := @op_type_equiv (sorts σ) v e.
   Let lifted_normal := @op_type_equiv (sorts σ) v ve.
 
-  Instance lifted_e_proper o: Proper ((=) ==> (=) ==> iff) (lifted_e o).
+  #[global] Instance lifted_e_proper o: Proper ((=) ==> (=) ==> iff) (lifted_e o).
   Proof with intuition.
    induction o; simpl. intuition.
    repeat intro.
@@ -196,7 +196,7 @@ Section first_iso.
    assumption.
   Qed.
 
-  Instance co: Congruence σ Φ.
+  #[global] Instance co: Congruence σ Φ.
   Proof with intuition.
    constructor.
     repeat intro.
@@ -219,7 +219,7 @@ Section first_iso.
   Lemma image_proper: ∀ s (x0 x' : B s), x0 = x' → iffT (image s x0) (image s x').
   Proof. intros ??? E. split; intros [v ?]; exists v; rewrite E in *; assumption. Qed.
 
-  Instance: ClosedSubset image.
+  #[global] Instance: ClosedSubset image.
   Proof with intuition.
    constructor; repeat intro.
     split; intros [q p]; exists q; rewrite p...

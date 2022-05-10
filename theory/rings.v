@@ -69,7 +69,7 @@ Section semiring_props.
   Context `{SemiRing R}.
   Add Ring SR : (stdlib_semiring_theory R).
 
-  Instance mult_ne_0 `{!NoZeroDivisors R} x y : PropHolds (x ≠ 0) → PropHolds (y ≠ 0) → PropHolds (x * y ≠ 0).
+  #[global] Instance mult_ne_0 `{!NoZeroDivisors R} x y : PropHolds (x ≠ 0) → PropHolds (y ≠ 0) → PropHolds (x * y ≠ 0).
   Proof.
     intros Ex Ey Exy.
     unfold PropHolds in *.
@@ -107,7 +107,7 @@ Section semiring_props.
 End semiring_props.
 
 (* Due to bug #2528 *)
-Hint Extern 3 (PropHolds (_ * _ ≠ 0)) => eapply @mult_ne_0 : typeclass_instances.
+#[global] Hint Extern 3 (PropHolds (_ * _ ≠ 0)) => eapply @mult_ne_0 : typeclass_instances.
 
 Section semiringmor_props.
   Context `{SemiRing_Morphism A B f}.
@@ -121,7 +121,7 @@ Section semiringmor_props.
   Lemma preserves_plus: ∀ x y, f (x + y) = f x + f y.
   Proof. intros. apply preserves_sg_op. Qed.
 
-  Instance: SemiRing B := semiringmor_b.
+  #[global] Instance: SemiRing B := semiringmor_b.
 
   Lemma preserves_2: f 2 = 2.
   Proof. rewrite preserves_plus. now rewrite preserves_1. Qed.
@@ -133,7 +133,7 @@ Section semiringmor_props.
   Proof. now rewrite ?preserves_plus, ?preserves_1. Qed.
 
   Context `{!Injective f}.
-  Instance injective_ne_0 x : PropHolds (x ≠ 0) → PropHolds (f x ≠ 0).
+  #[global] Instance injective_ne_0 x : PropHolds (x ≠ 0) → PropHolds (f x ≠ 0).
   Proof. intros. rewrite <-preserves_0. now apply (jections.injective_ne f). Qed.
 
   Lemma injective_ne_1 x : x ≠ 1 → f x ≠ 1.
@@ -141,7 +141,7 @@ Section semiringmor_props.
 End semiringmor_props.
 
 (* Due to bug #2528 *)
-Hint Extern 12 (PropHolds (_ _ ≠ 0)) => eapply @injective_ne_0 : typeclass_instances.
+#[global] Hint Extern 12 (PropHolds (_ _ ≠ 0)) => eapply @injective_ne_0 : typeclass_instances.
 
 Lemma stdlib_ring_theory R `{Ring R} :
   Ring_theory.ring_theory 0 1 (+) (.*.) (λ x y, x - y) (-) (=).
@@ -164,7 +164,7 @@ Section ring_props.
 
   Add Ring R: (stdlib_ring_theory R).
 
-  Instance: LeftAbsorb (.*.) 0.
+  #[global] Instance: LeftAbsorb (.*.) 0.
   Proof. intro. ring. Qed.
 
   Global Instance Ring_Semi: SemiRing R.
@@ -239,13 +239,13 @@ End ring_props.
 Section integral_domain_props.
   Context `{IntegralDomain R}.
 
-  Instance intdom_nontrivial_apart `{Apart R} `{!TrivialApart R} :
+  #[global] Instance intdom_nontrivial_apart `{Apart R} `{!TrivialApart R} :
     PropHolds (1 ≶ 0).
   Proof. apply strong_setoids.ne_apart. solve_propholds. Qed.
 End integral_domain_props.
 
 (* Due to bug #2528 *)
-Hint Extern 6 (PropHolds (1 ≶ 0)) => eapply @intdom_nontrivial_apart : typeclass_instances.
+#[global] Hint Extern 6 (PropHolds (1 ≶ 0)) => eapply @intdom_nontrivial_apart : typeclass_instances.
 
 Section ringmor_props.
   Context `{Ring A} `{Ring B} `{!SemiRing_Morphism (f : A → B)}.
@@ -321,7 +321,7 @@ Section from_stdlib_ring_theory.
   Qed.
 End from_stdlib_ring_theory.
 
-Instance id_sr_morphism `{SemiRing A}: SemiRing_Morphism (@id A) := {}.
+#[global] Instance id_sr_morphism `{SemiRing A}: SemiRing_Morphism (@id A) := {}.
 
 Section morphism_composition.
   Context `{Equiv A} `{Mult A} `{Plus A} `{One A} `{Zero A}
@@ -329,18 +329,18 @@ Section morphism_composition.
     `{Equiv C} `{Mult C} `{Plus C} `{One C} `{Zero C}
     (f : A → B) (g : B → C).
 
-  Instance compose_sr_morphism:
+  #[global] Instance compose_sr_morphism:
     SemiRing_Morphism f → SemiRing_Morphism g → SemiRing_Morphism (g ∘ f).
   Proof. split; try apply _; firstorder. Qed.
-  Instance invert_sr_morphism:
+  #[global] Instance invert_sr_morphism:
     ∀ `{!Inverse f}, Bijective f → SemiRing_Morphism f → SemiRing_Morphism (f⁻¹).
   Proof. split; try apply _; firstorder. Qed.
 End morphism_composition.
 
-Hint Extern 4 (SemiRing_Morphism (_ ∘ _)) => class_apply @compose_sr_morphism : typeclass_instances.
-Hint Extern 4 (SemiRing_Morphism (_⁻¹)) => class_apply @invert_sr_morphism : typeclass_instances.
+#[global] Hint Extern 4 (SemiRing_Morphism (_ ∘ _)) => class_apply @compose_sr_morphism : typeclass_instances.
+#[global] Hint Extern 4 (SemiRing_Morphism (_⁻¹)) => class_apply @invert_sr_morphism : typeclass_instances.
 
-Instance semiring_morphism_proper {A B eA eB pA mA zA oA pB mB zB oB} :
+#[global] Instance semiring_morphism_proper {A B eA eB pA mA zA oA pB mB zB oB} :
   Proper ((=) ==> (=)) (@SemiRing_Morphism A B eA eB pA mA zA oA pB mB zB oB).
 Proof.
   assert (∀ (f g : A → B), g = f → SemiRing_Morphism f → SemiRing_Morphism g) as P.

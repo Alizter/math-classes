@@ -19,9 +19,9 @@ Section algebras.
     | ne_list.cons _ g => λ X X0, rec_impl g (λ i, X i (X0 i))
     end.
 
-  Instance u (s: sorts sig): Equiv (∀ i : I, carriers i s) := products.dep_prod_equiv _ _.
+  #[global] Instance u (s: sorts sig): Equiv (∀ i : I, carriers i s) := products.dep_prod_equiv _ _.
 
-  Instance rec_impl_proper: ∀ o,
+  #[global] Instance rec_impl_proper: ∀ o,
     Proper (@products.dep_prod_equiv I _ (fun _ => op_type_equiv _ _ _) ==> (=)) (rec_impl o).
   Proof with auto.
    induction o; simpl. repeat intro...
@@ -31,10 +31,10 @@ Section algebras.
 
   Global Instance product_ops: AlgebraOps sig carrier := λ o, rec_impl (sig o) (λ i, algebra_op o).
 
-  Instance: ∀ o: sig, Proper (=) (algebra_op o: op_type carrier (sig o)).
+  #[global] Instance: ∀ o: sig, Proper (=) (algebra_op o: op_type carrier (sig o)).
   Proof. intro. apply rec_impl_proper. intro. apply (algebra_propers _). Qed.
 
-  Instance product_e sort: Equiv (carrier sort) := (=). (* hint; shouldn't be needed *)
+  #[global] Instance product_e sort: Equiv (carrier sort) := (=). (* hint; shouldn't be needed *)
 
   Global Instance product_algebra: Algebra sig carrier := {}.
 
@@ -67,7 +67,7 @@ Section varieties.
     `(∀ i, InVariety et (carriers i)).
 
   Notation carrier := (carrier et I carriers).
-  Instance carrier_e : forall s, Equiv _ := product_e et I carriers _.
+  #[global] Instance carrier_e : forall s, Equiv _ := product_e et I carriers _.
 
   Fixpoint nqe {t}: op_type carrier t → (∀ i, op_type (carriers i) t) → Prop :=
    match t with
@@ -75,7 +75,7 @@ Section varieties.
    | ne_list.cons _ _ => λ f g, ∀ tuple, nqe (f tuple) (λ i, g i (tuple i))
    end. (* todo: rename *)
 
-  Instance nqe_proper t: Proper ((=) ==> (λ x y, ∀ i, x i = y i) ==> iff) (@nqe t).
+  #[global] Instance nqe_proper t: Proper ((=) ==> (λ x y, ∀ i, x i = y i) ==> iff) (@nqe t).
   Proof with auto; try reflexivity.
    induction t; simpl; intros ? ? P ? ? E.
     intuition. rewrite <- (P i), <- E... rewrite (P i), E...

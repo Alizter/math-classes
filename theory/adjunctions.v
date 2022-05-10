@@ -4,7 +4,7 @@ Require Import
   MathClasses.misc.workaround_tactics MathClasses.theory.jections.
 Require MathClasses.categories.dual.
 
-Local Hint Unfold id compose: typeclass_instances. (* todo: move *)
+Local #[global] Hint Unfold id compose: typeclass_instances. (* todo: move *)
 Local Existing Instance injective_mor.
 Local Existing Instance surjective_mor.
 
@@ -20,11 +20,11 @@ Section for_φAdjunction.
 
   Arguments φ {_ _} _.
 
-  Instance: forall c d, Bijective (@φ c d) := φ_adjunction_bijective F G.
-  Instance: Functor F F'  := φ_adjunction_left_functor F G.
-  Instance: Functor G G'  := φ_adjunction_right_functor F G.
-  Instance: Category D := functor_from G.
-  Instance: Category C := functor_to G.
+  #[global] Instance: forall c d, Bijective (@φ c d) := φ_adjunction_bijective F G.
+  #[global] Instance: Functor F F'  := φ_adjunction_left_functor F G.
+  #[global] Instance: Functor G G'  := φ_adjunction_right_functor F G.
+  #[global] Instance: Category D := functor_from G.
+  #[global] Instance: Category C := functor_to G.
    (* Waiting for the new proof engine ... *)
 
   Lemma φ_adjunction_natural_right_inv `(g: c ⟶ G d) `(h: c' ⟶ c): φ⁻¹ (g ◎ h) = φ⁻¹ g ◎ fmap F h.
@@ -80,7 +80,7 @@ Section for_φAdjunction.
 
   Definition univwit (c : C) (d : D): (c ⟶ G d) → (F c ⟶ d) := φ⁻¹.
 
-  Instance: ∀ c, UniversalArrow (η c: c ⟶ G (F c)) (univwit c).
+  #[global] Instance: ∀ c, UniversalArrow (η c: c ⟶ G (F c)) (univwit c).
   Proof.
    unfold univwit.
    constructor; unfold compose.
@@ -94,9 +94,9 @@ Section for_φAdjunction.
    apply (bijective_applied _).
   Qed.
 
-  Instance φAdjunction_ηAdjunction: ηAdjunction F G η univwit := {}.
+  #[global] Instance φAdjunction_ηAdjunction: ηAdjunction F G η univwit := {}.
 
-  Instance φAdjunction_ηεAdjunction: ηεAdjunction F G η ε.
+  #[global] Instance φAdjunction_ηεAdjunction: ηεAdjunction F G η ε.
   Proof with try apply _.
    constructor; try apply _; intro x.
     rewrite <- @φ_in_terms_of_η.
@@ -134,16 +134,16 @@ Section for_ηAdjunction.
 
   Context `(ηAdjunction).
 
-  Instance: Functor F F'  := η_adjunction_left_functor F G.
-  Instance: Functor G G'  := η_adjunction_right_functor F G.
-  Instance: Category D := functor_from G.
-  Instance: Category C := functor_to G.
+  #[global] Instance: Functor F F'  := η_adjunction_left_functor F G.
+  #[global] Instance: Functor G G'  := η_adjunction_right_functor F G.
+  #[global] Instance: Category D := functor_from G.
+  #[global] Instance: Category C := functor_to G.
 
   Let φ x a (g: F x ⟶ a): (x ⟶ G a) := fmap G g ◎ η x.
 
-  Instance: ∀ (c: C) (d: D), Inverse (@φ c d) := uniwit.
+  #[global] Instance: ∀ (c: C) (d: D), Inverse (@φ c d) := uniwit.
 
-  Instance: ∀ x a, Surjective (@φ x a).
+  #[global] Instance: ∀ x a, Surjective (@φ x a).
   Proof with try apply _.
    unfold φ.
    repeat intro.
@@ -155,15 +155,15 @@ Section for_ηAdjunction.
    intros ?? E. rewrite E. reflexivity.
   Qed.
 
-  Instance: ∀ x a, Injective (@φ x a).
+  #[global] Instance: ∀ x a, Injective (@φ x a).
   Proof with try reflexivity; try apply _; auto.
    repeat intro. constructor... unfold φ. repeat intro.
    apply (equal_because_sole _ _ (η_adjunction_universal F G _ _ (fmap G x0 ◎ η x))); unfold compose...
   Qed.
 
-  Instance: ∀ x a, Bijective (@φ x a) := {}.
+  #[global] Instance: ∀ x a, Bijective (@φ x a) := {}.
 
-  Instance ηAdjunction_φAdjunction: φAdjunction F G φ.
+  #[global] Instance ηAdjunction_φAdjunction: φAdjunction F G φ.
   Proof with try reflexivity; try apply _.
    unfold φ. unfold id in *. unfold compose in η.
    constructor...
@@ -185,17 +185,17 @@ Section for_ηεAdjunction.
 
   Context `(ηεAdjunction).
 
-  Instance: Functor F F'  := ηε_adjunction_left_functor F G.
-  Instance: Functor G G'  := ηε_adjunction_right_functor F G.
-  Instance: Category D := functor_from G.
-  Instance: Category C := functor_to G.
-  Instance: NaturalTransformation η := ηε_adjunction_η_natural F G.
-  Instance: NaturalTransformation ε := ηε_adjunction_ε_natural F G.
+  #[global] Instance: Functor F F'  := ηε_adjunction_left_functor F G.
+  #[global] Instance: Functor G G'  := ηε_adjunction_right_functor F G.
+  #[global] Instance: Category D := functor_from G.
+  #[global] Instance: Category C := functor_to G.
+  #[global] Instance: NaturalTransformation η := ηε_adjunction_η_natural F G.
+  #[global] Instance: NaturalTransformation ε := ηε_adjunction_ε_natural F G.
 
   Let φ c d (f: F c ⟶ d): (c ⟶ G d) := fmap G f ◎ η c.
-  Instance uniwit c d: Inverse (φ c d) := λ f, ε d ◎ fmap F f.
+  #[global] Instance uniwit c d: Inverse (φ c d) := λ f, ε d ◎ fmap F f.
 
-  Instance ηεAdjunction_ηAdjunction: ηAdjunction F G η uniwit.
+  #[global] Instance ηεAdjunction_ηAdjunction: ηAdjunction F G η uniwit.
   Proof with try apply _.
    constructor...
    unfold uniwit.
@@ -225,6 +225,6 @@ Section for_ηεAdjunction.
    apply right_identity.
   Qed.
 
-  Instance ηεAdjunction_φAdjunction: φAdjunction F G φ.
+  #[global] Instance ηεAdjunction_φAdjunction: φAdjunction F G φ.
   Proof. apply ηAdjunction_φAdjunction, _. Qed.
 End for_ηεAdjunction.

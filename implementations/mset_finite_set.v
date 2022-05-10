@@ -9,21 +9,21 @@ Module MSet_FSet (E : DecidableType) (Import set : WSetsOn E).
 Module facts := WFactsOn E set.
 Module props := WPropertiesOn E set.
 
-Instance mset: SetType elt := t.
+#[global] Instance mset: SetType elt := t.
 
-Instance mset_in: SetContains elt := In.
-Instance mset_car_eq: Equiv elt := E.eq.
-Instance mset_eq: SetEquiv elt := Equal.
-Instance mset_le: SetLe elt := Subset.
+#[global] Instance mset_in: SetContains elt := In.
+#[global] Instance mset_car_eq: Equiv elt := E.eq.
+#[global] Instance mset_eq: SetEquiv elt := Equal.
+#[global] Instance mset_le: SetLe elt := Subset.
 
-Instance mset_singleton: SetSingleton elt := singleton.
-Instance mset_empty: EmptySet elt := empty.
-Instance mset_join: SetJoin elt := union.
-Instance mset_meet: SetMeet elt := inter.
-Instance mset_difference: SetDifference elt := diff.
+#[global] Instance mset_singleton: SetSingleton elt := singleton.
+#[global] Instance mset_empty: EmptySet elt := empty.
+#[global] Instance mset_join: SetJoin elt := union.
+#[global] Instance mset_meet: SetMeet elt := inter.
+#[global] Instance mset_difference: SetDifference elt := diff.
 
-Instance mset_car_dec: ∀ x y : elt, Decision (x = y) := E.eq_dec.
-Instance mset_dec: ∀ x y : t, Decision (x = y) := eq_dec.
+#[global] Instance mset_car_dec: ∀ x y : elt, Decision (x = y) := E.eq_dec.
+#[global] Instance mset_dec: ∀ x y : t, Decision (x = y) := eq_dec.
 
 Local Instance: Setoid elt.
 Proof. split; try apply _. Qed.
@@ -45,7 +45,7 @@ Proof. split; try apply _. Qed.
 
 Definition to_listset (X : @set_type _ mset) : @set_type _ (listset elt)
   := props.to_list X↾elements_spec2w X.
-Instance from_listset: Inverse to_listset := λ l, props.of_list (`l).
+#[global] Instance from_listset: Inverse to_listset := λ l, props.of_list (`l).
 
 Local Instance: Setoid_Morphism to_listset.
 Proof.
@@ -54,14 +54,14 @@ Proof.
   now rewrite <-!props.of_list_1, 2!props.of_list_3, E.
 Qed.
 
-Instance: Bijective to_listset.
+#[global] Instance: Bijective to_listset.
 Proof.
   split; split; try apply _.
    intros X Y E x. rewrite <-!elements_spec1. now apply E.
   intros ?? E. rewrite <-E. now rapply props.of_list_2.
 Qed.
 
-Instance: BoundedJoinSemiLattice_Morphism to_listset.
+#[global] Instance: BoundedJoinSemiLattice_Morphism to_listset.
 Proof.
   split; try apply _; split; try apply _.
    split; try apply _. intros X Y z.
@@ -71,7 +71,7 @@ Proof.
   intros z. compute. rewrite props.elements_empty. tauto.
 Qed.
 
-Instance mset_extend: FSetExtend elt := iso_is_fset_extend id to_listset.
+#[global] Instance mset_extend: FSetExtend elt := iso_is_fset_extend id to_listset.
 
 Local Instance: FSet elt.
 Proof.
@@ -81,7 +81,7 @@ Proof.
   now rewrite elements_spec1, singleton_spec, E, InA_singleton.
 Qed.
 
-Instance: FullFSet elt.
+#[global] Instance: FullFSet elt.
 Proof.
   split; try apply _. split.
      apply lattices.alt_Build_JoinSemiLatticeOrder.

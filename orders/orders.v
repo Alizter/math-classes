@@ -7,7 +7,7 @@ Proof. firstorder. Qed.
 Section partial_order.
   Context `{PartialOrder A}.
 
-  Instance: Setoid A := po_setoid.
+  #[global] Instance: Setoid A := po_setoid.
 
   Lemma eq_le x y : x = y → x ≤ y.
   Proof. intros E. now rewrite E. Qed.
@@ -25,7 +25,7 @@ End partial_order.
 Section strict_order.
   Context `{StrictSetoidOrder A}.
 
-  Instance: Setoid A := strict_setoid_order_setoid.
+  #[global] Instance: Setoid A := strict_setoid_order_setoid.
 
   Lemma lt_flip x y : x < y → ¬y < x.
   Proof.
@@ -53,7 +53,7 @@ End strict_order.
 Section pseudo_order.
   Context `{PseudoOrder A}.
 
-  Instance: StrongSetoid A := pseudo_order_setoid.
+  #[global] Instance: StrongSetoid A := pseudo_order_setoid.
 
   Lemma apart_total_lt x y : x ≶ y → x < y ∨ y < x.
   Proof. intros. now apply apart_iff_total_lt. Qed.
@@ -80,7 +80,7 @@ Section pseudo_order.
     destruct (pseudo_order_cotrans_twice x₁ y₁ x₂ y₂ E) as [?|[?|?]]; auto using pseudo_order_lt_apart.
   Qed.
 
-  Instance: Proper ((=) ==> (=) ==> iff) (<).
+  #[global] Instance: Proper ((=) ==> (=) ==> iff) (<).
   Proof.
     assert (∀ x₁ y₁ x₂ y₂, x₁ < y₁ → x₁ = x₂ → y₁ = y₂ → x₂ < y₂) as P.
      intros x₁ y₁ x₂ y₂ E Ex Ey.
@@ -124,11 +124,11 @@ End pseudo_order.
 Section full_partial_order.
   Context `{FullPartialOrder A}.
 
-  Instance: StrongSetoid A := strict_po_setoid.
+  #[global] Instance: StrongSetoid A := strict_po_setoid.
 
   (* Duplicate of strong_setoids.apart_ne. This is useful because a
     StrongSetoid is not defined as a substructure of a FullPartialOrder *)
-  Instance strict_po_apart_ne x y : PropHolds (x ≶ y) → PropHolds (x ≠ y).
+  #[global] Instance strict_po_apart_ne x y : PropHolds (x ≶ y) → PropHolds (x ≠ y).
   Proof. intros. apply _. Qed.
 
   Global Instance apart_proper: Proper ((=) ==> (=) ==> iff) (≶).
@@ -203,7 +203,7 @@ Section full_partial_order.
     right. rewrite lt_iff_le_ne; tauto.
   Qed.
 
-  Program Instance dec_from_lt_dec `{!TrivialApart A} `{∀ x y, Decision (x ≤ y)} :
+  #[global] Program Instance dec_from_lt_dec `{!TrivialApart A} `{∀ x y, Decision (x ≤ y)} :
      ∀ x y, Decision (x = y) := λ x y,
     match decide_rel (≤) x y with
     | left E1 => match decide_rel (≤) y x with
@@ -229,19 +229,19 @@ Section full_partial_order.
 End full_partial_order.
 
 (* Due to bug #2528 *)
-Hint Extern 5 (PropHolds (_ ≠ _)) => eapply @strict_po_apart_ne :  typeclass_instances.
-Hint Extern 10 (PropHolds (_ ≤ _)) => eapply @lt_le : typeclass_instances.
-Hint Extern 20 (Decision (_ < _)) => eapply @lt_dec_slow : typeclass_instances.
+#[global] Hint Extern 5 (PropHolds (_ ≠ _)) => eapply @strict_po_apart_ne :  typeclass_instances.
+#[global] Hint Extern 10 (PropHolds (_ ≤ _)) => eapply @lt_le : typeclass_instances.
+#[global] Hint Extern 20 (Decision (_ < _)) => eapply @lt_dec_slow : typeclass_instances.
 
 Section full_pseudo_order.
   Context `{FullPseudoOrder A}.
 
-  Instance: StrongSetoid A := pseudo_order_setoid.
+  #[global] Instance: StrongSetoid A := pseudo_order_setoid.
 
   Lemma not_lt_le_flip x y : ¬y < x → x ≤ y.
   Proof. intros. now apply le_iff_not_lt_flip. Qed.
 
-  Instance: PartialOrder (≤).
+  #[global] Instance: PartialOrder (≤).
   Proof.
     split; try apply _.
       intros ? ? E1 ? ? E2.
@@ -300,12 +300,12 @@ Section full_pseudo_order.
   Next Obligation. now apply not_le_lt_flip. Qed.
 End full_pseudo_order.
 
-Hint Extern 8 (Decision (_ < _)) => eapply @lt_dec : typeclass_instances.
+#[global] Hint Extern 8 (Decision (_ < _)) => eapply @lt_dec : typeclass_instances.
 (*
 The following instances would be tempting, but turn out to be a bad idea.
 
-Hint Extern 10 (PropHolds (_ ≠ _)) => eapply @le_ne : typeclass_instances.
-Hint Extern 10 (PropHolds (_ ≠ _)) => eapply @le_ne_flip : typeclass_instances.
+#[global] Hint Extern 10 (PropHolds (_ ≠ _)) => eapply @le_ne : typeclass_instances.
+#[global] Hint Extern 10 (PropHolds (_ ≠ _)) => eapply @le_ne_flip : typeclass_instances.
 
 It will then loop like:
 
@@ -315,12 +315,12 @@ semirings.lt_0_1 → lt_ne_flip → ...
 Section dec_strict_setoid_order.
   Context `{StrictSetoidOrder A} `{Apart A} `{!TrivialApart A} `{∀ x y, Decision (x = y)}.
 
-  Instance: Setoid A := strict_setoid_order_setoid.
-  Instance: StrongSetoid A := dec_strong_setoid.
+  #[global] Instance: Setoid A := strict_setoid_order_setoid.
+  #[global] Instance: StrongSetoid A := dec_strong_setoid.
 
   Context `{!Trichotomy (<)}.
 
-  Instance dec_strict_pseudo_order: PseudoOrder (<).
+  #[global] Instance dec_strict_pseudo_order: PseudoOrder (<).
   Proof.
     split; try apply _.
       intros x y [??]. destruct (lt_antisym x y); tauto.
@@ -337,12 +337,12 @@ End dec_strict_setoid_order.
 Section dec_partial_order.
   Context `{PartialOrder A} `{∀ x y, Decision (x = y)}.
 
-  Instance: Setoid A := po_setoid.
+  #[global] Instance: Setoid A := po_setoid.
   Definition dec_lt: Lt A := λ x y, x ≤ y ∧ x ≠ y.
 
   Context `{Alt : Lt A} (lt_correct : ∀ x y, x < y ↔ x ≤ y ∧ x ≠ y).
 
-  Instance dec_order: StrictSetoidOrder (<).
+  #[global] Instance dec_order: StrictSetoidOrder (<).
   Proof.
     split; try apply _.
      intros ? ? E1 ? ? E2.
@@ -359,9 +359,9 @@ Section dec_partial_order.
 
   Context `{Apart A} `{!TrivialApart A}.
 
-  Instance: StrongSetoid A := dec_strong_setoid.
+  #[global] Instance: StrongSetoid A := dec_strong_setoid.
 
-  Instance dec_full_partial_order: FullPartialOrder (≤) (<).
+  #[global] Instance dec_full_partial_order: FullPartialOrder (≤) (<).
   Proof.
   constructor; try typeclasses eauto.
   setoid_rewrite trivial_apart; apply lt_correct.
@@ -369,17 +369,17 @@ Section dec_partial_order.
 
   Context `{!TotalRelation (≤)}.
 
-  Instance: Trichotomy (<).
+  #[global] Instance: Trichotomy (<).
   Proof.
     intros x y. rewrite !lt_correct.
     destruct (decide (x = y)); try tauto.
     destruct (total (≤) x y); intuition.
   Qed.
 
-  Instance dec_pseudo_order: PseudoOrder (<).
+  #[global] Instance dec_pseudo_order: PseudoOrder (<).
   Proof dec_strict_pseudo_order.
 
-  Instance dec_full_pseudo_order: FullPseudoOrder (≤) (<).
+  #[global] Instance dec_full_pseudo_order: FullPseudoOrder (≤) (<).
   Proof.
     split; try apply _.
     intros x y. rewrite lt_correct. split.

@@ -57,7 +57,7 @@ Section contents.
   Lemma poly_eq_p_zero p: (p = 0) ↔ poly_eq_zero p.
   Proof. now destruct p. Qed.
 
-  Instance: Reflexive poly_eq.
+  #[global] Instance: Reflexive poly_eq.
   Proof with intuition. repeat intro. induction x... split... Qed.
 
   Lemma poly_eq_cons :
@@ -86,7 +86,7 @@ Section contents.
     now apply IH.
   Qed.
 
-  Instance: Symmetric poly_eq.
+  #[global] Instance: Symmetric poly_eq.
   Proof.
     intros p p' eqp.
     pattern p, p'; apply poly_eq_ind; auto; clear p p' eqp.
@@ -95,7 +95,7 @@ Section contents.
       rewrite <- poly_eq_cons; auto.
   Qed.
 
-  Instance poly_eq_zero_proper: Proper (poly_eq ==> iff) poly_eq_zero.
+  #[global] Instance poly_eq_zero_proper: Proper (poly_eq ==> iff) poly_eq_zero.
   Proof.
     apply proper_sym_impl_iff.
     { apply _. }
@@ -105,7 +105,7 @@ Section contents.
       rewrite !poly_eq_zero_cons, eqx; tauto.
   Qed.
 
-  Instance: Transitive poly_eq.
+  #[global] Instance: Transitive poly_eq.
   Proof.
     intros ??? eqxy; revert z.
     pattern x, y; refine (poly_eq_ind _ _ _ x y eqxy); clear x y eqxy.
@@ -141,7 +141,7 @@ Section contents.
     ring [eqx].
   Qed.
 
-  Instance plus_commutative: Commutative (+).
+  #[global] Instance plus_commutative: Commutative (+).
   Proof with (try easy); cbn.
     intro.
     induction x as [|x p IH]; intros [|y q]...
@@ -177,7 +177,7 @@ Section contents.
     ring [eqx eqy].
   Qed.
 
-  Instance plus_associative: Associative (+).
+  #[global] Instance plus_associative: Associative (+).
   Proof with try easy.
     do 2 red; induction x as [|x p IH]...
     intros [|y q]...
@@ -186,12 +186,12 @@ Section contents.
     ring.
   Qed.
 
-  Instance plus_left_id: LeftIdentity (+) 0.
+  #[global] Instance plus_left_id: LeftIdentity (+) 0.
   Proof. now intro; rewrite poly_eq_zero_plus_l. Qed.
-  Instance plus_right_id: RightIdentity (+) 0.
+  #[global] Instance plus_right_id: RightIdentity (+) 0.
   Proof. now intro; rewrite poly_eq_zero_plus_r. Qed.
 
-  Instance poly_plus_monoid: Monoid poly.
+  #[global] Instance poly_plus_monoid: Monoid poly.
   Proof. repeat (split; try apply _). Qed.
 
   Global Instance: Negate poly := map (-).
@@ -206,7 +206,7 @@ Section contents.
     split; intro eq0; ring [eq0].
   Qed.
 
-  Instance poly_negate_proper: Proper (poly_eq ==> poly_eq) (-).
+  #[global] Instance poly_negate_proper: Proper (poly_eq ==> poly_eq) (-).
   Proof.
     refine (poly_eq_ind _ _ _).
     { now intros ?? ->%poly_negate_zero%poly_eq_p_zero ->%poly_negate_zero%poly_eq_p_zero. }
@@ -214,7 +214,7 @@ Section contents.
     cbn; split; eauto.
   Qed.
 
-  Instance poly_negate_l: LeftInverse (+) (-) 0.
+  #[global] Instance poly_negate_l: LeftInverse (+) (-) 0.
   Proof.
     intro; rewrite poly_eq_p_zero.
     induction x as [|x p IH]; cbn.
@@ -223,10 +223,10 @@ Section contents.
     ring.
   Qed.
 
-  Instance poly_negate_r: RightInverse (+) (-) 0.
+  #[global] Instance poly_negate_r: RightInverse (+) (-) 0.
   Proof. now intro; rewrite commutativity, left_inverse. Qed.
 
-  Instance poly_plus_abgroup: AbGroup poly.
+  #[global] Instance poly_plus_abgroup: AbGroup poly.
   Proof. repeat (split; try apply _). Qed.
 
   Fixpoint poly_mult_cr (q: poly) (c: R): poly :=
@@ -245,7 +245,7 @@ Section contents.
     ring.
   Qed.
 
-  Instance poly_mult_cr_proper: Proper ((=) ==> (=) ==> (=)) poly_mult_cr.
+  #[global] Instance poly_mult_cr_proper: Proper ((=) ==> (=) ==> (=)) poly_mult_cr.
   Proof.
     intros p p' eqp c c' eqc.
     revert p p' eqp; refine (poly_eq_ind _ _ _).
@@ -257,26 +257,26 @@ Section contents.
 
   Lemma poly_mult_cr_1_l x: poly_mult_cr 1 x = [x].
   Proof. cbn; split; [ring|easy]. Qed.
-  Instance poly_mult_cr_1_r: RightIdentity poly_mult_cr 1.
+  #[global] Instance poly_mult_cr_1_r: RightIdentity poly_mult_cr 1.
   Proof.
     red; induction x as [|x p IH]; [easy|cbn].
     split; auto; ring.
   Qed.
 
-  Instance poly_mult_cr_dist_l: LeftHeteroDistribute poly_mult_cr (+) (+).
+  #[global] Instance poly_mult_cr_dist_l: LeftHeteroDistribute poly_mult_cr (+) (+).
   Proof.
     intros x a b.
     induction x as [|x p IH]; [easy|cbn].
     split; auto; ring.
   Qed.
-  Instance poly_mult_cr_dist_r: RightHeteroDistribute poly_mult_cr (+) (+).
+  #[global] Instance poly_mult_cr_dist_r: RightHeteroDistribute poly_mult_cr (+) (+).
   Proof.
     intros p q a.
     revert q.
     induction p as [|x p IH]; intros [|y q]; [easy..|cbn].
     split; auto; ring.
   Qed.
-  Instance poly_mult_cr_assoc: HeteroAssociative poly_mult_cr (.*.) poly_mult_cr poly_mult_cr.
+  #[global] Instance poly_mult_cr_assoc: HeteroAssociative poly_mult_cr (.*.) poly_mult_cr poly_mult_cr.
   Proof.
     intros x a b.
     induction x as [|p x IH]; [easy|cbn].
@@ -314,7 +314,7 @@ Section contents.
     - rewrite poly_eq_zero_cons; auto.
   Qed.
 
-  Instance poly_mult_proper: Proper ((=) ==> (=) ==> (=)) (.*.).
+  #[global] Instance poly_mult_proper: Proper ((=) ==> (=) ==> (=)) (.*.).
   Proof.
     refine (poly_eq_ind _ _ _).
     { intros ?? zp zp' q q' eqq.
@@ -327,7 +327,7 @@ Section contents.
     now apply IH.
   Qed.
 
-  Instance poly_mult_left_distr: LeftDistribute (.*.) (+).
+  #[global] Instance poly_mult_left_distr: LeftDistribute (.*.) (+).
   Proof.
     intros p q r.
     induction p as [|x p IH]; [easy|cbn].
@@ -347,7 +347,7 @@ Section contents.
     ring.
   Qed.
 
-  Instance poly_mult_comm: Commutative (.*.).
+  #[global] Instance poly_mult_comm: Commutative (.*.).
   Proof.
     intros p.
     induction p as [|x p IH].
@@ -364,25 +364,25 @@ Section contents.
     apply IH.
   Qed.
 
-  Instance poly_mult_right_distr: RightDistribute (.*.) (+).
+  #[global] Instance poly_mult_right_distr: RightDistribute (.*.) (+).
   Proof.
     intros p q r.
     now rewrite commutativity, distribute_l, !(commutativity r).
   Qed.
 
-  Instance poly_mult_1_l: LeftIdentity (.*.) 1.
+  #[global] Instance poly_mult_1_l: LeftIdentity (.*.) 1.
   Proof.
     intro; cbn.
     rewrite poly_mult_cr_1_r, poly_eq_zero_plus_r; auto.
     now split.
   Qed.
 
-  Instance poly_mult_1_r: RightIdentity (.*.) 1.
+  #[global] Instance poly_mult_1_r: RightIdentity (.*.) 1.
   Proof.
     intro; rewrite commutativity; apply left_identity.
   Qed.
 
-  Instance poly_mult_assoc: Associative (.*.).
+  #[global] Instance poly_mult_assoc: Associative (.*.).
   Proof with (try easy); cbn.
     intros x.
     induction x as [|x p IH]...

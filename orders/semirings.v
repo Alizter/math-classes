@@ -54,7 +54,7 @@ Section semiring_order.
   Lemma nonpos_plus_compat x y : x ≤ 0 → y ≤ 0 → x + y ≤ 0.
   Proof. intros. rewrite <-(plus_0_r 0). now apply plus_le_compat. Qed.
 
-  Instance nonneg_plus_compat (x y : R) : PropHolds (0 ≤ x) → PropHolds (0 ≤ y) → PropHolds (0 ≤ x + y).
+  #[global] Instance nonneg_plus_compat (x y : R) : PropHolds (0 ≤ x) → PropHolds (0 ≤ y) → PropHolds (0 ≤ x + y).
   Proof. intros. now apply plus_le_compat_l. Qed.
 
   Lemma decompose_le {x y} : x ≤ y → ∃ z, 0 ≤ z ∧ y = x + z.
@@ -145,7 +145,7 @@ Section semiring_order.
 End semiring_order.
 
 (* Due to bug #2528 *)
-Hint Extern 7 (PropHolds (0 ≤ _ + _)) => eapply @nonneg_plus_compat : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 ≤ _ + _)) => eapply @nonneg_plus_compat : typeclass_instances.
 
 Section strict_semiring_order.
   Context `{SemiRing R} `{Apart R} `{!StrictSemiRingOrder Rlt}.
@@ -185,7 +185,7 @@ Section strict_semiring_order.
   Lemma neg_plus_compat x y : x < 0 → y < 0 → x + y < 0.
   Proof. intros. rewrite <-(plus_0_r 0). now apply plus_lt_compat. Qed.
 
-  Instance pos_plus_compat (x y : R) : PropHolds (0 < x) → PropHolds (0 < y) → PropHolds (0 < x + y).
+  #[global] Instance pos_plus_compat (x y : R) : PropHolds (0 < x) → PropHolds (0 < y) → PropHolds (0 < x + y).
   Proof. intros. now apply plus_lt_compat_l. Qed.
 
   Lemma compose_lt x y z : 0 < z → y = x + z → x < y.
@@ -274,13 +274,13 @@ Section strict_semiring_order.
 End strict_semiring_order.
 
 (* Due to bug #2528 *)
-Hint Extern 7 (PropHolds (0 < _ + _)) => eapply @pos_plus_compat : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 < _ + _)) => eapply @pos_plus_compat : typeclass_instances.
 
 Section pseudo_semiring_order.
   Context `{PseudoSemiRingOrder R}.
   Add Ring Rp : (stdlib_semiring_theory R).
 
-  Instance: StrongSetoid R := pseudo_order_setoid.
+  #[global] Instance: StrongSetoid R := pseudo_order_setoid.
 
   Global Instance: StrictSemiRingOrder (_ : Lt R).
   Proof.
@@ -357,7 +357,7 @@ Section pseudo_semiring_order.
   Global Instance: ∀ (z : R), PropHolds (0 < z) → StrictlyOrderReflecting (.* z).
   Proof. intros. now apply strictly_order_reflecting_flip. Qed.
 
-  Global  Instance: ∀ z, PropHolds (z ≶ 0) → StrongLeftCancellation (.*.) z.
+  Global  #[global] Instance: ∀ z, PropHolds (z ≶ 0) → StrongLeftCancellation (.*.) z.
   Proof.
     intros z Ez x y E. red in Ez.
     rewrite apart_iff_total_lt in E, Ez |- *.
@@ -400,16 +400,16 @@ Section pseudo_semiring_order.
 
   Context `{PropHolds (1 ≶ 0)}.
 
-  Instance lt_0_1 : PropHolds (0 < 1).
+  #[global] Instance lt_0_1 : PropHolds (0 < 1).
   Proof. red. setoid_replace 1 with (1 * 1) by ring. now apply square_pos. Qed.
 
-  Instance lt_0_2 : PropHolds (0 < 2).
+  #[global] Instance lt_0_2 : PropHolds (0 < 2).
   Proof. apply _. Qed.
 
-  Instance lt_0_3 : PropHolds (0 < 3).
+  #[global] Instance lt_0_3 : PropHolds (0 < 3).
   Proof. apply _. Qed.
 
-  Instance lt_0_4 : PropHolds (0 < 4).
+  #[global] Instance lt_0_4 : PropHolds (0 < 4).
   Proof. apply _. Qed.
 
   Lemma lt_1_2 : 1 < 2.
@@ -430,15 +430,15 @@ Section pseudo_semiring_order.
   Lemma lt_3_4 : 3 < 4.
   Proof. apply (strictly_order_preserving (1+)), lt_2_3. Qed.
 
-  Instance apart_0_2 : PropHolds (2 ≶ 0).
+  #[global] Instance apart_0_2 : PropHolds (2 ≶ 0).
   Proof. red. symmetry. now apply pseudo_order_lt_apart, lt_0_2. Qed.
 End pseudo_semiring_order.
 
-Hint Extern 7 (PropHolds (0 < 1)) => eapply @lt_0_1 : typeclass_instances.
-Hint Extern 7 (PropHolds (0 < 2)) => eapply @lt_0_2 : typeclass_instances.
-Hint Extern 7 (PropHolds (0 < 3)) => eapply @lt_0_3 : typeclass_instances.
-Hint Extern 7 (PropHolds (0 < 4)) => eapply @lt_0_4 : typeclass_instances.
-Hint Extern 7 (PropHolds (2 ≶ 0)) => eapply @apart_0_2 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 < 1)) => eapply @lt_0_1 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 < 2)) => eapply @lt_0_2 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 < 3)) => eapply @lt_0_3 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 < 4)) => eapply @lt_0_4 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (2 ≶ 0)) => eapply @apart_0_2 : typeclass_instances.
 
 Section full_pseudo_semiring_order.
   Context `{FullPseudoSemiRingOrder R}.
@@ -515,16 +515,16 @@ Section full_pseudo_semiring_order.
   Lemma nonneg_mult_rev_r x y : 0 ≤ x * y → 0 < x → 0 ≤ y.
   Proof. intros. apply nonneg_mult_rev_l with x. now rewrite commutativity. easy. Qed.
 
-  Instance le_0_1 : PropHolds (0 ≤ 1).
+  #[global] Instance le_0_1 : PropHolds (0 ≤ 1).
   Proof. red. setoid_replace 1 with (1 * 1) by ring. now apply square_nonneg. Qed.
 
-  Instance le_0_2 : PropHolds (0 ≤ 2).
+  #[global] Instance le_0_2 : PropHolds (0 ≤ 2).
   Proof. solve_propholds. Qed.
 
-  Instance le_0_3 : PropHolds (0 ≤ 3).
+  #[global] Instance le_0_3 : PropHolds (0 ≤ 3).
   Proof. solve_propholds. Qed.
 
-  Instance le_0_4 : PropHolds (0 ≤ 4).
+  #[global] Instance le_0_4 : PropHolds (0 ≤ 4).
   Proof. solve_propholds. Qed.
 
   Lemma le_1_2 : 1 ≤ 2.
@@ -573,10 +573,10 @@ Section full_pseudo_semiring_order.
 End full_pseudo_semiring_order.
 
 (* Due to bug #2528 *)
-Hint Extern 7 (PropHolds (0 ≤ 1)) => eapply @le_0_1 : typeclass_instances.
-Hint Extern 7 (PropHolds (0 ≤ 2)) => eapply @le_0_2 : typeclass_instances.
-Hint Extern 7 (PropHolds (0 ≤ 3)) => eapply @le_0_3 : typeclass_instances.
-Hint Extern 7 (PropHolds (0 ≤ 4)) => eapply @le_0_4 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 ≤ 1)) => eapply @le_0_1 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 ≤ 2)) => eapply @le_0_2 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 ≤ 3)) => eapply @le_0_3 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (0 ≤ 4)) => eapply @le_0_4 : typeclass_instances.
 
 Section dec_semiring_order.
   (* Maybe these assumptions can be weakened? *)
@@ -585,10 +585,10 @@ Section dec_semiring_order.
 
   Context `{Rlt : Lt R} (lt_correct : ∀ x y, x < y ↔ x ≤ y ∧ x ≠ y).
 
-  Instance: FullPseudoOrder (_ : Le R) (_ : Lt R) := dec_full_pseudo_order lt_correct.
-  Instance: StrongSetoid R := pseudo_order_setoid.
+  #[global] Instance: FullPseudoOrder (_ : Le R) (_ : Lt R) := dec_full_pseudo_order lt_correct.
+  #[global] Instance: StrongSetoid R := pseudo_order_setoid.
 
-  Instance dec_pseudo_srorder: PseudoSemiRingOrder (<).
+  #[global] Instance dec_pseudo_srorder: PseudoSemiRingOrder (<).
   Proof.
     split; try apply _.
        intros x y E. now apply srorder_partial_minus, not_lt_le_flip.
@@ -604,7 +604,7 @@ Section dec_semiring_order.
     now apply mult_ne_0; apply not_symmetry.
   Qed.
 
-  Instance dec_full_pseudo_srorder: FullPseudoSemiRingOrder (≤) (<).
+  #[global] Instance dec_full_pseudo_srorder: FullPseudoSemiRingOrder (≤) (<).
   Proof.
     split; try apply _.
     now apply le_iff_not_lt_flip.
@@ -642,7 +642,7 @@ Section another_semiring.
     now rewrite Ez2, preserves_plus.
   Qed.
 
-  Instance preserves_nonneg `{!OrderPreserving f} x : PropHolds (0 ≤ x) → PropHolds (0 ≤ f x).
+  #[global] Instance preserves_nonneg `{!OrderPreserving f} x : PropHolds (0 ≤ x) → PropHolds (0 ≤ f x).
   Proof. intros. rewrite <-(preserves_0 (f:=f)). now apply (order_preserving f). Qed.
 
   Lemma preserves_nonpos `{!OrderPreserving f} x : x ≤ 0 → f x ≤ 0.
@@ -670,7 +670,7 @@ Section another_semiring_strict.
     now rewrite Ez2, preserves_plus.
   Qed.
 
-  Instance preserves_pos `{!StrictlyOrderPreserving f} x : PropHolds (0 < x) → PropHolds (0 < f x).
+  #[global] Instance preserves_pos `{!StrictlyOrderPreserving f} x : PropHolds (0 < x) → PropHolds (0 < f x).
   Proof. intros. rewrite <-(preserves_0 (f:=f)). now apply (strictly_order_preserving f). Qed.
 
   Lemma preserves_neg `{!StrictlyOrderPreserving f} x : x < 0 → f x < 0.
@@ -684,9 +684,9 @@ Section another_semiring_strict.
 End another_semiring_strict.
 
 (* Due to bug #2528 *)
-Hint Extern 15 (PropHolds (_ ≤ _ _)) => eapply @preserves_nonneg : typeclass_instances.
-Hint Extern 15 (PropHolds (_ < _ _)) => eapply @preserves_pos : typeclass_instances.
+#[global] Hint Extern 15 (PropHolds (_ ≤ _ _)) => eapply @preserves_nonneg : typeclass_instances.
+#[global] Hint Extern 15 (PropHolds (_ < _ _)) => eapply @preserves_pos : typeclass_instances.
 
 (* Oddly enough, the above hints do not work for goals of the following shape? *)
-Hint Extern 15 (PropHolds (_ ≤ '_)) => eapply @preserves_nonneg : typeclass_instances.
-Hint Extern 15 (PropHolds (_ < '_)) => eapply @preserves_pos : typeclass_instances.
+#[global] Hint Extern 15 (PropHolds (_ ≤ '_)) => eapply @preserves_nonneg : typeclass_instances.
+#[global] Hint Extern 15 (PropHolds (_ < '_)) => eapply @preserves_pos : typeclass_instances.

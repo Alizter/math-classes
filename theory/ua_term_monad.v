@@ -63,9 +63,9 @@ Section contents.
 
   Arguments gen_bind_aux {A B} _ {s} _.
 
-  Instance gen_bind: MonadBind M := λ _ _ f z, gen_bind_aux f z.
+  #[global] Instance gen_bind: MonadBind M := λ _ _ f z, gen_bind_aux f z.
 
-  Instance: ∀ `{Equiv A} `{Equiv B},
+  #[global] Instance: ∀ `{Equiv A} `{Equiv B},
     Proper (((=) ==> (=)) ==> (=) ==> (=)) (@bind M _ A B).
   Proof with intuition.
    intros A H1 B H2 x0 y0 E' x y E.
@@ -82,13 +82,13 @@ Section contents.
   Qed.
 
   (* return: *)
-  Instance gen_ret: MonadReturn M := λ _ x, Var sign _ x tt.
+  #[global] Instance gen_ret: MonadReturn M := λ _ x, Var sign _ x tt.
 
-  Instance: ∀ `{Equiv A}, Proper ((=) ==> (=)) (@ret M _ A).
+  #[global] Instance: ∀ `{Equiv A}, Proper ((=) ==> (=)) (@ret M _ A).
   Proof. repeat intro. assumption. Qed.
 
   (* What remains are the laws: *)
-  Instance: Monad M.
+  #[global] Instance: Monad M.
   Proof with intuition.
    constructor; intros; try apply _.
      (* law 1 *)

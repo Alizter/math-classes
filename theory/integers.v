@@ -49,11 +49,11 @@ Proof.
   unfold compose. now rewrite E.
 Qed.
 
-Instance integers_to_integers_injective `{Integers Z} `{Integers Z2} (f: Z → Z2) `{!SemiRing_Morphism f} :
+#[global] Instance integers_to_integers_injective `{Integers Z} `{Integers Z2} (f: Z → Z2) `{!SemiRing_Morphism f} :
   Injective f.
 Proof. apply (to_ring_injective (integers_to_ring Z2 Z) _). Qed.
 
-Instance naturals_to_integers_injective `{Integers Z} `{Naturals N} (f: N → Z) `{!SemiRing_Morphism f} :
+#[global] Instance naturals_to_integers_injective `{Integers Z} `{Naturals N} (f: N → Z) `{!SemiRing_Morphism f} :
   Injective f.
 Proof.
   split; try apply _. intros x y E.
@@ -71,7 +71,7 @@ Section retract_is_int.
   Section for_another_ring.
     Context `{Ring R}.
 
-    Instance: SemiRing_Morphism (integers_to_ring Z R ∘ f⁻¹) := {}.
+    #[global] Instance: SemiRing_Morphism (integers_to_ring Z R ∘ f⁻¹) := {}.
     Context (h :  Z2 → R) `{!SemiRing_Morphism h}.
 
     Lemma same_morphism: integers_to_ring Z R ∘ f⁻¹ = h.
@@ -84,7 +84,7 @@ Section retract_is_int.
   End for_another_ring.
 
   (* If we make this an instance, then instance resolution will often loop *)
-  Program Instance retract_is_int: Integers Z2 (U:=retract_is_int_to_ring).
+  #[global] Program Instance retract_is_int: Integers Z2 (U:=retract_is_int_to_ring).
   Next Obligation. unfold integers_to_ring, retract_is_int_to_ring. apply _. Qed.
   Next Obligation. apply integer_initial. intros. now apply same_morphism. Qed.
 End retract_is_int.
@@ -114,7 +114,7 @@ Next Obligation.
   now apply (naturals.to_semiring_twice _ _ _).
 Qed.
 
-Instance: PropHolds ((1:Z) ≠ 0).
+#[global] Instance: PropHolds ((1:Z) ≠ 0).
 Proof.
   intros E.
   apply (rings.is_ne_0 (1:nat)).

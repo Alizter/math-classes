@@ -8,7 +8,7 @@ Definition fset_car_setoid A `{FSet A} : Setoid A := setoidmor_a singleton.
 Section fset_props.
   Context `{FSet A}.
 
-  Instance: Setoid A := fset_car_setoid A.
+  #[global] Instance: Setoid A := fset_car_setoid A.
 
   Lemma fset_extend_correct_applied `{BoundedJoinSemiLattice B} (f : A → B) `{!Setoid_Morphism f} x :
     f x = fset_extend f {{ x }}.
@@ -23,7 +23,7 @@ Section fset_props.
   Qed.
 
   Let F (x y z : A) := if decide (z = x) then false else true.
-  Instance: ∀ x y, Setoid_Morphism (F x y).
+  #[global] Instance: ∀ x y, Setoid_Morphism (F x y).
   Proof.
     split; try apply _. intros ?? E. unfold F.
     do 2 case (decide _); try reflexivity; rewrite E; contradiction.
@@ -66,7 +66,7 @@ Section fset_props.
   Proof. rewrite commutativity, fset_join_singletons_eq_l. intuition. Qed.
 End fset_props.
 
-Instance fset_map_mor `{FSet A} `{FSet B} (f : A → B) `{!Setoid_Morphism f} :
+#[global] Instance fset_map_mor `{FSet A} `{FSet B} (f : A → B) `{!Setoid_Morphism f} :
   BoundedJoinSemiLattice_Morphism (fset_map (H:=At) (H0:=At0) (SetSingleton0:=Asingle0)  f).
 Proof. apply _. Qed.
 
@@ -116,7 +116,7 @@ Section fset_map_inverse.
 
   Global Instance fset_map_inverse: Inverse (fset_map f) := fset_map (f⁻¹).
 
-  Instance fset_map_surjective: Surjective (fset_map f).
+  #[global] Instance fset_map_surjective: Surjective (fset_map f).
   Proof.
     pose proof (fset_car_setoid A). pose proof (fset_car_setoid B).
     pose proof (injective_mor f). split; try apply _.
@@ -128,7 +128,7 @@ Section fset_map_inverse.
   Qed.
 End fset_map_inverse.
 
-Instance fset_map_bijective `{FSet A} `{FSet B}
+#[global] Instance fset_map_bijective `{FSet A} `{FSet B}
   (f : A → B) `{!Inverse f} `{!Bijective f} : Bijective (fset_map f).
 Proof.
   pose proof (fset_car_setoid A). pose proof (fset_car_setoid B).
@@ -161,7 +161,7 @@ Proof. split; intros E ?; now apply E, (preserves_in f). Qed.
 Section full_fset_props.
   Context `{FullFSet A}.
 
-  Instance: Setoid A := fset_car_setoid A.
+  #[global] Instance: Setoid A := fset_car_setoid A.
 
   Notation to_listset := (fset_map id : set_type A → @set_type _ (listset A)).
   Notation from_listset := (to_listset⁻¹).
@@ -249,15 +249,15 @@ Section full_fset_props.
     intros. now apply (injective (to_listset)).
   Qed.
 
-  Instance: Proper ((=) ==> (=) ==> (=)) (⊓).
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) (⊓).
   Proof. intros ?? E1 ?? E2. apply fset_eq_in. intros. now rewrite !fset_in_meet, E1, E2. Qed.
-  Instance: Associative (⊓).
+  #[global] Instance: Associative (⊓).
   Proof. repeat intro. apply fset_eq_in. intros. rewrite !fset_in_meet. tauto. Qed.
-  Instance: Commutative (⊓).
+  #[global] Instance: Commutative (⊓).
   Proof. repeat intro. apply fset_eq_in. intros. rewrite !fset_in_meet. tauto. Qed.
-  Instance: BinaryIdempotent (⊓).
+  #[global] Instance: BinaryIdempotent (⊓).
   Proof. repeat intro. apply fset_eq_in. intros. rewrite !fset_in_meet. tauto. Qed.
-  Instance: MeetSemiLattice (set_type A).
+  #[global] Instance: MeetSemiLattice (set_type A).
   Proof. repeat (split; try apply _). Qed.
 
   Global Instance: DistributiveLattice (set_type A).
@@ -359,7 +359,7 @@ Section iso_is_fset.
    `{∀ a₁ a₂ : A, Decision (a₁ = a₂)}
     (singleton_correct : At_to_Bt ∘ singleton = singleton ∘ A_to_B).
 
-  Instance: Setoid B := fset_car_setoid B.
+  #[global] Instance: Setoid B := fset_car_setoid B.
 
   Lemma singleton_correct_alt :
     At_to_Bt⁻¹ ∘ singleton = singleton ∘ A_to_B⁻¹.
@@ -373,10 +373,10 @@ Section iso_is_fset.
     now apply setoids.ext_equiv_refl.
   Qed.
 
-  Instance iso_is_fset_extend: FSetExtend A := λ C _ _ f,
+  #[global] Instance iso_is_fset_extend: FSetExtend A := λ C _ _ f,
     fset_extend (f ∘ A_to_B⁻¹) ∘ At_to_Bt.
 
-  Instance iso_is_fset: FSet A.
+  #[global] Instance iso_is_fset: FSet A.
   Proof.
     pose proof (injective_mor A_to_B).
     split; unfold fset_extend, iso_is_fset_extend; try apply _.

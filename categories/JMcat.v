@@ -28,8 +28,8 @@ Arguments map_obj {x y} _ _.
 Existing Instance Fmap_inst.
 Existing Instance Functor_inst.
 
-Instance: Arrows Object := Arrow.
-(* Hint Extern 4 (Arrows Object) => exact Arrow: typeclass_instances. *)
+#[global] Instance: Arrows Object := Arrow.
+(* #[global] Hint Extern 4 (Arrows Object) => exact Arrow: typeclass_instances. *)
 
 Section contents.
   Section more_arrows.
@@ -39,19 +39,19 @@ Section contents.
       (∀ v, a v ≡ b v) ∧
       (∀ `(f: v ⟶ w), JMrelation.R (=) (fmap a f) _ (=) (fmap b f)).
 
-    Instance e_refl: Reflexive e.
+    #[global] Instance e_refl: Reflexive e.
     Proof.
      intro a. unfold e. intuition.
      apply JMrelation.reflexive, _.
     Qed.
 
-    Instance e_sym: Symmetric e.
+    #[global] Instance e_sym: Symmetric e.
     Proof with intuition.
      unfold e. intros ?? [P Q]...
      apply JMrelation.symmetric...
     Qed.
 
-    Instance e_trans: Transitive e.
+    #[global] Instance e_trans: Transitive e.
     Proof with intuition.
      unfold e. intros a b c [P Q] [R S]...
       transitivity (b v)...

@@ -22,7 +22,7 @@ Section contents.
     | ne_list.cons _ _ => λ x y, app_tree (App _ _ _ _ x y)
     end.
 
-  Instance: AlgebraOps et ClosedTerm0 := λ x, app_tree (Op _ _ x).
+  #[global] Instance: AlgebraOps et ClosedTerm0 := λ x, app_tree (Op _ _ x).
 
   (* We define term equivalence on all operation types: *)
 
@@ -42,9 +42,9 @@ Section contents.
 
   (* .. and then take the specialization at arity 0 for Term0: *)
 
-  Instance: ∀ a, Equiv (ClosedTerm0 a) := λ a, e (ne_list.one a).
+  #[global] Instance: ∀ a, Equiv (ClosedTerm0 a) := λ a, e (ne_list.one a).
 
-  Instance: ∀ a, Setoid (ClosedTerm0 a).
+  #[global] Instance: ∀ a, Setoid (ClosedTerm0 a).
   Proof. split; apply _. Qed.
 
   (* While this fancy congruence is the one we'll use to make our initial object a setoid,
@@ -54,18 +54,18 @@ Section contents.
 
   Let structural_eq a: relation _ := @op_type_equiv (sorts et) ClosedTerm0 (λ _, eq) a.
 
-  Instance structural_eq_refl a: Reflexive (structural_eq a).
+  #[global] Instance structural_eq_refl a: Reflexive (structural_eq a).
   Proof. induction a; repeat intro. reflexivity. subst. apply IHa. Qed.
 
   (* The implementation is proper: *)
 
-  Instance app_tree_proper: ∀ o, Proper ((=) ==> (=)) (@app_tree o).
+  #[global] Instance app_tree_proper: ∀ o, Proper ((=) ==> (=)) (@app_tree o).
   Proof with auto.
    induction o; repeat intro...
    apply IHo, e_sub...
   Qed.
 
-  Instance: Algebra et ClosedTerm0.
+  #[global] Instance: Algebra et ClosedTerm0.
   Proof.
    constructor. intro. apply _.
    intro. apply app_tree_proper. reflexivity.
@@ -139,7 +139,7 @@ Section contents.
 
     (* And with those two somewhat subtle lemmas, we show that eval_in_other is a setoid morphism: *)
 
-    Instance prep_proper {o}: Proper ((=) ==> (=)) (@eval_in_other o).
+    #[global] Instance prep_proper {o}: Proper ((=) ==> (=)) (@eval_in_other o).
     Proof with intuition.
      intros x y H.
      induction H; simpl...
@@ -161,12 +161,12 @@ Section contents.
      do 2 rewrite <- eval_is_close...
     Qed.
 
-    Instance: ∀ a, Setoid_Morphism (@eval_in_other (ne_list.one a)).
+    #[global] Instance: ∀ a, Setoid_Morphism (@eval_in_other (ne_list.one a)).
     Proof. constructor; simpl; try apply _. Qed.
 
     (* Furthermore, we can show preservation of operations, giving us a homomorphism (and an arrow): *)
 
-    Instance: @HomoMorphism et ClosedTerm0 other _ (varieties.variety_equiv et other) _ _ (λ _, eval_in_other).
+    #[global] Instance: @HomoMorphism et ClosedTerm0 other _ (varieties.variety_equiv et other) _ _ (λ _, eval_in_other).
     Proof with intuition.
      constructor; try apply _.
      intro.
@@ -205,9 +205,9 @@ Section contents.
 
   End for_another_object.
 
-  Hint Extern 4 (InitialArrow the_object) => exact the_arrow: typeclass_instances.
+  #[global] Hint Extern 4 (InitialArrow the_object) => exact the_arrow: typeclass_instances.
 
-  Instance: Initial the_object.
+  #[global] Instance: Initial the_object.
   Proof. intro. apply arrow_unique. Qed.
 
   (* Todo: Show decidability of equality (likely quite tricky). Without that, we cannot use any of this to

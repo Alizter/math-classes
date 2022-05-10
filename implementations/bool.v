@@ -1,12 +1,12 @@
 Require Import MathClasses.interfaces.abstract_algebra.
 
-Instance bool_eq: Equiv bool := eq.
-Instance bool_bottom: Bottom bool := false.
-Instance bool_top: Top bool := true.
-Instance bool_join: Join bool := orb.
-Instance bool_meet: Meet bool := andb.
+#[global] Instance bool_eq: Equiv bool := eq.
+#[global] Instance bool_bottom: Bottom bool := false.
+#[global] Instance bool_top: Top bool := true.
+#[global] Instance bool_join: Join bool := orb.
+#[global] Instance bool_meet: Meet bool := andb.
 
-Instance: BoundedJoinSemiLattice bool.
+#[global] Instance: BoundedJoinSemiLattice bool.
 Proof.
   repeat (split; try apply _); repeat intro.
      apply Bool.orb_assoc.
@@ -15,7 +15,7 @@ Proof.
   apply Bool.orb_diag.
 Qed.
 
-Instance: MeetSemiLattice bool.
+#[global] Instance: MeetSemiLattice bool.
 Proof.
   repeat (split; try apply _); repeat intro.
     apply Bool.andb_assoc.
@@ -23,7 +23,7 @@ Proof.
   apply Bool.andb_diag.
 Qed.
 
-Instance: DistributiveLattice bool.
+#[global] Instance: DistributiveLattice bool.
 Proof.
   repeat (split; try apply _); repeat intro.
     apply Bool.absoption_orb.

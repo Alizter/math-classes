@@ -10,17 +10,17 @@ Module QType_Rationals (Import anyQ: QType).
 
 Module Import props := QProperties anyQ.
 
-Instance QType_equiv: Equiv t := eq.
-Instance QType_plus: Plus t := add.
-Instance QType_0: Zero t := zero.
-Instance QType_1: One t := one.
-Instance QType_mult: Mult t := mul.
-Instance QType_negate: Negate t := opp.
-Instance QType_dec_recip: DecRecip t := inv.
+#[global] Instance QType_equiv: Equiv t := eq.
+#[global] Instance QType_plus: Plus t := add.
+#[global] Instance QType_0: Zero t := zero.
+#[global] Instance QType_1: One t := one.
+#[global] Instance QType_mult: Mult t := mul.
+#[global] Instance QType_negate: Negate t := opp.
+#[global] Instance QType_dec_recip: DecRecip t := inv.
 
-Instance: Setoid t := {}.
+#[global] Instance: Setoid t := {}.
 
-Instance: ∀ x y: t, Decision (x = y).
+#[global] Instance: ∀ x y: t, Decision (x = y).
 Proof with intuition.
 refine (λ x y,
   (match anyQ.eq_bool x y as p return p ≡ Qeq_bool (to_Q x) (to_Q y) → Decision (x = y) with
@@ -48,63 +48,63 @@ Proof.
  exact mul_inv_diag_l.
 Qed.
 
-Instance: DecField t.
+#[global] Instance: DecField t.
 Proof.
   refine (dec_fields.from_stdlib_field_theory anyQ_field_theory _).
   unfold eq. now rewrite spec_inv, spec_0.
 Qed.
 
 (* Type-classified facts about to_Q/of_Q: *)
-Instance inject_QType_Q: Cast t Q := to_Q.
+#[global] Instance inject_QType_Q: Cast t Q := to_Q.
 
-Instance: Setoid_Morphism to_Q.
+#[global] Instance: Setoid_Morphism to_Q.
 Proof. constructor; try apply _. intros x y. auto. Qed.
 
-Instance: SemiRing_Morphism to_Q.
+#[global] Instance: SemiRing_Morphism to_Q.
 Proof. repeat (constructor; try apply _); intros; qify; reflexivity. Qed.
 
-Instance inject_Q_QType: Cast Q t := of_Q.
-Instance: Inverse to_Q := of_Q.
+#[global] Instance inject_Q_QType: Cast Q t := of_Q.
+#[global] Instance: Inverse to_Q := of_Q.
 
-Instance: Surjective to_Q.
+#[global] Instance: Surjective to_Q.
 Proof. constructor. intros x y E. rewrite <- E. apply spec_of_Q. apply _. Qed.
 
-Instance: Injective to_Q.
+#[global] Instance: Injective to_Q.
 Proof. constructor. auto. apply _. Qed.
 
-Instance: Bijective to_Q := {}.
+#[global] Instance: Bijective to_Q := {}.
 
-Instance: Inverse of_Q := to_Q.
+#[global] Instance: Inverse of_Q := to_Q.
 
-Instance: Bijective of_Q.
+#[global] Instance: Bijective of_Q.
 Proof. apply jections.flip_bijection. Qed.
 
-Instance: SemiRing_Morphism of_Q.
+#[global] Instance: SemiRing_Morphism of_Q.
 Proof. change (SemiRing_Morphism (to_Q⁻¹)). split; apply _. Qed.
 
-Instance: RationalsToFrac t := iso_to_frac of_Q.
-Instance: Rationals t := iso_is_rationals of_Q.
+#[global] Instance: RationalsToFrac t := iso_to_frac of_Q.
+#[global] Instance: Rationals t := iso_is_rationals of_Q.
 
 (* Order *)
-Instance QType_le: Le t := le.
-Instance QType_lt: Lt t := lt.
+#[global] Instance QType_le: Le t := le.
+#[global] Instance QType_lt: Lt t := lt.
 
-Instance: Proper ((=) ==> (=) ==> iff) QType_le.
+#[global] Instance: Proper ((=) ==> (=) ==> iff) QType_le.
 Proof.
   intros ? ? E1 ? ? E2. unfold QType_le, le, equiv, QType_equiv, eq in *.
   now rewrite E1, E2.
 Qed.
 
-Instance: SemiRingOrder QType_le.
+#[global] Instance: SemiRingOrder QType_le.
 Proof. now apply (rings.projected_ring_order to_Q). Qed.
 
-Instance: OrderEmbedding to_Q.
+#[global] Instance: OrderEmbedding to_Q.
 Proof. now repeat (split; try apply _). Qed.
 
-Instance: TotalRelation QType_le.
+#[global] Instance: TotalRelation QType_le.
 Proof. now apply (maps.projected_total_order to_Q). Qed.
 
-Instance: FullPseudoSemiRingOrder QType_le QType_lt.
+#[global] Instance: FullPseudoSemiRingOrder QType_le QType_lt.
 Proof.
   rapply semirings.dec_full_pseudo_srorder.
   intros x y.
@@ -113,7 +113,7 @@ Proof.
 Qed.
 
 (* Efficient comparison *)
-Program Instance: ∀ x y: t, Decision (x ≤ y) := λ x y,
+#[global] Program Instance: ∀ x y: t, Decision (x ≤ y) := λ x y,
   match compare x y with
   | Gt => right _
   | _ => left _
@@ -132,9 +132,9 @@ Next Obligation.
 Qed.
 
 (* Efficient [int_pow] *)
-Program Instance QType_Zpow: Pow t Z := power.
+#[global] Program Instance QType_Zpow: Pow t Z := power.
 
-Instance: IntPowSpec t Z QType_Zpow.
+#[global] Instance: IntPowSpec t Z QType_Zpow.
 Proof.
   split; try apply _; unfold_equiv.
     intros. now rewrite spec_power, preserves_1.
@@ -145,9 +145,9 @@ Proof.
   now apply int_pow_S.
 Qed.
 
-Program Instance QType_Npow: Pow t N := λ x n, power x (Z_of_N n).
+#[global] Program Instance QType_Npow: Pow t N := λ x n, power x (Z_of_N n).
 
-Instance: NatPowSpec t N QType_Npow.
+#[global] Instance: NatPowSpec t N QType_Npow.
 Proof.
   split; unfold "^", QType_Npow.
     solve_proper.

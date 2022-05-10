@@ -17,12 +17,12 @@ Next Obligation. apply nat_int.to_semiring_nonneg. Qed.
 
 Local Ltac unfold_equivs := unfold equiv, sig_equiv in *; simpl in *.
 
-Instance: Proper ((=) ==> (=)) of_nat.
+#[global] Instance: Proper ((=) ==> (=)) of_nat.
 Proof. intros ?? E. unfold_equivs. now rewrite E. Qed.
 
-Instance: Setoid_Morphism of_nat := {}.
+#[global] Instance: Setoid_Morphism of_nat := {}.
 
-Instance: SemiRing_Morphism of_nat.
+#[global] Instance: SemiRing_Morphism of_nat.
 Proof.
   repeat (split; try apply _); repeat intro; unfold_equivs.
      now apply rings.preserves_plus.
@@ -34,13 +34,13 @@ Qed.
 Program Let to_nat: Inverse of_nat := λ x, int_abs Z nat (`x).
 Existing Instance to_nat.
 
-Instance: Proper ((=) ==> (=)) to_nat.
+#[global] Instance: Proper ((=) ==> (=)) to_nat.
 Proof.
   intros [x Ex] [y Ey] E. unfold to_nat. do 2 red in E. simpl in E. simpl.
   now rewrite E.
 Qed.
 
-Instance: SemiRing_Morphism to_nat.
+#[global] Instance: SemiRing_Morphism to_nat.
 Proof.
   pose proof (_ : SemiRing (Z⁺)).
   repeat (split; try apply _).
@@ -52,7 +52,7 @@ Proof.
   unfold mon_unit, one_is_mon_unit. apply int_abs_1.
 Qed.
 
-Instance: Surjective of_nat.
+#[global] Instance: Surjective of_nat.
 Proof.
   split. 2: apply _.
   intros [x Ex] y E. rewrite <- E.

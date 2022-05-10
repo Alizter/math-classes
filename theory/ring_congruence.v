@@ -23,7 +23,7 @@ Inductive Quotient A (R : relation A) := quotient_inject : Cast A (Quotient A R)
 Existing Instance quotient_inject.
 Arguments quotient_inject {A R} _.
 
-Instance quotient_rep {A R} : Cast (Quotient A R) A := λ x,
+#[global] Instance quotient_rep {A R} : Cast (Quotient A R) A := λ x,
   match x with quotient_inject r => r end.
 
 Section quotient_ring.
@@ -39,7 +39,7 @@ Section quotient_ring.
   Global Instance quotient_mult: Mult (Quotient A R) := λ x y, cast A (Quotient A R) ('x * 'y).
   Global Instance quotient_negate: Negate (Quotient A R) := λ x, cast A (Quotient A R) (-'x).
 
-  Instance: Setoid (Quotient A R).
+  #[global] Instance: Setoid (Quotient A R).
   Proof.
     constructor; unfold equiv, quotient_equiv.
       intros [x]. reflexivity.
@@ -47,13 +47,13 @@ Section quotient_ring.
     intros [x] [y] [z] E1 E2. now transitivity y.
   Qed.
 
-  Instance: Proper ((=) ==> (=) ==> (=)) quotient_plus.
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) quotient_plus.
   Proof. intros [?] [?] E1 [?] [?] E2. now rapply ring_congr_plus. Qed.
 
-  Instance: Proper ((=) ==> (=) ==> (=)) quotient_mult.
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) quotient_mult.
   Proof. intros [?] [?] E1 [?] [?] E2. now rapply ring_congr_mult. Qed.
 
-  Instance: Proper ((=) ==> (=)) quotient_negate.
+  #[global] Instance: Proper ((=) ==> (=)) quotient_negate.
   Proof. intros [?] [?] E. now rapply ring_congr_negate. Qed.
 
   Global Instance: Setoid_Morphism quotient_inject.

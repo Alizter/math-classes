@@ -54,7 +54,7 @@ Qed.
 Lemma dec_recip_ne_0_iff x : / x ≠ 0 ↔ x ≠ 0.
 Proof. now split; intros E1 E2; destruct E1; apply dec_recip_zero. Qed.
 
-Instance dec_recip_ne_0 x : PropHolds (x ≠ 0) → PropHolds (/x ≠ 0).
+#[global] Instance dec_recip_ne_0 x : PropHolds (x ≠ 0) → PropHolds (/x ≠ 0).
 Proof. intro. now apply dec_recip_ne_0_iff. Qed.
 
 Lemma equal_by_one_quotient (x y : F) : x / y = 1 → x = y.
@@ -144,7 +144,7 @@ Proof.
   now apply flip_negate_ne_0.
 Qed.
 
-Instance: @VectorSpace F F Ae Aplus Amult Azero Aone Anegate Adec_recip
+#[global] Instance: @VectorSpace F F Ae Aplus Amult Azero Aone Anegate Adec_recip
                        Ae Aplus Azero Anegate Amult.
 Proof.
   repeat split; repeat (try apply _).
@@ -154,7 +154,7 @@ Qed.
 End contents.
 
 (* Due to bug #2528 *)
-Hint Extern 7 (PropHolds (/ _ ≠ 0)) => eapply @dec_recip_ne_0 : typeclass_instances.
+#[global] Hint Extern 7 (PropHolds (/ _ ≠ 0)) => eapply @dec_recip_ne_0 : typeclass_instances.
 
 (* Given a decidable field we can easily construct a constructive field. *)
 Section is_field.
@@ -162,7 +162,7 @@ Section is_field.
 
   Global Program Instance recip_dec_field: Recip F := λ x, /`x.
 
-  Instance: StrongSetoid F := dec_strong_setoid.
+  #[global] Instance: StrongSetoid F := dec_strong_setoid.
 
   Global Instance: Field F.
   Proof.

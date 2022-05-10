@@ -8,7 +8,7 @@ Section contents.
 Context `{DecField F} `{Apart F} `{!TrivialApart F} `{!FullPseudoSemiRingOrder Fle Flt} `{∀ x y : F, Decision (x = y)}.
 Add Ring F : (stdlib_ring_theory F).
 
-Instance pos_dec_recip_compat x : PropHolds (0 < x) → PropHolds (0 < /x).
+#[global] Instance pos_dec_recip_compat x : PropHolds (0 < x) → PropHolds (0 < /x).
 Proof.
   intros E.
   apply (strictly_order_reflecting (x *.)).
@@ -16,7 +16,7 @@ Proof.
   rewrite mult_0_r. solve_propholds.
 Qed.
 
-Instance nonneg_dec_recip_compat x : PropHolds (0 ≤ x) → PropHolds (0 ≤ /x).
+#[global] Instance nonneg_dec_recip_compat x : PropHolds (0 ≤ x) → PropHolds (0 ≤ /x).
 Proof.
   intros E. red.
   destruct (decide (x = 0)) as [E2 | E2].
@@ -100,5 +100,5 @@ Qed.
 End contents.
 
 (* Due to bug #2528 *)
-Hint Extern 12 (PropHolds (0 ≤ _)) => eapply @nonneg_dec_recip_compat : typeclass_instances.
-Hint Extern 12 (PropHolds (0 < _)) => eapply @pos_dec_recip_compat : typeclass_instances.
+#[global] Hint Extern 12 (PropHolds (0 ≤ _)) => eapply @nonneg_dec_recip_compat : typeclass_instances.
+#[global] Hint Extern 12 (PropHolds (0 < _)) => eapply @pos_dec_recip_compat : typeclass_instances.

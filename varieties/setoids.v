@@ -18,12 +18,12 @@ Section from_instance.
 
   Notation carriers := (λ _, A).
 
-  Instance: AlgebraOps sig carriers := λ o, False_rect _ o.
+  #[global] Instance: AlgebraOps sig carriers := λ o, False_rect _ o.
 
-  Instance: Algebra sig carriers.
+  #[global] Instance: Algebra sig carriers.
   Proof. constructor; intuition. Qed.
 
-  Instance: InVariety theory carriers.
+  #[global] Instance: InVariety theory carriers.
   Proof. constructor; intuition. Qed.
 
   Definition object: varieties.Object theory := varieties.object theory (λ _, A).
@@ -36,7 +36,7 @@ Section from_variety.
 
   Context `{InVariety theory A}.
 
-  Instance: Setoid (A tt) := {}.
+  #[global] Instance: Setoid (A tt) := {}.
 
 End from_variety.
 
@@ -50,4 +50,4 @@ Proof with try apply _.
  change (Algebra theory B)...
 Qed.
 
-Instance decode_variety_and_ops `{InVariety theory A}: Setoid (A tt) := {}.
+#[global] Instance decode_variety_and_ops `{InVariety theory A}: Setoid (A tt) := {}.

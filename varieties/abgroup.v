@@ -34,7 +34,7 @@ End laws.
 Definition theory: EquationalTheory := Build_EquationalTheory sig Laws.
 Definition Object := varieties.Object theory.
 
-Hint Extern 4 => match goal with [ |- ∀ _:unit, _ ] => intros [] end : typeclass_instances.
+#[global] Hint Extern 4 => match goal with [ |- ∀ _:unit, _ ] => intros [] end : typeclass_instances.
 Program Definition forget: Object → setoids.Object :=
   product.project (λ _, setoids.Object) tt
      ∘ forget_algebra.object theory ∘ forget_variety.forget theory.
@@ -45,7 +45,7 @@ Program Definition forget: Object → setoids.Object :=
  Algebra/InVariety/HomoMorphism type classes instantiated with the above
  signature and theory. *)
 
-Instance encode_operations A `{!SgOp A} `{Negate A} `{!MonUnit A}: AlgebraOps sig (λ _, A) :=
+#[global] Instance encode_operations A `{!SgOp A} `{Negate A} `{!MonUnit A}: AlgebraOps sig (λ _, A) :=
   λ o, match o with mult => sg_op | inv => negate | one => mon_unit: A end.
 
 Section decode_operations.
@@ -61,7 +61,7 @@ Section encode_variety_and_ops.
   Global Instance encode_algebra_and_ops: Algebra sig _.
   Proof. constructor. intro. apply _. intros []; simpl; try apply _; unfold Proper; reflexivity. Qed.
 
-  Hint Resolve associativity left_identity right_identity left_inverse right_inverse commutativity.
+  #[global] Hint Resolve associativity left_identity right_identity left_inverse right_inverse commutativity.
   Global Instance encode_variety_and_ops: InVariety theory (λ _, A).
   Proof.
    constructor. apply _.

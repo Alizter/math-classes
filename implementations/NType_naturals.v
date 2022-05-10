@@ -9,15 +9,15 @@ Module NType_Integers (Import anyN: NType).
 
 Module axioms := NTypeIsNAxioms anyN.
 
-Instance NType_equiv : Equiv t := eq.
-Instance NType_plus : Plus t := add.
-Instance NType_0 : Zero t := zero.
-Instance NType_1 : One t := one.
-Instance NType_mult : Mult t := mul.
+#[global] Instance NType_equiv : Equiv t := eq.
+#[global] Instance NType_plus : Plus t := add.
+#[global] Instance NType_0 : Zero t := zero.
+#[global] Instance NType_1 : One t := one.
+#[global] Instance NType_mult : Mult t := mul.
 
-Instance: Setoid t | 10 := {}.
+#[global] Instance: Setoid t | 10 := {}.
 
-Program Instance: ∀ x y: t, Decision (x = y) := λ x y, match compare x y with
+#[global] Program Instance: ∀ x y: t, Decision (x = y) := λ x y, match compare x y with
   | Eq => left _
   | _ => right _
   end.
@@ -34,14 +34,14 @@ Ltac unfold_equiv := unfold equiv, NType_equiv, eq in *.
 Lemma  NType_semiring_theory: semi_ring_theory zero one add mul eq.
 Proof. repeat split; repeat intro; axioms.zify; auto with zarith. Qed.
 
-Instance: SemiRing t | 10 := rings.from_stdlib_semiring_theory NType_semiring_theory.
+#[global] Instance: SemiRing t | 10 := rings.from_stdlib_semiring_theory NType_semiring_theory.
 
-Instance inject_NType_N: Cast t N := to_N.
+#[global] Instance inject_NType_N: Cast t N := to_N.
 
-Instance: Proper ((=) ==> (=)) to_N.
+#[global] Instance: Proper ((=) ==> (=)) to_N.
 Proof. intros x y E. unfold equiv, NType_equiv, eq in E. unfold to_N. now rewrite E. Qed.
 
-Instance: SemiRing_Morphism to_N.
+#[global] Instance: SemiRing_Morphism to_N.
 Proof.
   repeat (split; try apply _); unfold to_N; intros.
      now rewrite spec_add, Z2N.inj_add by apply spec_pos.
@@ -50,17 +50,17 @@ Proof.
   unfold mon_unit, one_is_mon_unit, NType_1. now rewrite spec_1.
 Qed.
 
-Instance inject_N_NType: Cast N t := of_N.
-Instance: Inverse to_N := of_N.
+#[global] Instance inject_N_NType: Cast N t := of_N.
+#[global] Instance: Inverse to_N := of_N.
 
-Instance: Surjective to_N.
+#[global] Instance: Surjective to_N.
 Proof.
   split; try apply _. intros x y E.
   rewrite <-E. unfold to_N, inverse, compose. rewrite spec_of_N.
   apply N2Z.id.
 Qed.
 
-Instance: Injective to_N.
+#[global] Instance: Injective to_N.
 Proof.
   split; try apply _. intros x y E.
   unfold equiv, NType_equiv, eq. unfold to_N in E.
@@ -68,25 +68,25 @@ Proof.
   now rewrite E.
 Qed.
 
-Instance: Bijective to_N := {}.
+#[global] Instance: Bijective to_N := {}.
 
-Instance: Inverse of_N := to_N.
+#[global] Instance: Inverse of_N := to_N.
 
-Instance: Bijective of_N.
+#[global] Instance: Bijective of_N.
 Proof. apply jections.flip_bijection. Qed.
 
-Instance: SemiRing_Morphism of_N.
+#[global] Instance: SemiRing_Morphism of_N.
 Proof. change (SemiRing_Morphism (to_N⁻¹)). split; apply _. Qed.
 
-Instance: NaturalsToSemiRing t := naturals.retract_is_nat_to_sr of_N.
-Instance: Naturals t := naturals.retract_is_nat of_N.
+#[global] Instance: NaturalsToSemiRing t := naturals.retract_is_nat_to_sr of_N.
+#[global] Instance: Naturals t := naturals.retract_is_nat of_N.
 
-Instance inject_NType_Z: Cast t Z := to_Z.
+#[global] Instance inject_NType_Z: Cast t Z := to_Z.
 
-Instance: Proper ((=) ==> (=)) to_Z.
+#[global] Instance: Proper ((=) ==> (=)) to_Z.
 Proof. now intros x y E. Qed.
 
-Instance: SemiRing_Morphism to_Z.
+#[global] Instance: SemiRing_Morphism to_Z.
 Proof.
   repeat (split; try apply _).
      exact spec_add.
@@ -96,16 +96,16 @@ Proof.
 Qed.
 
 (* Order *)
-Instance  NType_le: Le t := le.
-Instance  NType_lt: Lt t := lt.
+#[global] Instance  NType_le: Le t := le.
+#[global] Instance  NType_lt: Lt t := lt.
 
-Instance: Proper ((=) ==> (=) ==> iff) NType_le.
+#[global] Instance: Proper ((=) ==> (=) ==> iff) NType_le.
 Proof.
   intros ? ? E1 ? ? E2. unfold NType_le, le. unfold equiv, NType_equiv, eq in *.
   now rewrite E1, E2.
 Qed.
 
-Instance: SemiRingOrder NType_le.
+#[global] Instance: SemiRingOrder NType_le.
 Proof.
   apply (semirings.projected_srorder to_Z).
    reflexivity.
@@ -115,13 +115,13 @@ Proof.
   ring.
 Qed.
 
-Instance: OrderEmbedding to_Z.
+#[global] Instance: OrderEmbedding to_Z.
 Proof. now repeat (split; try apply _). Qed.
 
-Instance: TotalRelation NType_le.
+#[global] Instance: TotalRelation NType_le.
 Proof. now apply (maps.projected_total_order to_Z). Qed.
 
-Instance: FullPseudoSemiRingOrder NType_le NType_lt.
+#[global] Instance: FullPseudoSemiRingOrder NType_le NType_lt.
 Proof.
   rapply semirings.dec_full_pseudo_srorder.
   intros x y. split.
@@ -133,7 +133,7 @@ Proof.
 Qed.
 
 (* Efficient comparison *)
-Program Instance: ∀ x y: t, Decision (x ≤ y) := λ x y, match (compare x y) with
+#[global] Program Instance: ∀ x y: t, Decision (x ≤ y) := λ x y, match (compare x y) with
   | Gt => right _
   | _ => left _
   end.
@@ -162,9 +162,9 @@ Proof.
 Qed.
 
 (* Efficient [nat_pow] *)
-Program Instance NType_pow: Pow t t := pow.
+#[global] Program Instance NType_pow: Pow t t := pow.
 
-Instance: NatPowSpec t t NType_pow.
+#[global] Instance: NatPowSpec t t NType_pow.
 Proof.
   split.
     intros x1 y1 E1 x2 y2 E2.
@@ -177,9 +177,9 @@ Proof.
 Qed.
 
 (* Efficient [shiftl] *)
-Program Instance NType_shiftl: ShiftL t t := shiftl.
+#[global] Program Instance NType_shiftl: ShiftL t t := shiftl.
 
-Instance: ShiftLSpec t t NType_shiftl.
+#[global] Instance: ShiftLSpec t t NType_shiftl.
 Proof.
   apply shiftl_spec_from_nat_pow.
   intros x y.
@@ -191,6 +191,6 @@ Proof.
 Qed.
 
 (* Efficient [shiftr] *)
-Program Instance: ShiftR t t := shiftr.
+#[global] Program Instance: ShiftR t t := shiftr.
 
 End NType_Integers.

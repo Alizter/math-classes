@@ -41,7 +41,7 @@ Definition forget: Object → setoids.Object :=
  Algebra/InVariety/HomoMorphism type classes instantiated with the above
  signature and theory. *)
 
-Instance encode_operations A `{!SgOp A}: AlgebraOps sig (λ _, A) :=
+#[global] Instance encode_operations A `{!SgOp A}: AlgebraOps sig (λ _, A) :=
   λ o, match o with mult => (&) end.
 
 Section decode_operations.
@@ -104,7 +104,7 @@ Proof.
  apply (preserves theory x y f mult).
 Qed.
 
-Instance id_sg_morphism `{SemiGroup A}: SemiGroup_Morphism (@id A).
+#[global] Instance id_sg_morphism `{SemiGroup A}: SemiGroup_Morphism (@id A).
 Proof. repeat (split; try apply _); easy. Qed.
 
 (* Finally, we use these encoding/decoding functions to specialize some universal results: *)
@@ -112,7 +112,7 @@ Section specialized.
   Context `{Equiv A} `{SgOp A} `{Equiv B} `{SgOp B} `{Equiv C} `{SgOp C}
     (f : A → B) (g : B → C).
 
-  Instance compose_sg_morphism:
+  #[global] Instance compose_sg_morphism:
     SemiGroup_Morphism f → SemiGroup_Morphism g → SemiGroup_Morphism (g ∘ f).
   Proof.
     intros. pose proof (encode_morphism_and_ops (f:=f)) as P.
@@ -122,7 +122,7 @@ Section specialized.
     apply (@decode_morphism_and_ops _ _ _ _ _ _ _ _ _ PP).
   Qed.
 
-  Instance invert_sg_morphism:
+  #[global] Instance invert_sg_morphism:
     ∀ `{!Inverse f}, Bijective f → SemiGroup_Morphism f → SemiGroup_Morphism (f⁻¹).
   Proof.
     intros. pose proof (encode_morphism_and_ops (f:=f)) as P.
@@ -132,5 +132,5 @@ Section specialized.
   Qed.
 End specialized.
 
-Hint Extern 4 (SemiGroup_Morphism (_ ∘ _)) => class_apply @compose_sg_morphism : typeclass_instances.
-Hint Extern 4 (SemiGroup_Morphism (_⁻¹)) => class_apply @invert_sg_morphism : typeclass_instances.
+#[global] Hint Extern 4 (SemiGroup_Morphism (_ ∘ _)) => class_apply @compose_sg_morphism : typeclass_instances.
+#[global] Hint Extern 4 (SemiGroup_Morphism (_⁻¹)) => class_apply @invert_sg_morphism : typeclass_instances.

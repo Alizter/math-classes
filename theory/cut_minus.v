@@ -12,7 +12,7 @@ Section cut_minus_properties.
   Local Existing Instance pseudo_srorder_semiring.
 
   Add Ring SR: (rings.stdlib_semiring_theory R).
-  Hint Resolve (@orders.le_flip R _ _).
+  #[global] Hint Resolve (@orders.le_flip R _ _).
 
   Global Instance cut_minus_proper: Proper ((=) ==> (=) ==> (=)) cut_minus | 1.
   Proof.
@@ -30,8 +30,8 @@ Section cut_minus_properties.
   Global Instance cut_minus_mor_2: ∀ x : R, Setoid_Morphism (∸ x) | 0.
   Proof. split; try apply _. solve_proper. Qed.
 
-  Hint Resolve (cut_minus_0).
-  Hint Resolve (cut_minus_le).
+  #[global] Hint Resolve (cut_minus_0).
+  #[global] Hint Resolve (cut_minus_le).
 
   Lemma cut_minus_diag x : x ∸ x = 0.
   Proof. now apply cut_minus_0. Qed.
@@ -65,7 +65,7 @@ Section cut_minus_properties.
     rewrite <-associativity, !cut_minus_le; try easy.
     now transitivity y.
   Qed.
-  Hint Resolve cut_minus_le_trans.
+  #[global] Hint Resolve cut_minus_le_trans.
 
   (* We need y₁ ≤ x₁ ∧ y₂ ≤ x₂, e.g. (5 ∸ 6) + (5 ∸0) = 0 + 5 = 5, whereas (10 ∸ 6) = 4 *)
   (* This example illustrates that y₁ + y₂ ≤ x₁ + x₂ does not work either. *)

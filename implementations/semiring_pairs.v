@@ -19,7 +19,7 @@ Global Instance SRpair_apart `{Apart SR} : Apart (SRpair SR) := λ x y, pos x + 
 Global Instance SRpair_trivial_apart `{!TrivialApart SR} :  TrivialApart (SRpair SR).
 Proof. intros x y. now rapply trivial_apart. Qed.
 
-Instance: Setoid (SRpair SR).
+#[global] Instance: Setoid (SRpair SR).
 Proof.
   split; red; unfold equiv, SRpair_equiv.
     reflexivity.
@@ -32,7 +32,7 @@ Proof.
   rewrite <- E, E'. ring.
 Qed.
 
-Instance: Proper ((=) ==> (=) ==> (=)) C.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) C.
 Proof.
   intros x1 y1 E1 x2 y2 E2. unfold equiv, SRpair_equiv. simpl.
   now rewrite E1, E2.
@@ -54,13 +54,13 @@ Global Instance SRpair_1: One (SRpair SR) := ('1 : SRpair SR).
 Ltac unfolds := unfold SRpair_negate, SRpair_plus, equiv, SRpair_equiv in *; simpl in *.
 Ltac ring_on_sr := repeat intro; unfolds; try ring.
 
-Instance: Proper ((=) ==> (=)) SRpair_negate.
+#[global] Instance: Proper ((=) ==> (=)) SRpair_negate.
 Proof.
   intros x y E. unfolds.
   rewrite commutativity, <- E. ring.
 Qed.
 
-Instance: Proper ((=) ==> (=) ==> (=)) SRpair_plus.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) SRpair_plus.
 Proof with try ring.
   intros x1 y1 E1 x2 y2 E2. unfolds.
   transitivity (pos x1 + neg y1 + (pos x2 + neg y2))...
@@ -75,10 +75,10 @@ Proof with try ring.
   now rewrite E.
 Qed.
 
-Instance: Commutative SRpair_mult.
+#[global] Instance: Commutative SRpair_mult.
 Proof. repeat intro. ring_on_sr. Qed.
 
-Instance: Proper ((=) ==> (=) ==> (=)) SRpair_mult.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) SRpair_mult.
 Proof.
   intros x1 y1 E1 x2 y2 E2.
   transitivity (x1 * y2).
@@ -115,7 +115,7 @@ Ltac unfold_lt := unfold lt, SRpair_lt, equiv, SRpair_equiv; simpl.
 Section with_semiring_order.
   Context `{!SemiRingOrder SRle}.
 
-  Instance: Proper ((=) ==> (=) ==> iff) SRpair_le.
+  #[global] Instance: Proper ((=) ==> (=) ==> iff) SRpair_le.
   Proof.
     assert (∀ x1 y1 : SRpair SR, x1 = y1 → ∀ x2 y2, x2 = y2 → x1 ≤ x2 → y1 ≤ y2) as E.
      unfold_le. intros [xp1 xn1] [yp1 yn1] E1 [xp2 xn2] [yp2 yn2] E2 F. simpl in *.
@@ -127,10 +127,10 @@ Section with_semiring_order.
     split; repeat intro; eapply E; eauto; symmetry; eauto.
   Qed.
 
-  Instance: Reflexive SRpair_le.
+  #[global] Instance: Reflexive SRpair_le.
   Proof. intros [? ?]. unfold_le. reflexivity. Qed.
 
-  Instance: Transitive SRpair_le.
+  #[global] Instance: Transitive SRpair_le.
   Proof.
     intros [xp xn] [yp yn] [zp zn] E1 E2.
     unfold SRpair_le in *. simpl in *.
@@ -140,13 +140,13 @@ Section with_semiring_order.
     now apply plus_le_compat.
   Qed.
 
-  Instance: AntiSymmetric SRpair_le.
+  #[global] Instance: AntiSymmetric SRpair_le.
   Proof.
     intros [xp xn] [yp yn] E1 E2. unfold_le.
     now apply (antisymmetry (≤)).
   Qed.
 
-  Instance: PartialOrder SRpair_le.
+  #[global] Instance: PartialOrder SRpair_le.
   Proof. repeat (split; try apply _). Qed.
 
   Global Instance: OrderEmbedding SRpair_inject.
@@ -156,7 +156,7 @@ Section with_semiring_order.
     intros x y E. unfold le, SRpair_le in E. simpl in E. now rewrite 2!rings.plus_0_r in E.
   Qed.
 
-  Instance: ∀ z : SRpair SR, OrderPreserving ((+) z).
+  #[global] Instance: ∀ z : SRpair SR, OrderPreserving ((+) z).
   Proof.
     repeat (split; try apply _). unfold_le.
     destruct z as [zp zn]. intros [xp xn] [yp yn] E. simpl in *.
@@ -165,7 +165,7 @@ Section with_semiring_order.
     now apply (order_preserving _).
   Qed.
 
-  Instance: ∀ x y : SRpair SR, PropHolds (0 ≤ x) → PropHolds (0 ≤ y) → PropHolds (0 ≤ x * y).
+  #[global] Instance: ∀ x y : SRpair SR, PropHolds (0 ≤ x) → PropHolds (0 ≤ y) → PropHolds (0 ≤ x * y).
   Proof.
     intros [xp xn] [yp yn].
     unfold PropHolds. unfold_le. intros E1 E2.
@@ -184,7 +184,7 @@ End with_semiring_order.
 Section with_strict_semiring_order.
   Context `{!StrictSemiRingOrder SRle}.
 
-  Instance: Proper ((=) ==> (=) ==> iff) SRpair_lt.
+  #[global] Instance: Proper ((=) ==> (=) ==> iff) SRpair_lt.
   Proof.
     assert (∀ x1 y1 : SRpair SR, x1 = y1 → ∀ x2 y2, x2 = y2 → x1 < x2 → y1 < y2) as E.
      unfold_lt. intros [xp1 xn1] [yp1 yn1] E1 [xp2 xn2] [yp2 yn2] E2 F. simpl in *.
@@ -196,10 +196,10 @@ Section with_strict_semiring_order.
     split; repeat intro; eapply E; eauto; symmetry; eauto.
   Qed.
 
-  Instance: Irreflexive SRpair_lt.
+  #[global] Instance: Irreflexive SRpair_lt.
   Proof. intros [? ?] E. edestruct (irreflexivity (<)); eauto. Qed.
 
-  Instance: Transitive SRpair_lt.
+  #[global] Instance: Transitive SRpair_lt.
   Proof.
     intros [xp xn] [yp yn] [zp zn] E1 E2.
     unfold SRpair_lt in *. simpl in *.
@@ -209,7 +209,7 @@ Section with_strict_semiring_order.
     now apply plus_lt_compat.
   Qed.
 
-  Instance: ∀ z : SRpair SR, StrictlyOrderPreserving ((+) z).
+  #[global] Instance: ∀ z : SRpair SR, StrictlyOrderPreserving ((+) z).
   Proof.
     repeat (split; try apply _). unfold_lt.
     destruct z as [zp zn]. intros [xp xn] [yp yn] E. simpl in *.
@@ -218,10 +218,10 @@ Section with_strict_semiring_order.
     now apply (strictly_order_preserving _).
   Qed.
 
-  Instance: StrictSetoidOrder SRpair_lt.
+  #[global] Instance: StrictSetoidOrder SRpair_lt.
   Proof. repeat (split; try apply _). Qed.
 
-  Instance: ∀ x y : SRpair SR, PropHolds (0 < x) → PropHolds (0 < y) → PropHolds (0 < x * y).
+  #[global] Instance: ∀ x y : SRpair SR, PropHolds (0 < x) → PropHolds (0 < y) → PropHolds (0 < x * y).
   Proof.
     intros [xp xn] [yp yn].
     unfold PropHolds. unfold_lt. intros E1 E2.
@@ -240,9 +240,9 @@ End with_strict_semiring_order.
 Section with_full_pseudo_semiring_order.
   Context `{!FullPseudoSemiRingOrder SRle SRlt}.
 
-  Instance: StrongSetoid SR := pseudo_order_setoid.
+  #[global] Instance: StrongSetoid SR := pseudo_order_setoid.
 
-  Instance: StrongSetoid (SRpair SR).
+  #[global] Instance: StrongSetoid (SRpair SR).
   Proof.
     split.
        intros [??] E. now eapply (irreflexivity (≶)); eauto.
@@ -259,7 +259,7 @@ Section with_full_pseudo_semiring_order.
     intros [??] [??]. now rapply tight_apart.
   Qed.
 
-  Instance: FullPseudoOrder SRpair_le SRpair_lt.
+  #[global] Instance: FullPseudoOrder SRpair_le SRpair_lt.
   Proof.
     split.
      split; try apply _.
@@ -277,7 +277,7 @@ Section with_full_pseudo_semiring_order.
     intros [??] [??]. now rapply le_iff_not_lt_flip.
   Qed.
 
-  Instance: ∀ z : SRpair SR, StrongSetoid_Morphism (z *.).
+  #[global] Instance: ∀ z : SRpair SR, StrongSetoid_Morphism (z *.).
   Proof.
     intros [zp zn]. split; try apply _. intros [xp xn] [yp yn] E1.
     unfold apart, SRpair_apart in *. simpl in *.

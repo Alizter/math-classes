@@ -156,7 +156,7 @@ Section contents.
   Qed.
 
 (*
-    Instance eval_morphism `{Algebra σ}  A {V} (v: Vars σ A V):
+    #[global] Instance eval_morphism `{Algebra σ}  A {V} (v: Vars σ A V):
       HomoMorphism (Term0 σ V) A (λ _ => eval σ v).
     Proof.
      constructor; repeat intro; try apply _.

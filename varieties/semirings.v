@@ -43,7 +43,7 @@ Definition theory: EquationalTheory := Build_EquationalTheory sig Laws.
 Section from_instance.
   Context A `{SemiRing A}.
 
-  Instance implementation: AlgebraOps sig (λ _, A) := λ o,
+  #[global] Instance implementation: AlgebraOps sig (λ _, A) := λ o,
     match o with plus => (+) | mult => (.*.) | zero => 0: A | one => 1:A end.
 
   Global Instance: Algebra sig _.
@@ -95,7 +95,7 @@ Proof.
  change (Algebra theory B). apply _.
 Qed. (* todo: these [change]s should not be necessary at all. [apply] is too weak. report bug. *)
 
-Instance decode_variety_and_ops `{v: InVariety theory A}: SemiRing (A tt).
+#[global] Instance decode_variety_and_ops `{v: InVariety theory A}: SemiRing (A tt).
 Proof with simpl; auto.
  pose proof (λ law lawgood x y z, variety_laws law lawgood (λ s n,
    match s with tt => match n with 0 => x | 1 => y | _ => z end end)).

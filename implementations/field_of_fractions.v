@@ -17,7 +17,7 @@ Add Ring R: (stdlib_ring_theory R).
 
 Global Instance Frac_equiv : Equiv (Frac R) | 0 := λ x y, num x * den y = num y * den x.
 
-Instance: Setoid (Frac R).
+#[global] Instance: Setoid (Frac R).
 Proof with auto.
   split; red; unfold equiv, Frac_equiv.
     reflexivity.
@@ -36,7 +36,7 @@ Global Instance Frac_dec : ∀ x y: Frac R, Decision (x = y)
 Global Program Instance Frac_inject: Cast R (Frac R) := λ r, frac r 1 _.
 Next Obligation. exact (is_ne_0 1). Qed.
 
-Instance: Proper ((=) ==> (=)) Frac_inject.
+#[global] Instance: Proper ((=) ==> (=)) Frac_inject.
 Proof. intros x1 x2 E. unfold equiv, Frac_equiv. simpl. now rewrite E. Qed.
 
 (* Relations, operations and constants *)
@@ -63,20 +63,20 @@ Proof.
   rewrite F. apply left_absorb.
 Qed.
 
-Instance: Proper ((=) ==> (=) ==> (=)) Frac_plus.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) Frac_plus.
 Proof with try ring.
   intros x x' E y y' E'. unfolds.
   transitivity (num x * den x' * den y * den y' + num y * den y' * den x * den x')...
   rewrite E, E'...
 Qed.
 
-Instance: Proper ((=) ==> (=)) Frac_negate.
+#[global] Instance: Proper ((=) ==> (=)) Frac_negate.
 Proof.
   intros x y E. unfolds.
   rewrite <-negate_mult_distr_l, E. ring.
 Qed.
 
-Instance: Proper ((=) ==> (=) ==> (=)) Frac_mult.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) Frac_mult.
 Proof with try ring.
   intros x y E x0 y0 E'. unfolds.
   transitivity (num x * den y * (num x0 * den y0))...
@@ -92,7 +92,7 @@ Global Instance Frac_dec_recip: DecRecip (Frac R) := λ x,
   | right P => frac (den x) (num x) P
   end.
 
-Instance: Setoid_Morphism Frac_dec_recip.
+#[global] Instance: Setoid_Morphism Frac_dec_recip.
 Proof.
   split; try apply _.
   intros [xn xd Px] [yn yd Py]. unfolds. unfold Frac_dec_recip. simpl.
@@ -160,7 +160,7 @@ Next Obligation.
   now apply (den_ne_0 x).
 Qed.
 
-Instance: Proper ((=) ==> (=)) Frac_lift.
+#[global] Instance: Proper ((=) ==> (=)) Frac_lift.
 Proof.
   intros x y E.
   unfold equiv, Frac_equiv, Frac_lift in *. simpl.

@@ -175,10 +175,10 @@ Section for_signature.
      reflexivity.
     Qed.
 
-    Hint Extern 4 (Equiv (Term _ _)) => exact eq: typeclass_instances.
-    Hint Extern 4 (Equiv (Term0 _ _)) => exact eq: typeclass_instances.
+    #[global] Hint Extern 4 (Equiv (Term _ _)) => exact eq: typeclass_instances.
+    #[global] Hint Extern 4 (Equiv (Term0 _ _)) => exact eq: typeclass_instances.
 
-    Instance: ∀ V n v, Setoid_Morphism (@eval V (ne_list.one n) v).
+    #[global] Instance: ∀ V n v, Setoid_Morphism (@eval V (ne_list.one n) v).
     Proof.
      constructor; try apply _.
       unfold Setoid. apply _.
@@ -191,10 +191,10 @@ Section for_signature.
       | ne_list.cons _ _ => λ x y, app_tree (App _ _ _ x y)
       end.
 (*
-    Instance: AlgebraOps σ (Term0 V) := λ _ x => app_tree (Op _ x).
+    #[global] Instance: AlgebraOps σ (Term0 V) := λ _ x => app_tree (Op _ x).
       (* todo: these two are now duplicate with open_terms *)
 
-    Instance: Algebra σ (Term0 V).
+    #[global] Instance: Algebra σ (Term0 V).
     Proof.
      constructor.
       intro. unfold Setoid. apply _.
@@ -247,9 +247,9 @@ Section for_signature.
 End for_signature.
 
 (* Avoid eager application *)
-Remove Hints ua_vars_equiv : typeclass_instances.
-Hint Extern 0 (Equiv (Vars _ _ _)) => eapply @ua_vars_equiv : typeclass_instances.
-Instance: Params (@eval_stmt) 3 := {}.
+Remove #[global] Hints ua_vars_equiv : typeclass_instances.
+#[global] Hint Extern 0 (Equiv (Vars _ _ _)) => eapply @ua_vars_equiv : typeclass_instances.
+#[global] Instance: Params (@eval_stmt) 3 := {}.
 
 (* And with that, we define equational theories and varieties: *)
 

@@ -28,7 +28,7 @@ Proof.
   split; intro; eapply P2; eauto; now symmetry.
 Qed.
 
-Instance apart_ne x y : PropHolds (x ≶ y) → PropHolds (x ≠ y).
+#[global] Instance apart_ne x y : PropHolds (x ≶ y) → PropHolds (x ≠ y).
 Proof. firstorder. Qed.
 
 Global Instance: ∀ x y, Stable (x = y).
@@ -39,7 +39,7 @@ Qed.
 End contents.
 
 (* Due to bug #2528 *)
-Hint Extern 3 (PropHolds (_ ≠ _)) => eapply @apart_ne : typeclass_instances.
+#[global] Hint Extern 3 (PropHolds (_ ≠ _)) => eapply @apart_ne : typeclass_instances.
 
 Lemma projected_strong_setoid `{StrongSetoid B} `{Equiv A} `{Apart A} (f: A → B)
   (eq_correct : ∀ x y, x = y ↔ f x = f y) (apart_correct : ∀ x y, x ≶ y ↔ f x ≶ f y) : StrongSetoid A.
@@ -51,7 +51,7 @@ Proof.
   intros x y. rewrite apart_correct, eq_correct. now apply tight_apart.
 Qed.
 
-Instance sig_strong_setoid `{StrongSetoid A} (P: A → Prop): StrongSetoid (sig P).
+#[global] Instance sig_strong_setoid `{StrongSetoid A} (P: A → Prop): StrongSetoid (sig P).
 Proof. now apply (projected_strong_setoid (@proj1_sig _ P)). Qed.
 
 Section morphisms.
@@ -146,10 +146,10 @@ Section more_morphisms.
   Qed.
 End more_morphisms.
 
-Instance default_apart `{Equiv A} : Apart A | 20 := (≠).
+#[global] Instance default_apart `{Equiv A} : Apart A | 20 := (≠).
 Typeclasses Opaque default_apart.
 
-Instance default_apart_trivial `{Equiv A} : TrivialApart A (Aap:=default_apart).
+#[global] Instance default_apart_trivial `{Equiv A} : TrivialApart A (Aap:=default_apart).
 Proof. red. reflexivity. Qed.
 
 (* In case we have a decidable setoid, we can construct a strong setoid. Again
@@ -158,10 +158,10 @@ Section dec_setoid.
   Context `{Setoid A} `{Apart A} `{!TrivialApart A} `{∀ x y, Decision (x = y)}.
 
   (* Not Global in order to avoid loops *)
-  Instance ne_apart x y : PropHolds (x ≠ y) → PropHolds (x ≶ y).
+  #[global] Instance ne_apart x y : PropHolds (x ≠ y) → PropHolds (x ≶ y).
   Proof. rewrite trivial_apart. easy. Qed.
 
-  Instance dec_strong_setoid: StrongSetoid A.
+  #[global] Instance dec_strong_setoid: StrongSetoid A.
   Proof.
     split; try apply _.
        firstorder.
@@ -179,7 +179,7 @@ End dec_setoid.
 Section dec_setoid_morphisms.
   Context `{StrongSetoid A} `{!TrivialApart A} `{StrongSetoid B}.
 
-  Instance dec_strong_morphism (f : A → B) `{!Setoid_Morphism f} :
+  #[global] Instance dec_strong_morphism (f : A → B) `{!Setoid_Morphism f} :
     StrongSetoid_Morphism f.
   Proof.
     split; try apply _.
@@ -188,7 +188,7 @@ Section dec_setoid_morphisms.
 
   Context `{!TrivialApart B}.
 
-  Instance dec_strong_injective (f : A → B) `{!Injective f} :
+  #[global] Instance dec_strong_injective (f : A → B) `{!Injective f} :
     StrongInjective f.
   Proof.
     pose proof (injective_mor f).
@@ -198,7 +198,7 @@ Section dec_setoid_morphisms.
 
   Context `{StrongSetoid C}.
 
-  Instance dec_strong_binary_morphism (f : A → B → C) `{!Proper ((=) ==> (=) ==> (=)) f} :
+  #[global] Instance dec_strong_binary_morphism (f : A → B → C) `{!Proper ((=) ==> (=) ==> (=)) f} :
     StrongSetoid_BinaryMorphism f.
   Proof.
     split; try apply _.

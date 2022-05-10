@@ -75,7 +75,7 @@ Section equivlistA_misc.
     | permA_skip x₁ x₂ l₁ l₂ : eqA x₁ x₂ → PermutationA l₁ l₂ → PermutationA (x₁ :: l₁) (x₂ :: l₂)
     | permA_swap x y l : PermutationA (y :: x :: l) (x :: y :: l)
     | permA_trans l₁ l₂ l₃ : PermutationA l₁ l₂ → PermutationA l₂ l₃ -> PermutationA l₁ l₃.
-  Hint Constructors PermutationA.
+  #[global] Hint Constructors PermutationA.
 
   Global Instance: Equivalence PermutationA.
   Proof.
@@ -176,10 +176,10 @@ Section contents.
   Global Instance cons_proper: Proper (=) (@cons A).
   Proof. repeat intro. now apply eqlistA_cons. Qed.
 
-  Instance: Setoid (list A).
+  #[global] Instance: Setoid (list A).
   Proof. constructor; apply _. Qed.
 
-  Instance app_proper: Proper ((=) ==> (=) ==> (=)) (@app A).
+  #[global] Instance app_proper: Proper ((=) ==> (=) ==> (=)) (@app A).
   Proof. apply _. Qed. 
 
   Global Instance: Monoid (list A).
@@ -196,24 +196,24 @@ Lemma list_equiv_eq {A} (x y : list A) :
   @list_equiv A (≡) x y ↔ x ≡ y.
 Proof. split. induction 1. reflexivity. now f_equal. intros. now subst. Qed.
 
-Instance list_join: MonadJoin list := λ _, fix list_join ll :=
+#[global] Instance list_join: MonadJoin list := λ _, fix list_join ll :=
   match ll with
   | [] => []
   | l :: ll => l & list_join ll
   end.
-Instance list_map: SFmap list := map.
-Instance list_ret: MonadReturn list := λ _ x, [x].
+#[global] Instance list_map: SFmap list := map.
+#[global] Instance list_ret: MonadReturn list := λ _ x, [x].
 
-Instance list_join_proper `{Setoid A} : Proper (=) (@list_join A).
+#[global] Instance list_join_proper `{Setoid A} : Proper (=) (@list_join A).
 Proof.
   intros l. induction l; intros k E; inversion_clear E; try reflexivity.
   simpl. apply app_proper; auto.
 Qed.
 
-Instance list_ret_proper `{Equiv A}: Proper (=) (list_ret A).
+#[global] Instance list_ret_proper `{Equiv A}: Proper (=) (list_ret A).
 Proof. compute. firstorder. Qed.
 
-Instance list_map_proper `{Setoid A} `{Setoid B} : 
+#[global] Instance list_map_proper `{Setoid A} `{Setoid B} : 
   Proper (((=) ==> (=)) ==> ((=) ==> (=))) (list_map A B).
 Proof.
   intros f g E1 l. induction l; intros k E2; inversion_clear E2.
@@ -242,7 +242,7 @@ Proof.
   pose proof (setoidmor_a g). now rewrite <-E, map_map.
 Qed.
 
-Instance: StrongMonad list.
+#[global] Instance: StrongMonad list.
 Proof.
   split; try apply _; unfold compose, id, sfmap, join, ret.
       intros A ? B ? f [???].
@@ -258,7 +258,7 @@ Proof.
   simpl. now rewrite IHl, list_join_app.
 Qed.
 
-Instance: FullMonad list.
+#[global] Instance: FullMonad list.
 Proof. apply strong_monad_default_full_monad. Qed.
 
 (*
@@ -269,9 +269,9 @@ Proof. apply strong_monad_default_full_monad. Qed.
 
   Global Instance sm: SeqToMonoid A (list A) := λ _ _ _ f, fold_right ((&) ∘ f) mon_unit.
 
-  Instance: Equiv A := eq.
+  #[global] Instance: Equiv A := eq.
 
-  Instance inj_mor: Setoid_Morphism inj.
+  #[global] Instance inj_mor: Setoid_Morphism inj.
 
   Section sm_mor.
 

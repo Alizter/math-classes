@@ -26,12 +26,12 @@ Notation "(≠ x )" := (λ y, y ≠ x) (only parsing) : mc_scope.
 Delimit Scope mc_scope with mc. 
 Global Open Scope mc_scope.
 
-Hint Extern 2 (?x = ?x) => reflexivity.
-Hint Extern 2 (?x = ?y) => auto_symm.
-Hint Extern 2 (?x = ?y) => auto_trans.
+#[global] Hint Extern 2 (?x = ?x) => reflexivity.
+#[global] Hint Extern 2 (?x = ?y) => auto_symm.
+#[global] Hint Extern 2 (?x = ?y) => auto_trans.
 
 (* Coq sometimes uses an incorrect DefaultRelation, so we override it. *)
-Instance equiv_default_relation `{Equiv A} : DefaultRelation (=) | 3 := {}.
+#[global] Instance equiv_default_relation `{Equiv A} : DefaultRelation (=) | 3 := {}.
 
 (*
 Because Coq does not support setoid rewriting in Type'd relations
@@ -71,8 +71,8 @@ Notation "(≢ x )" := (λ y, y ≢ x) (only parsing) : mc_scope.
 
 (* Some common notions of equality *)
 Definition ext_equiv `{Equiv A} `{Equiv B} : Equiv (A → B) := ((=) ==> (=))%signature.
-Hint Extern 10 (Equiv (_ → _)) => apply @ext_equiv : typeclass_instances.
-Hint Extern 10 (Equiv (relation _)) => apply @ext_equiv : typeclass_instances. (* Due to bug #2491 *)
+#[global] Hint Extern 10 (Equiv (_ → _)) => apply @ext_equiv : typeclass_instances.
+#[global] Hint Extern 10 (Equiv (relation _)) => apply @ext_equiv : typeclass_instances. (* Due to bug #2491 *)
 (** Interestingly, most of the development works fine if this is defined as
   ∀ x, f x = g x.
 However, in the end that version was just not strong enough for comfortable rewriting
@@ -84,19 +84,19 @@ Ltac simpl_sig_equiv :=
   match goal with 
   | |- (@equiv _ (@sig_equiv _ ?e _) (?x↾_) (?y↾_)) => change (@equiv _ e x y) 
   end.
-Hint Extern 10 (Equiv (sig _)) => apply @sig_equiv : typeclass_instances.
-Hint Extern 4 (@equiv _ (sig_equiv _ _ _) (_↾_) (_↾_)) => simpl_sig_equiv.
+#[global] Hint Extern 10 (Equiv (sig _)) => apply @sig_equiv : typeclass_instances.
+#[global] Hint Extern 4 (@equiv _ (sig_equiv _ _ _) (_↾_) (_↾_)) => simpl_sig_equiv.
 
 Definition sigT_equiv `{Equiv A} (P: A → Type) : Equiv (sigT P) := λ a b, projT1 a = projT1 b.
-Hint Extern 10 (Equiv (sigT _)) => apply @sigT_equiv : typeclass_instances.
+#[global] Hint Extern 10 (Equiv (sigT _)) => apply @sigT_equiv : typeclass_instances.
 
 Definition sig_apart `{Apart A} (P: A → Prop) : Apart (sig P) := λ x y, `x ≶ `y.
-Hint Extern 10 (Apart (sig _)) => apply @sig_apart : typeclass_instances.
+#[global] Hint Extern 10 (Apart (sig _)) => apply @sig_apart : typeclass_instances.
 
 Class Cast A B := cast: A → B.
 Arguments cast _ _ {Cast} _.
 Notation "' x" := (cast _ _ x) (at level 20) : mc_scope.
-Instance: Params (@cast) 3 := {}.
+#[global] Instance: Params (@cast) 3 := {}.
 Typeclasses Transparent Cast.
 
 (* Other canonically named relations/operations/constants: *)
@@ -143,40 +143,40 @@ Class RalgebraAction A B := ralgebra_action: A → B → B.
 Arguments cat_id {O arrows CatId x} : rename.
 Arguments comp {O arrow CatComp} _ _ _ _ _ : rename.
 
-Instance: Params (@mult) 2 := {}.
-Instance: Params (@plus) 2 := {}.
-Instance: Params (@negate) 2 := {}.
-Instance: Params (@equiv) 2 := {}.
-Instance: Params (@apart) 2 := {}.
-Instance: Params (@le) 2 := {}.
-Instance: Params (@lt) 2 := {}.
-Instance: Params (@recip) 4 := {}.
-Instance: Params (@dec_recip) 2 := {}.
-Instance: Params (@meet) 2 := {}.
-Instance: Params (@join) 2 := {}.
-Instance: Params (@contains) 3 := {}.
-Instance: Params (@singleton) 3 := {}.
-Instance: Params (@difference) 2 := {}.
+#[global] Instance: Params (@mult) 2 := {}.
+#[global] Instance: Params (@plus) 2 := {}.
+#[global] Instance: Params (@negate) 2 := {}.
+#[global] Instance: Params (@equiv) 2 := {}.
+#[global] Instance: Params (@apart) 2 := {}.
+#[global] Instance: Params (@le) 2 := {}.
+#[global] Instance: Params (@lt) 2 := {}.
+#[global] Instance: Params (@recip) 4 := {}.
+#[global] Instance: Params (@dec_recip) 2 := {}.
+#[global] Instance: Params (@meet) 2 := {}.
+#[global] Instance: Params (@join) 2 := {}.
+#[global] Instance: Params (@contains) 3 := {}.
+#[global] Instance: Params (@singleton) 3 := {}.
+#[global] Instance: Params (@difference) 2 := {}.
 
-Instance plus_is_sg_op `{f : Plus A} : SgOp A := f.
-Instance mult_is_sg_op `{f : Mult A} : SgOp A := f.
-Instance one_is_mon_unit `{c : One A} : MonUnit A := c.
-Instance zero_is_mon_unit `{c : Zero A} : MonUnit A := c.
-Instance meet_is_sg_op `{f : Meet A} : SgOp A := f.
-Instance join_is_sg_op `{f : Join A} : SgOp A := f.
-Instance top_is_mon_unit `{s : Top A} : MonUnit A := s.
-Instance bottom_is_mon_unit `{s : Bottom A} : MonUnit A := s.
-Instance singleton_is_cast `{s : Singleton A B} : Cast A B := s.
+#[global] Instance plus_is_sg_op `{f : Plus A} : SgOp A := f.
+#[global] Instance mult_is_sg_op `{f : Mult A} : SgOp A := f.
+#[global] Instance one_is_mon_unit `{c : One A} : MonUnit A := c.
+#[global] Instance zero_is_mon_unit `{c : Zero A} : MonUnit A := c.
+#[global] Instance meet_is_sg_op `{f : Meet A} : SgOp A := f.
+#[global] Instance join_is_sg_op `{f : Join A} : SgOp A := f.
+#[global] Instance top_is_mon_unit `{s : Top A} : MonUnit A := s.
+#[global] Instance bottom_is_mon_unit `{s : Bottom A} : MonUnit A := s.
+#[global] Instance singleton_is_cast `{s : Singleton A B} : Cast A B := s.
 
-Hint Extern 10 (Equiv (_ ⟶ _)) => apply @ext_equiv : typeclass_instances.
-Hint Extern 4 (Equiv (ApartZero _)) => apply @sig_equiv : typeclass_instances.
-Hint Extern 4 (Equiv (NonNeg _)) => apply @sig_equiv : typeclass_instances.
-Hint Extern 4 (Equiv (Pos _)) => apply @sig_equiv : typeclass_instances.
-Hint Extern 4 (Equiv (PosInf _)) => apply @sig_equiv : typeclass_instances.
-Hint Extern 4 (Apart (ApartZero _)) => apply @sig_apart : typeclass_instances.
-Hint Extern 4 (Apart (NonNeg _)) => apply @sig_apart : typeclass_instances.
-Hint Extern 4 (Apart (Pos _)) => apply @sig_apart : typeclass_instances.
-Hint Extern 4 (Apart (PosInf _)) => apply @sig_apart : typeclass_instances.
+#[global] Hint Extern 10 (Equiv (_ ⟶ _)) => apply @ext_equiv : typeclass_instances.
+#[global] Hint Extern 4 (Equiv (ApartZero _)) => apply @sig_equiv : typeclass_instances.
+#[global] Hint Extern 4 (Equiv (NonNeg _)) => apply @sig_equiv : typeclass_instances.
+#[global] Hint Extern 4 (Equiv (Pos _)) => apply @sig_equiv : typeclass_instances.
+#[global] Hint Extern 4 (Equiv (PosInf _)) => apply @sig_equiv : typeclass_instances.
+#[global] Hint Extern 4 (Apart (ApartZero _)) => apply @sig_apart : typeclass_instances.
+#[global] Hint Extern 4 (Apart (NonNeg _)) => apply @sig_apart : typeclass_instances.
+#[global] Hint Extern 4 (Apart (Pos _)) => apply @sig_apart : typeclass_instances.
+#[global] Hint Extern 4 (Apart (PosInf _)) => apply @sig_apart : typeclass_instances.
 
 (* Notations: *)
 Notation "R ₀" := (ApartZero R) (at level 20, no associativity) : mc_scope.
@@ -290,14 +290,14 @@ Notation "(:::)" := Cons (only parsing) : mc_scope.
 Notation "(::: X )" := (λ x, Cons x X) (only parsing) : mc_scope.
 Notation "( x :::)" := (Cons x) (only parsing) : mc_scope.
 
-Hint Extern 2 (?x ≤ ?y) => reflexivity.
-Hint Extern 4 (?x ≤ ?z) => auto_trans.
-Hint Extern 4 (?x < ?z) => auto_trans.
+#[global] Hint Extern 2 (?x ≤ ?y) => reflexivity.
+#[global] Hint Extern 4 (?x ≤ ?z) => auto_trans.
+#[global] Hint Extern 4 (?x < ?z) => auto_trans.
 
 Class Abs A `{Equiv A} `{Le A} `{Zero A} `{Negate A} := abs_sig: ∀ (x : A), { y : A | (0 ≤ x → y = x) ∧ (x ≤ 0 → y = -x)}.
 Definition abs `{Abs A} := λ x : A, ` (abs_sig x).
-Instance: Params (@abs_sig) 6 := {}.
-Instance: Params (@abs) 6 := {}.
+#[global] Instance: Params (@abs_sig) 6 := {}.
+#[global] Instance: Params (@abs) 6 := {}.
 
 (* Common properties: *)
 Class Inverse `(A → B) : Type := inverse: B → A.
@@ -382,7 +382,7 @@ Class ZeroDivisor {R} `{Equiv R} `{Zero R} `{Mult R} (x : R) : Prop
 Class NoZeroDivisors R `{Equiv R} `{Zero R} `{Mult R} : Prop
   := no_zero_divisors x : ¬ZeroDivisor x.
 
-Instance zero_product_no_zero_divisors `{ZeroProduct A} : NoZeroDivisors A.
+#[global] Instance zero_product_no_zero_divisors `{ZeroProduct A} : NoZeroDivisors A.
 Proof. intros x [? [? [? E]]]. destruct (zero_product _ _ E); intuition. Qed.
 
 Class RingUnit `{Equiv R} `{Mult R} `{One R} (x : R) : Prop := ring_unit : ∃ y, x * y = 1.

@@ -5,7 +5,7 @@ Require Import
 Section contents.
   Context `{TotalOrder A} `{∀ x y: A, Decision (x ≤ y)}.
 
-  Instance: Setoid A := po_setoid.
+  #[global] Instance: Setoid A := po_setoid.
 
   Definition sort (x y: A) : A * A := if decide_rel (≤) x y then (x, y) else (y, x).
 
@@ -27,7 +27,7 @@ Section contents.
      intros; case (decide_rel _); try easy; now apply le_flip.
   Qed.
 
-  Instance: LeftDistribute max min.
+  #[global] Instance: LeftDistribute max min.
   Proof.
     intros x y z. unfold min, max, sort.
     repeat case (decide_rel _); simpl; try solve [intuition].
@@ -35,7 +35,7 @@ Section contents.
     intros. now apply (antisymmetry (≤)).
   Qed.
 
-  Instance: Lattice A := lattice_order_lattice.
+  #[global] Instance: Lattice A := lattice_order_lattice.
 
   Global Instance: DistributiveLattice A.
   Proof. repeat (split; try apply _). Qed.

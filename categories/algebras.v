@@ -13,7 +13,7 @@ Record Object (sign: Signature) : Type := object
 Arguments object _ _ {algebra_equiv algebra_ops algebra_proof}.
 
 (* Avoid Coq trying to apply algebra_equiv to find arbitrary Equiv instances *)
-Hint Extern 0 (Equiv (algebra_carriers _ _ _)) => eapply @algebra_equiv : typeclass_instances.
+#[global] Hint Extern 0 (Equiv (algebra_carriers _ _ _)) => eapply @algebra_equiv : typeclass_instances.
 Existing Instance algebra_ops.
 Existing Instance algebra_proof.
 
@@ -40,7 +40,7 @@ Section contents.
    intros ? ? ? E F ? ?. rewrite (E _ _). apply F.
   Qed.
 
-  Instance: `{Proper ((=) ==> (=) ==> (=)) (comp x y z)}.
+  #[global] Instance: `{Proper ((=) ==> (=) ==> (=)) (comp x y z)}.
   Proof.
    intros ? ? ? x0 ? E ? ? F ? ?.
    simpl. unfold compose. do 3 red in E, F.

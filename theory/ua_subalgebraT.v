@@ -46,7 +46,7 @@ Section subalgebras.
 
   Definition carrier s := sigT (P s).
 
-  Hint Extern 4 => progress unfold carrier: typeclass_instances.
+  #[global] Hint Extern 4 => progress unfold carrier: typeclass_instances.
 
   (* We can implement closed operations in the new algebra: *)
 
@@ -59,7 +59,7 @@ Section subalgebras.
   Global Instance impl: AlgebraOps sign carrier := λ o, close_op (algebra_op o) (subset_closed o).
 
   (* By showing that these ops are proper, we get our new algebra: *)
-  Instance: ∀ d, Equiv (op_type carrier d).
+  #[global] Instance: ∀ d, Equiv (op_type carrier d).
    intro.
    apply op_type_equiv.
    intro.
@@ -78,4 +78,4 @@ Section subalgebras.
   Proof. constructor. apply _. intro. apply close_op_proper, algebra_propers. Qed.
 End subalgebras.
 
-Hint Extern 4 => progress unfold carrier: typeclass_instances.
+#[global] Hint Extern 4 => progress unfold carrier: typeclass_instances.

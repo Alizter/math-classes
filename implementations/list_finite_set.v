@@ -9,18 +9,18 @@ We define finite sets as unordered lists. This implementation is slow,
 but quite convenient as a reference implementation to lift properties to
 arbitrary finite set instances.
 *)
-Instance listset A `{Equiv A} : SetType A | 30 := sig (NoDupA (=)).
+#[global] Instance listset A `{Equiv A} : SetType A | 30 := sig (NoDupA (=)).
 
 Section listset.
 Context `{Setoid A} `{∀ a₁ a₂ : A, Decision (a₁ = a₂)}.
 
-Instance listset_in_raw: Contains A (list A) := InA (=).
-Instance listset_equiv_raw: Equiv (list A) := equivlistA (=).
-Instance: Setoid (list A) := {}.
+#[global] Instance listset_in_raw: Contains A (list A) := InA (=).
+#[global] Instance listset_equiv_raw: Equiv (list A) := equivlistA (=).
+#[global] Instance: Setoid (list A) := {}.
 
-Instance listset_empty_raw: Bottom (list A) := [].
-Instance listset_join_raw: Join (list A) := @app A.
-Instance: BoundedJoinSemiLattice (list A).
+#[global] Instance listset_empty_raw: Bottom (list A) := [].
+#[global] Instance listset_join_raw: Join (list A) := @app A.
+#[global] Instance: BoundedJoinSemiLattice (list A).
 Proof.
   split. split. split. split. apply _.
        repeat intro. now apply equivlistA_app_ass.
@@ -36,7 +36,7 @@ Global Instance listset_in: SetContains A := λ x l, x ∈ 'l.
 Global Instance listset_le: SetLe A := λ l k, ∀ x, x ∈ l → x ∈ k.
 Global Instance listset_equiv: SetEquiv A := λ l k, ∀ x, x ∈ l ↔ x ∈ k.
 
-Instance: Setoid (set_type A).
+#[global] Instance: Setoid (set_type A).
 Proof. now apply (setoids.projected_setoid listset_to_list). Qed.
 
 Global Instance: Setoid_Morphism listset_to_list.
@@ -96,7 +96,7 @@ Next Obligation.
   apply listset_add_raw_NoDupA, IHl. now inversion Pl.
 Qed.
 
-Instance: Setoid_Morphism listset_singleton.
+#[global] Instance: Setoid_Morphism listset_singleton.
 Proof.
   split; try apply _. intros ? ? E.
   apply (injective listset_to_list). change ([x] = [y]). now rewrite E.
@@ -111,7 +111,7 @@ Proof.
   now rewrite <-IHl, listset_add_raw_cons.
 Qed.
 
-Instance: BoundedJoinSemiLattice (set_type A).
+#[global] Instance: BoundedJoinSemiLattice (set_type A).
 Proof.
   apply (projected_bounded_sl listset_to_list).
    intros. now apply listset_to_list_preserves_join.
@@ -125,7 +125,7 @@ Proof.
   now apply InA_app_iff.
 Qed.
 
-Instance: JoinSemiLatticeOrder listset_le.
+#[global] Instance: JoinSemiLatticeOrder listset_le.
 Proof.
   apply alt_Build_JoinSemiLatticeOrder. intros l k.
   unfold le, listset_le, equiv, listset_equiv.
@@ -165,7 +165,7 @@ Section listset_extend.
     etransitivity; eassumption.
   Qed.
 
-  Instance list_extend_proper: Proper (equiv ==> equiv) (fset_extend f).
+  #[global] Instance list_extend_proper: Proper (equiv ==> equiv) (fset_extend f).
   Proof.
     intros [??][??] ?.
     apply listset_extend_raw_permute. now apply NoDupA_equivlistA_PermutationA.
@@ -185,7 +185,7 @@ Section listset_extend.
     now rewrite IHl, 2!associativity, (commutativity (f _)).
   Qed.
 
-  Instance list_extend_mor:
+  #[global] Instance list_extend_mor:
     BoundedJoinSemiLattice_Morphism (fset_extend f).
   Proof.
     repeat (split; try apply _).
@@ -217,7 +217,7 @@ Proof.
   apply sg_op_proper; [|easy]. symmetry. now apply E1.
 Qed.
 
-Instance: FSetContainsSpec A.
+#[global] Instance: FSetContainsSpec A.
 Proof.
   split; try apply _. unfold le, listset_le.
   intros x X; split; intros E1.
@@ -227,10 +227,10 @@ Proof.
   apply E1. now rapply InA_cons_hd.
 Qed.
 
-Instance listset_in_raw_dec: ∀ x (l : list A), Decision (x ∈ l) := λ x l, InA_dec (decide_rel (=)) x l.
+#[global] Instance listset_in_raw_dec: ∀ x (l : list A), Decision (x ∈ l) := λ x l, InA_dec (decide_rel (=)) x l.
 Global Instance listset_in_dec: ∀ x (l : set_type A), Decision (x ∈ l) := λ x l, InA_dec (decide_rel (=)) x ('l).
 
-Instance listset_meet_raw: Meet (list A) :=
+#[global] Instance listset_meet_raw: Meet (list A) :=
   fix listset_meet_raw l k :=
     match l with
     | [] => []
@@ -270,7 +270,7 @@ Qed.
 Global Program Instance listset_meet: SetMeet A := λ l k, listset_meet_raw l k.
 Next Obligation. apply listset_meet_raw_NoDupA. now destruct l. Qed.
 
-Instance listset_diff_raw: Difference (list A) :=
+#[global] Instance listset_diff_raw: Difference (list A) :=
   fix listset_diff_raw l k :=
     match l with
     | [] => []

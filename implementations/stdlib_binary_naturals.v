@@ -4,14 +4,14 @@ Require Import
   MathClasses.interfaces.additional_operations.  
 
 (* canonical names for relations/operations/constants: *)
-Instance N_equiv : Equiv N := eq.
-Instance N_0 : Zero N := 0%N.
-Instance N_1 : One N := 1%N.
-Instance N_plus : Plus N := Nplus.
-Instance N_mult : Mult N := Nmult.
+#[global] Instance N_equiv : Equiv N := eq.
+#[global] Instance N_0 : Zero N := 0%N.
+#[global] Instance N_1 : One N := 1%N.
+#[global] Instance N_plus : Plus N := Nplus.
+#[global] Instance N_mult : Mult N := Nmult.
 
 (* properties: *)
-Instance: SemiRing N.
+#[global] Instance: SemiRing N.
 Proof.
   repeat (split; try apply _); repeat intro.
          now apply Nplus_assoc.
@@ -24,44 +24,44 @@ Proof.
   now apply Nmult_plus_distr_l.
 Qed.
 
-Instance: ∀ x y : N, Decision (x = y) := N.eq_dec.
+#[global] Instance: ∀ x y : N, Decision (x = y) := N.eq_dec.
 
-Instance inject_nat_N: Cast nat N := N_of_nat.
-Instance inject_N_nat: Cast N nat := nat_of_N.
+#[global] Instance inject_nat_N: Cast nat N := N_of_nat.
+#[global] Instance inject_N_nat: Cast N nat := nat_of_N.
 
-Instance: SemiRing_Morphism nat_of_N.
+#[global] Instance: SemiRing_Morphism nat_of_N.
 Proof.
   repeat (split; try apply _); repeat intro.
    now apply nat_of_Nplus.
   now apply nat_of_Nmult.
 Qed.
 
-Instance: Inverse nat_of_N := N_of_nat.
+#[global] Instance: Inverse nat_of_N := N_of_nat.
 
-Instance: Surjective nat_of_N.
+#[global] Instance: Surjective nat_of_N.
 Proof. constructor. intros x y E. rewrite <- E. now apply nat_of_N_of_nat. now apply _. Qed.
 
-Instance: Injective nat_of_N.
+#[global] Instance: Injective nat_of_N.
 Proof. constructor. exact nat_of_N_inj. apply _. Qed.
 
-Instance: Bijective nat_of_N := {}.
+#[global] Instance: Bijective nat_of_N := {}.
 
-Instance: Inverse N_of_nat := nat_of_N.
+#[global] Instance: Inverse N_of_nat := nat_of_N.
 
-Instance: Bijective N_of_nat.
+#[global] Instance: Bijective N_of_nat.
 Proof. apply jections.flip_bijection. Qed.
 
-Instance: SemiRing_Morphism N_of_nat.
+#[global] Instance: SemiRing_Morphism N_of_nat.
 Proof. change (SemiRing_Morphism (nat_of_N⁻¹)). split; apply _. Qed.
 
-Instance: NaturalsToSemiRing N := retract_is_nat_to_sr N_of_nat.
-Instance: Naturals N := retract_is_nat N_of_nat.
+#[global] Instance: NaturalsToSemiRing N := retract_is_nat_to_sr N_of_nat.
+#[global] Instance: Naturals N := retract_is_nat N_of_nat.
 
 (* order *)
-Instance N_le: Le N := N.le.
-Instance N_lt: Lt N := N.lt.
+#[global] Instance N_le: Le N := N.le.
+#[global] Instance N_lt: Lt N := N.lt.
 
-Instance: FullPseudoSemiRingOrder N_le N_lt.
+#[global] Instance: FullPseudoSemiRingOrder N_le N_lt.
 Proof.
   assert (PartialOrder N_le).
    repeat (split; try apply _). exact N.le_antisymm.
@@ -81,15 +81,15 @@ Proof.
   intros [E1 E2]. now apply N.Private_Tac.le_neq_lt.
 Qed.
 
-Program Instance: ∀ x y: N, Decision (x ≤ y) := λ y x,
+#[global] Program Instance: ∀ x y: N, Decision (x ≤ y) := λ y x,
   match N.compare y x with
   | Gt => right _
   | _ => left _
   end.
 Next Obligation. now apply not_symmetry. Qed.
 
-Instance N_cut_minus: CutMinus N := Nminus.
-Instance: CutMinusSpec N _.
+#[global] Instance N_cut_minus: CutMinus N := Nminus.
+#[global] Instance: CutMinusSpec N _.
 Proof.
   split; try apply _.
    intros. now apply N.sub_add.

@@ -24,8 +24,8 @@ Ltac group_simplify :=
 
 Ltac group := group_simplify; easy.
 
-Hint Rewrite @associativity using apply _: group_simplify.
-Hint Rewrite @left_identity @right_identity @left_inverse @right_inverse using apply _: group_cancellation.
+#[global] Hint Rewrite @associativity using apply _: group_simplify.
+#[global] Hint Rewrite @left_identity @right_identity @left_inverse @right_inverse using apply _: group_cancellation.
 
 Section group_props.
 Context `{Group G}.
@@ -38,7 +38,7 @@ intros.
   group.
 Qed.
 
-Hint Rewrite @negate_sg_op_distr_flip using apply _ : group_simplify.
+#[global] Hint Rewrite @negate_sg_op_distr_flip using apply _ : group_simplify.
 
 Global Instance negate_involutive: Involutive (-).
 Proof.
@@ -48,7 +48,7 @@ Proof.
   group.
 Qed.
 
-Hint Rewrite @negate_involutive using apply _ : group_cancellation.
+#[global] Hint Rewrite @negate_involutive using apply _ : group_cancellation.
 
 Global Instance: Injective (-).
 Proof.
@@ -62,7 +62,7 @@ Proof.
   setoid_replace mon_unit with (-mon_unit & mon_unit); group.
 Qed.
 
-Hint Rewrite @negate_mon_unit using apply _ : group_cancellation.
+#[global] Hint Rewrite @negate_mon_unit using apply _ : group_cancellation.
 
 Global Instance: ∀ z : G, LeftCancellation (&) z.
 Proof.
@@ -96,10 +96,10 @@ Section groupmor_props.
     apply preserves_mon_unit.
   Qed.
 
-  Hint Rewrite @preserves_sg_op @preserves_negate @preserves_mon_unit using apply _ : group_simplify.
+  #[global] Hint Rewrite @preserves_sg_op @preserves_negate @preserves_mon_unit using apply _ : group_simplify.
 End groupmor_props.
 
-Instance semigroup_morphism_proper {A B eA eB opA opB} :
+#[global] Instance semigroup_morphism_proper {A B eA eB opA opB} :
   Proper ((=) ==> iff) (@SemiGroup_Morphism A B eA eB opA opB) | 1.
 Proof.
   assert (∀ (f g : A → B), g = f → SemiGroup_Morphism f → SemiGroup_Morphism g) as P.
@@ -112,7 +112,7 @@ Proof.
   now apply P with g.
 Qed.
 
-Instance monoid_morphism_proper {A B eA eB opA uA opB uB} :
+#[global] Instance monoid_morphism_proper {A B eA eB opA uA opB uB} :
   Proper ((=) ==> iff) (@Monoid_Morphism A B eA eB opA uA opB uB) | 1.
 Proof.
   assert (∀ (f g : A → B), g = f → Monoid_Morphism f → Monoid_Morphism g) as P.
@@ -129,8 +129,8 @@ Section from_another_sg.
   Context `{SemiGroup A} `{Setoid B}
    `{Bop : SgOp B} (f : B → A) `{!Injective f} (op_correct : ∀ x y, f (x & y) = f x & f y).
 
-  Instance: Setoid_Morphism f := injective_mor f.
-  Instance: Proper ((=) ==> (=) ==> (=)) Bop.
+  #[global] Instance: Setoid_Morphism f := injective_mor f.
+  #[global] Instance: Proper ((=) ==> (=) ==> (=)) Bop.
   Proof. intros ? ? E1 ? ? E2. apply (injective f). rewrite 2!op_correct. apply sg_op_proper; now apply sm_proper. Qed.
 
   Lemma projected_sg: SemiGroup B.
@@ -182,8 +182,8 @@ Section from_another_group.
    (op_correct : ∀ x y, f (x & y) = f x & f y) (unit_correct : f mon_unit = mon_unit)
    (negate_correct : ∀ x, f (-x) = -f x).
 
-  Instance: Setoid_Morphism f := injective_mor f.
-  Instance: Setoid_Morphism Bnegate.
+  #[global] Instance: Setoid_Morphism f := injective_mor f.
+  #[global] Instance: Setoid_Morphism Bnegate.
   Proof. split; try apply _. intros ? ? E1. apply (injective f). rewrite 2!negate_correct. now do 2 apply sm_proper. Qed.
 
   Lemma projected_group: Group B.

@@ -3,13 +3,13 @@ Require Import
 Require
   MathClasses.varieties.semigroups MathClasses.varieties.monoids.
 
-Instance bounded_sl_is_sl `{BoundedSemiLattice L} : SemiLattice L.
+#[global] Instance bounded_sl_is_sl `{BoundedSemiLattice L} : SemiLattice L.
 Proof. repeat (split; try apply _). Qed.
 
-Instance bounded_join_sl_is_join_sl `{BoundedJoinSemiLattice L} : JoinSemiLattice L.
+#[global] Instance bounded_join_sl_is_join_sl `{BoundedJoinSemiLattice L} : JoinSemiLattice L.
 Proof. repeat (split; try apply _). Qed.
 
-Instance bounded_sl_mor_is_sl_mor `{H : BoundedJoinSemiLattice_Morphism A B f} :
+#[global] Instance bounded_sl_mor_is_sl_mor `{H : BoundedJoinSemiLattice_Morphism A B f} :
   JoinSemiLattice_Morphism f.
 Proof. destruct H. split; apply _. Qed.
 
@@ -28,8 +28,8 @@ Proof preserves_sg_op x y.
 Section bounded_join_sl_props.
   Context `{BoundedJoinSemiLattice L}.
 
-  Instance join_bottom_l: LeftIdentity (⊔) ⊥ := _.
-  Instance join_bottom_r: RightIdentity (⊔) ⊥ := _.
+  #[global] Instance join_bottom_l: LeftIdentity (⊔) ⊥ := _.
+  #[global] Instance join_bottom_r: RightIdentity (⊔) ⊥ := _.
 End bounded_join_sl_props.
 
 Section lattice_props.
@@ -42,7 +42,7 @@ End lattice_props.
 Section distributive_lattice_props.
   Context `{DistributiveLattice L}.
 
-  Instance join_meet_distr_l: LeftDistribute (⊔) (⊓).
+  #[global] Instance join_meet_distr_l: LeftDistribute (⊔) (⊓).
   Proof join_meet_distr_l _.
 
   Global Instance join_meet_distr_r: RightDistribute (⊔) (⊓).
@@ -111,13 +111,13 @@ Section from_another_bounded_sl.
   Qed.
 End from_another_bounded_sl.
 
-Instance id_join_sl_morphism `{JoinSemiLattice A} : JoinSemiLattice_Morphism (@id A).
+#[global] Instance id_join_sl_morphism `{JoinSemiLattice A} : JoinSemiLattice_Morphism (@id A).
 Proof. firstorder. Qed.
-Instance id_meet_sl_morphism `{MeetSemiLattice A} : MeetSemiLattice_Morphism (@id A).
+#[global] Instance id_meet_sl_morphism `{MeetSemiLattice A} : MeetSemiLattice_Morphism (@id A).
 Proof. firstorder. Qed.
-Instance id_bounded_join_sl_morphism `{BoundedJoinSemiLattice A} : BoundedJoinSemiLattice_Morphism (@id A).
+#[global] Instance id_bounded_join_sl_morphism `{BoundedJoinSemiLattice A} : BoundedJoinSemiLattice_Morphism (@id A).
 Proof. firstorder. Qed.
-Instance id_lattice_morphism `{Lattice A} : Lattice_Morphism (@id A).
+#[global] Instance id_lattice_morphism `{Lattice A} : Lattice_Morphism (@id A).
 Proof. firstorder. Qed.
 
 Section morphism_composition.
@@ -126,38 +126,38 @@ Section morphism_composition.
     `{Equiv C}`{Join C} `{Meet C} `{Bottom C}
     (f : A → B) (g : B → C).
 
-  Instance compose_join_sl_morphism:
+  #[global] Instance compose_join_sl_morphism:
     JoinSemiLattice_Morphism f → JoinSemiLattice_Morphism g → JoinSemiLattice_Morphism (g ∘ f).
   Proof. split; try apply _; firstorder. Qed.
-  Instance compose_meet_sl_morphism:
+  #[global] Instance compose_meet_sl_morphism:
     MeetSemiLattice_Morphism f → MeetSemiLattice_Morphism g → MeetSemiLattice_Morphism (g ∘ f).
   Proof. split; try apply _; firstorder. Qed.
-  Instance compose_bounded_join_sl_morphism:
+  #[global] Instance compose_bounded_join_sl_morphism:
     BoundedJoinSemiLattice_Morphism f → BoundedJoinSemiLattice_Morphism g → BoundedJoinSemiLattice_Morphism (g ∘ f).
   Proof. split; try apply _; firstorder. Qed.
-  Instance compose_lattice_morphism:
+  #[global] Instance compose_lattice_morphism:
     Lattice_Morphism f → Lattice_Morphism g → Lattice_Morphism (g ∘ f).
   Proof. split; try apply _; firstorder. Qed.
 
-  Instance invert_join_sl_morphism:
+  #[global] Instance invert_join_sl_morphism:
     ∀ `{!Inverse f}, Bijective f → JoinSemiLattice_Morphism f → JoinSemiLattice_Morphism (f⁻¹).
   Proof. split; try apply _; firstorder. Qed.
-  Instance invert_meet_sl_morphism:
+  #[global] Instance invert_meet_sl_morphism:
     ∀ `{!Inverse f}, Bijective f → MeetSemiLattice_Morphism f → MeetSemiLattice_Morphism (f⁻¹).
   Proof. split; try apply _; firstorder. Qed.
-  Instance invert_bounded_join_sl_morphism:
+  #[global] Instance invert_bounded_join_sl_morphism:
     ∀ `{!Inverse f}, Bijective f → BoundedJoinSemiLattice_Morphism f → BoundedJoinSemiLattice_Morphism (f⁻¹).
   Proof. split; try apply _; firstorder. Qed.
-  Instance invert_lattice_morphism:
+  #[global] Instance invert_lattice_morphism:
     ∀ `{!Inverse f}, Bijective f → Lattice_Morphism f → Lattice_Morphism (f⁻¹).
   Proof. split; try apply _; firstorder. Qed.
 End morphism_composition.
 
-Hint Extern 4 (JoinSemiLattice_Morphism (_ ∘ _)) => class_apply @compose_join_sl_morphism : typeclass_instances.
-Hint Extern 4 (MeetSemiLattice_Morphism (_ ∘ _)) => class_apply @compose_meet_sl_morphism : typeclass_instances.
-Hint Extern 4 (BoundedJoinSemiLattice_Morphism (_ ∘ _)) => class_apply @compose_bounded_join_sl_morphism : typeclass_instances.
-Hint Extern 4 (Lattice_Morphism (_ ∘ _)) => class_apply @compose_lattice_morphism : typeclass_instances.
-Hint Extern 4 (JoinSemiLattice_Morphism (_⁻¹)) => class_apply @invert_join_sl_morphism : typeclass_instances.
-Hint Extern 4 (MeetSemiLattice_Morphism (_⁻¹)) => class_apply @invert_meet_sl_morphism : typeclass_instances.
-Hint Extern 4 (BoundedJoinSemiLattice_Morphism (_⁻¹)) => class_apply @invert_bounded_join_sl_morphism : typeclass_instances.
-Hint Extern 4 (Lattice_Morphism (_⁻¹)) => class_apply @invert_lattice_morphism : typeclass_instances.
+#[global] Hint Extern 4 (JoinSemiLattice_Morphism (_ ∘ _)) => class_apply @compose_join_sl_morphism : typeclass_instances.
+#[global] Hint Extern 4 (MeetSemiLattice_Morphism (_ ∘ _)) => class_apply @compose_meet_sl_morphism : typeclass_instances.
+#[global] Hint Extern 4 (BoundedJoinSemiLattice_Morphism (_ ∘ _)) => class_apply @compose_bounded_join_sl_morphism : typeclass_instances.
+#[global] Hint Extern 4 (Lattice_Morphism (_ ∘ _)) => class_apply @compose_lattice_morphism : typeclass_instances.
+#[global] Hint Extern 4 (JoinSemiLattice_Morphism (_⁻¹)) => class_apply @invert_join_sl_morphism : typeclass_instances.
+#[global] Hint Extern 4 (MeetSemiLattice_Morphism (_⁻¹)) => class_apply @invert_meet_sl_morphism : typeclass_instances.
+#[global] Hint Extern 4 (BoundedJoinSemiLattice_Morphism (_⁻¹)) => class_apply @invert_bounded_join_sl_morphism : typeclass_instances.
+#[global] Hint Extern 4 (Lattice_Morphism (_⁻¹)) => class_apply @invert_lattice_morphism : typeclass_instances.

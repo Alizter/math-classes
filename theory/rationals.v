@@ -4,7 +4,7 @@ Require Import
   MathClasses.implementations.field_of_fractions MathClasses.implementations.natpair_integers
   MathClasses.theory.rings MathClasses.theory.integers MathClasses.theory.dec_fields.
 
-Program Instance slow_rat_dec `{Rationals Q} : ∀ x y: Q, Decision (x = y) | 10 := λ x y,
+#[global] Program Instance slow_rat_dec `{Rationals Q} : ∀ x y: Q, Decision (x = y) | 10 := λ x y,
   match decide (rationals_to_frac Q (SRpair nat) x = rationals_to_frac Q (SRpair nat) y) with
   | left E => left _
   | right E => right _
@@ -64,7 +64,7 @@ Section another_integers.
   Qed.
 
   (* Making this instance global results in loops *)
-  Instance to_frac_bijective: Bijective f := {}.
+  #[global] Instance to_frac_bijective: Bijective f := {}.
   Global Instance to_frac_inverse_bijective: Bijective (f⁻¹) := _.
   Global Instance: SemiRing_Morphism (f⁻¹) := {}.
 End another_integers.
@@ -80,19 +80,19 @@ Qed.
 
 Definition rationals_to_rationals Q1 Q2 `{Rationals Q1} `{Rationals Q2} : Q1 → Q2
   := (rationals_to_frac Q2 (SRpair nat))⁻¹ ∘ rationals_to_frac Q1 (SRpair nat).
-Hint Unfold rationals_to_rationals : typeclass_instances.
+#[global] Hint Unfold rationals_to_rationals : typeclass_instances.
 
 Section another_rationals.
   Context `{Rationals Q1} `{Rationals Q2}.
 
-  Hint Extern 4 => progress unfold rationals_to_rationals : typeclass_instances.
+  #[global] Hint Extern 4 => progress unfold rationals_to_rationals : typeclass_instances.
 
   Local Existing Instance to_frac_bijective.
   Global Instance: SemiRing_Morphism (rationals_to_rationals Q1 Q2) := _.
   Global Instance: Bijective (rationals_to_rationals Q1 Q2) := _.
   Global Instance: Bijective (rationals_to_rationals Q2 Q1) := _.
 
-  Instance: Bijective (rationals_to_frac Q1 (SRpair nat)) := {}.
+  #[global] Instance: Bijective (rationals_to_frac Q1 (SRpair nat)) := {}.
 
   Lemma to_rationals_involutive:
     ∀ x, rationals_to_rationals Q2 Q1 (rationals_to_rationals Q1 Q2 x) = x.
@@ -143,11 +143,11 @@ Section isomorphic_image_is_rationals.
   Context `{Rationals Q} `{DecField F}.
   Context (f : Q → F) `{!Inverse f} `{!Bijective f} `{!SemiRing_Morphism f}.
 
-  Instance iso_to_frac: RationalsToFrac F := λ Z _ _ _ _ _ _ _ _, rationals_to_frac Q Z ∘ f⁻¹.
-  Hint Extern 4 => progress unfold iso_to_frac : typeclass_instances.
+  #[global] Instance iso_to_frac: RationalsToFrac F := λ Z _ _ _ _ _ _ _ _, rationals_to_frac Q Z ∘ f⁻¹.
+  #[global] Hint Extern 4 => progress unfold iso_to_frac : typeclass_instances.
 
-  Instance: Bijective (f⁻¹) := _.
-  Instance: SemiRing_Morphism (f⁻¹) := {}.
+  #[global] Instance: Bijective (f⁻¹) := _.
+  #[global] Instance: SemiRing_Morphism (f⁻¹) := {}.
 
   Lemma iso_is_rationals: Rationals F.
   Proof.
@@ -162,14 +162,14 @@ Section alt_Build_Rationals.
   Context `{DecField F} `{Integers Z} (F_to_fracZ : F → Frac Z) `{!SemiRing_Morphism F_to_fracZ} `{!Injective F_to_fracZ}.
   Context (Z_to_F : Z → F) `{!SemiRing_Morphism Z_to_F} `{!Injective Z_to_F}.
 
-  Program Instance alt_to_frac: RationalsToFrac F := λ B _ _ _ _ _ _ _ _ x,
+  #[global] Program Instance alt_to_frac: RationalsToFrac F := λ B _ _ _ _ _ _ _ _ x,
     frac (integers_to_ring Z B (num (F_to_fracZ x))) (integers_to_ring Z B (den (F_to_fracZ x))) _.
   Next Obligation.
     apply injective_ne_0.
     apply den_ne_0.
   Qed.
 
-  Instance: ∀ `{Integers B}, Proper ((=) ==> (=)) (rationals_to_frac F B).
+  #[global] Instance: ∀ `{Integers B}, Proper ((=) ==> (=)) (rationals_to_frac F B).
   Proof.
     intros. intros ? ? E.
     unfold equiv, Frac_equiv. simpl.
@@ -179,7 +179,7 @@ Section alt_Build_Rationals.
     now apply sm_proper.
   Qed.
 
-  Instance: ∀ `{Integers B}, SemiRing_Morphism (rationals_to_frac F B).
+  #[global] Instance: ∀ `{Integers B}, SemiRing_Morphism (rationals_to_frac F B).
   Proof.
     intros.
     repeat (split; try apply _); unfold equiv, Frac_equiv; simpl.
@@ -204,7 +204,7 @@ Section alt_Build_Rationals.
     apply preserves_1.
   Qed.
 
-  Instance: ∀ `{Integers B}, Injective (rationals_to_frac F B).
+  #[global] Instance: ∀ `{Integers B}, Injective (rationals_to_frac F B).
   Proof.
     intros.
     split; try apply _.
@@ -214,7 +214,7 @@ Section alt_Build_Rationals.
     now apply (injective (integers_to_ring Z B)).
   Qed.
 
-  Instance: ∀ `{Integers B}, Injective (integers_to_ring B F).
+  #[global] Instance: ∀ `{Integers B}, Injective (integers_to_ring B F).
   Proof.
     intros.
     split; try apply _.

@@ -68,7 +68,7 @@ Proof. intros. apply (strong_extensionality (.* y)). now rewrite mult_0_l. Qed.
 Lemma mult_apart_zero_r x y : x * y ≶ 0 → y ≶ 0.
 Proof. intros. apply (strong_extensionality (x *.)). now rewrite mult_0_r. Qed.
 
-Instance mult_apart_zero x y :
+#[global] Instance mult_apart_zero x y :
   PropHolds (x ≶ 0) → PropHolds (y ≶ 0) → PropHolds (x * y ≶ 0).
 Proof.
   intros Ex Ey.
@@ -76,7 +76,7 @@ Proof.
   now rewrite <-associativity, reciperse_alt, mult_1_r, mult_0_l.
 Qed.
 
-Instance: NoZeroDivisors F.
+#[global] Instance: NoZeroDivisors F.
 Proof.
   intros x [x_nonzero [y [y_nonzero E]]].
   rewrite <-tight_apart in y_nonzero. destruct y_nonzero. intro y_apartzero.
@@ -91,7 +91,7 @@ Proof. split; try apply _. Qed.
 Global Instance apart_0_sig_apart_0: ∀ (x : F ₀), PropHolds (`x ≶ 0).
 Proof. now intros [??]. Qed.
 
-Instance recip_apart_zero x : PropHolds (// x ≶ 0).
+#[global] Instance recip_apart_zero x : PropHolds (// x ≶ 0).
 Proof.
   red.
   apply mult_apart_zero_r with (`x).
@@ -133,8 +133,8 @@ Qed.
 End field_properties.
 
 (* Due to bug #2528 *)
-Hint Extern 8 (PropHolds (// _ ≶ 0)) => eapply @recip_apart_zero : typeclass_instances.
-Hint Extern 8 (PropHolds (_ * _ ≶ 0)) => eapply @mult_apart_zero : typeclass_instances.
+#[global] Hint Extern 8 (PropHolds (// _ ≶ 0)) => eapply @recip_apart_zero : typeclass_instances.
+#[global] Hint Extern 8 (PropHolds (_ * _ ≶ 0)) => eapply @mult_apart_zero : typeclass_instances.
 
 Section morphisms.
   Context `{Field F1} `{Field F2} `{!StrongSemiRing_Morphism (f : F1 → F2)}.

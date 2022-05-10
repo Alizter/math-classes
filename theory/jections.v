@@ -16,7 +16,7 @@ Qed.
 Lemma surjective_applied `{Equiv A} `{Equiv B} (f : A → B) `{!Inverse f} `{!Surjective f} x : f (f⁻¹ x) = x.
 Proof. firstorder. Qed.
 
-Instance inverse_mor `{Bijective A B f} : Setoid_Morphism (f⁻¹).
+#[global] Instance inverse_mor `{Bijective A B f} : Setoid_Morphism (f⁻¹).
 Proof.
   pose proof (setoidmor_a f). pose proof (setoidmor_b f).
   split; try apply _.
@@ -53,25 +53,25 @@ Lemma injective_ne `{Equiv A} `{Equiv B} `(f : A → B) `{!Injective f} x y :
   x ≠ y → f x ≠ f y.
 Proof. intros E1 E2. apply E1. now apply (injective f). Qed.
 
-Instance id_inverse {A} : Inverse (@id A) := (@id A).
+#[global] Instance id_inverse {A} : Inverse (@id A) := (@id A).
 
 Global Existing Instance id_morphism.
 
-Instance id_injective `{Setoid A} : Injective (@id A).
+#[global] Instance id_injective `{Setoid A} : Injective (@id A).
 Proof. split; try apply _. easy. Qed.
-Instance id_surjective `{Setoid A} : Surjective (@id A).
+#[global] Instance id_surjective `{Setoid A} : Surjective (@id A).
 Proof. split; try apply _. now repeat intro. Qed.
-Instance id_bijective `{Setoid A} : Bijective (@id A).
+#[global] Instance id_bijective `{Setoid A} : Bijective (@id A).
 Proof. split; try apply _. Qed.
 
 Section compositions.
   Context `{Equiv A} `{Equiv B} `{Equiv C} (g: A → B) (f: B → C) `{!Inverse f} `{!Inverse g}.
 
-  Instance compose_inverse: Inverse (f ∘ g) := g⁻¹ ∘ f⁻¹.
+  #[global] Instance compose_inverse: Inverse (f ∘ g) := g⁻¹ ∘ f⁻¹.
 
-  Instance compose_injective: Injective f → Injective g → Injective (f ∘ g).
+  #[global] Instance compose_injective: Injective f → Injective g → Injective (f ∘ g).
   Proof. firstorder. Qed.
-  Instance compose_surjective: Surjective f → Surjective g → Surjective (f ∘ g).
+  #[global] Instance compose_surjective: Surjective f → Surjective g → Surjective (f ∘ g).
   Proof.
     split; try apply _.
     pose proof (setoidmor_b f).
@@ -79,13 +79,13 @@ Section compositions.
     change (f (g (g⁻¹ (f⁻¹ x))) = x).
     now rewrite !surjective_applied.
   Qed.
-  Instance compose_bijective: Bijective f → Bijective g → Bijective (f ∘ g) := {}.
+  #[global] Instance compose_bijective: Bijective f → Bijective g → Bijective (f ∘ g) := {}.
 End compositions.
 
-Hint Extern 4 (Inverse (_ ∘ _)) => class_apply @compose_inverse : typeclass_instances.
-Hint Extern 4 (Injective (_ ∘ _)) => class_apply @compose_injective : typeclass_instances.
-Hint Extern 4 (Surjective (_ ∘ _)) => class_apply @compose_surjective : typeclass_instances.
-Hint Extern 4 (Bijective (_ ∘ _)) => class_apply @compose_bijective : typeclass_instances.
+#[global] Hint Extern 4 (Inverse (_ ∘ _)) => class_apply @compose_inverse : typeclass_instances.
+#[global] Hint Extern 4 (Injective (_ ∘ _)) => class_apply @compose_injective : typeclass_instances.
+#[global] Hint Extern 4 (Surjective (_ ∘ _)) => class_apply @compose_surjective : typeclass_instances.
+#[global] Hint Extern 4 (Bijective (_ ∘ _)) => class_apply @compose_bijective : typeclass_instances.
 
 Lemma alt_Build_Injective `{Equiv A} `{Equiv B} (f : A → B) `{!Inverse f} :
   Setoid_Morphism f → Setoid_Morphism (f⁻¹) → f⁻¹ ∘ f = id → Injective f.
@@ -107,14 +107,14 @@ Proof.
 Qed.
 
 Definition inverse_inverse `{Inverse A B f} : Inverse (f⁻¹) := f.
-Hint Extern 4 (Inverse (_ ⁻¹)) => class_apply @inverse_inverse : typeclass_instances.
+#[global] Hint Extern 4 (Inverse (_ ⁻¹)) => class_apply @inverse_inverse : typeclass_instances.
 
 Lemma flip_bijection `{Bijective A B f} : Bijective (f⁻¹).
 Proof. apply alt_Build_Bijective; try apply _. apply (surjective f). apply (bijective f). Qed.
 
 (* We use this instead of making flip_bijection a real instance, because
    otherwise it gets applied too eagerly, resulting in cycles. *)
-Hint Extern 4 (Bijective (_ ⁻¹)) => apply flip_bijection : typeclass_instances.
+#[global] Hint Extern 4 (Bijective (_ ⁻¹)) => apply flip_bijection : typeclass_instances.
 
 Lemma inverse_involutive `(f : A → B) `{!Inverse f} : (f⁻¹)⁻¹ ≡ f.
 Proof. reflexivity. Qed.
@@ -123,7 +123,7 @@ Proof. reflexivity. Qed.
 Lemma flip_bijection_back `{Equiv A} `{Equiv B} (f: A → B) `{!Inverse f} : Bijective (f⁻¹) → Bijective f.
 Proof. intro. apply (_: Bijective (f⁻¹⁻¹)). Qed.
 
-Instance injective_proper `{Equiv A} `{Equiv B} : Proper ((=) ==> (=)) (@Injective A B _ _).
+#[global] Instance injective_proper `{Equiv A} `{Equiv B} : Proper ((=) ==> (=)) (@Injective A B _ _).
 Proof.
   assert (∀ f g : A → B, f = g → Injective f → Injective g) as aux.
    intros f g E ?. pose proof (setoidmor_a f). pose proof (setoidmor_b f). split.

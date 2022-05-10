@@ -8,7 +8,7 @@ Require
 
 Module ua := universal_algebra.
 
-Instance: Arrows Type := λ X Y, X → Y.
+#[global] Instance: Arrows Type := λ X Y, X → Y.
   (* todo: move elsewhere *)
 
 (* First, the nice clean high level encapsulated version: *)
@@ -70,12 +70,12 @@ Section practical.
 
   Program Definition posh_free (X: setoids.Object): monoids.Object := monoids.object (free X).
 
-  Program Instance posh_fmap: functors.Fmap posh_free :=
+  #[global] Program Instance posh_fmap: functors.Fmap posh_free :=
     λ _ _ X _, raw_fmap _ _ X.
 
   Next Obligation. apply monoids.encode_morphism_only. destruct X. apply _. Qed.
 
-  Instance: Functor posh_free posh_fmap.
+  #[global] Instance: Functor posh_free posh_fmap.
   Proof with try apply _.
    constructor...
      repeat intro.
@@ -112,7 +112,7 @@ Section practical.
 
   (* ... and show that they form a posh sequence: *)
 
-  Instance: NaturalTransformation posh_inject.
+  #[global] Instance: NaturalTransformation posh_inject.
   Proof.
    unfold NaturalTransformation.
    intros [???] [???] [??] ?? E.

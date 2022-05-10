@@ -47,7 +47,7 @@ Section setoid_morphisms.
 End setoid_morphisms.
 
 Arguments sm_proper {A B Ae Be f Setoid_Morphism} _ _ _.
-Hint Extern 4 (?f _ = ?f _) => unshelve eapply (sm_proper (f:=f)).
+#[global] Hint Extern 4 (?f _ = ?f _) => unshelve eapply (sm_proper (f:=f)).
 
 Section setoid_binary_morphisms.
   Context {A B C} {Ae: Equiv A} {Aap: Apart A} 
@@ -148,9 +148,9 @@ Section upper_classes.
 End upper_classes.
 
 (* Due to bug #2528 *)
-Hint Extern 4 (PropHolds (1 ≠ 0)) => eapply @intdom_nontrivial : typeclass_instances.
-Hint Extern 5 (PropHolds (1 ≶ 0)) => eapply @field_nontrivial : typeclass_instances.
-Hint Extern 5 (PropHolds (1 ≠ 0)) => eapply @decfield_nontrivial : typeclass_instances.
+#[global] Hint Extern 4 (PropHolds (1 ≠ 0)) => eapply @intdom_nontrivial : typeclass_instances.
+#[global] Hint Extern 5 (PropHolds (1 ≶ 0)) => eapply @field_nontrivial : typeclass_instances.
+#[global] Hint Extern 5 (PropHolds (1 ≠ 0)) => eapply @decfield_nontrivial : typeclass_instances.
 
 (* 
 For a strange reason Ring instances of Integers are sometimes obtained by
@@ -158,7 +158,7 @@ Integers -> IntegralDomain -> Ring and sometimes directly. Making this an
 instance with a low priority instead of using intdom_ring:> Ring forces Coq to
 take the right way 
 *)
-Hint Extern 10 (Ring _) => apply @intdom_ring : typeclass_instances.
+#[global] Hint Extern 10 (Ring _) => apply @intdom_ring : typeclass_instances.
 
 Arguments recip_inverse {A Ae Aplus Amult Azero Aone Anegate Aap Arecip Field} _.
 Arguments dec_recip_inverse {A Ae Aplus Amult Azero Aone Anegate Adec_recip DecField} _ _.
@@ -266,7 +266,7 @@ Section jections.
     ; bijective_surjective :> Surjective }.
 End jections.
 
-Instance: Params (@StrongInjective) 4 := {}.
-Instance: Params (@Injective) 4 := {}.
-Instance: Params (@Surjective) 4 := {}.
-Instance: Params (@Bijective) 4 := {}.
+#[global] Instance: Params (@StrongInjective) 4 := {}.
+#[global] Instance: Params (@Injective) 4 := {}.
+#[global] Instance: Params (@Surjective) 4 := {}.
+#[global] Instance: Params (@Bijective) 4 := {}.

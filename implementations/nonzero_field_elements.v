@@ -14,7 +14,7 @@ Next Obligation. solve_propholds. Qed.
 
 Ltac unfold_equiv := repeat intro; unfold equiv, sig_equiv in *; simpl in *.
 
-Instance: Proper ((=) ==> (=) ==> (=)) NonZero_mult.
+#[global] Instance: Proper ((=) ==> (=) ==> (=)) NonZero_mult.
 Proof.
   intros [??] [??] E1 [??] [??] E2. unfold_equiv.
   now rewrite E1, E2.

@@ -1,14 +1,14 @@
 Require Import
   MathClasses.interfaces.abstract_algebra MathClasses.interfaces.monads MathClasses.theory.functors.
 
-Instance default_mon_join `{MonadBind M} : MonadJoin M | 20 := λ _, bind id.
-Instance default_mon_map `{MonadReturn M} `{MonadBind M} : SFmap M | 20 := λ _ _ f, bind (ret ∘ f).
-Instance default_mon_bind `{SFmap M} `{MonadJoin M} : MonadBind M | 20 := λ _ _ f, join ∘ (sfmap f).
+#[global] Instance default_mon_join `{MonadBind M} : MonadJoin M | 20 := λ _, bind id.
+#[global] Instance default_mon_map `{MonadReturn M} `{MonadBind M} : SFmap M | 20 := λ _ _ f, bind (ret ∘ f).
+#[global] Instance default_mon_bind `{SFmap M} `{MonadJoin M} : MonadBind M | 20 := λ _ _ f, join ∘ (sfmap f).
 
-Hint Extern 0 (ProperProxy (@respectful _ _ _ _) _) =>
+#[global] Hint Extern 0 (ProperProxy (@respectful _ _ _ _) _) =>
   class_apply @proper_proper_proxy : typeclass_instances.
 
-Instance equiv_ext_equiv `{Equiv A} `{Equiv B} :
+#[global] Instance equiv_ext_equiv `{Equiv A} `{Equiv B} :
   Setoid A -> Setoid B ->
   Proper ((equiv ==> equiv) ==> (equiv ==> equiv) ==> flip impl)
          (@equiv _ (@ext_equiv A _ B _)).
@@ -21,7 +21,7 @@ Proof.
   eapply H7. eapply H6.
 Qed.
 
-Instance equiv_ext_equiv_partial `{Equiv A} `{Equiv B} (f : A -> B) :
+#[global] Instance equiv_ext_equiv_partial `{Equiv A} `{Equiv B} (f : A -> B) :
   Setoid A -> Setoid B ->
   Proper (equiv ==> equiv) f ->
   Proper ((equiv ==> equiv) ==> flip impl)
@@ -70,7 +70,7 @@ Section monad.
     now apply setoids.ext_equiv_refl.
   Qed.
 
-  Instance: SFunctor M.
+  #[global] Instance: SFunctor M.
   Proof.
     split; try apply _.
      intros A ? ?.
@@ -85,14 +85,14 @@ Section monad.
     now apply setoids.ext_equiv_refl.
   Qed.
 
-  Instance: ∀ `{Setoid A}, Setoid_Morphism (@join _ _ A).
+  #[global] Instance: ∀ `{Setoid A}, Setoid_Morphism (@join _ _ A).
   Proof.
     split; try apply _. intros x y E1. 
     assert (∀ z, join z = bind id z) as E2 by (intros; now apply join_correct).
     now rewrite !E2, E1.
   Qed.
 
-  Instance monad_strong_monad: StrongMonad M.
+  #[global] Instance monad_strong_monad: StrongMonad M.
   Proof.
     split; try apply _.
         intros A ? B ? f ?. pose proof (setoidmor_a f). pose proof (setoidmor_b f).
@@ -118,11 +118,11 @@ Section monad.
     now apply setoids.ext_equiv_refl.
   Qed.
 
-  Instance monad_full_monad: FullMonad M.
+  #[global] Instance monad_full_monad: FullMonad M.
   Proof. split; try apply _; auto. Qed.
   End to_strong_monad.
 
-  Instance monad_default_full_monad: FullMonad M.
+  #[global] Instance monad_default_full_monad: FullMonad M.
   Proof.
     apply monad_full_monad; unfold sfmap, default_mon_map.
       intros A ?? B ?? f g E1 m n E2.
@@ -142,8 +142,8 @@ Section strong_monad.
   Global Instance sret_mor `{Setoid A} : Setoid_Morphism (@ret _ _ A) := {}.
   Global Instance join_mor `{Setoid A} : Setoid_Morphism (@join _ _ A) := {}.
 
-  Hint Immediate setoidmor_a : typeclass_instances.
-  Hint Immediate setoidmor_b : typeclass_instances.
+  #[global] Hint Immediate setoidmor_a : typeclass_instances.
+  #[global] Hint Immediate setoidmor_b : typeclass_instances.
 
   Lemma sfmap_ret_applied `{Equiv A} `{Equiv B} `{!Setoid_Morphism (f : A → B)} (x : A) : 
     sfmap f (ret x) = ret (f x).
@@ -170,7 +170,7 @@ Section strong_monad.
     (bind_proper : ∀ `{Setoid A} `{Setoid B}, Proper (((=) ==> (=)) ==> ((=) ==> (=))) (@bind M _ A B))
     (bind_correct : ∀ `{Equiv A} `{Setoid B} `{!Setoid_Morphism (f : A → M B)}, bind f = join ∘ sfmap f).
 
-  Instance: ∀ `{Equiv A} `{Setoid B} `{!Setoid_Morphism (f : A → M B)},
+  #[global] Instance: ∀ `{Equiv A} `{Setoid B} `{!Setoid_Morphism (f : A → M B)},
     Setoid_Morphism (bind f).
   Proof. intros. split; try apply _. Qed.
 
@@ -178,7 +178,7 @@ Section strong_monad.
     bind f m = join (sfmap f m).
   Proof. now eapply bind_correct. Qed.
 
-  Instance strong_monad_monad: Monad M.
+  #[global] Instance strong_monad_monad: Monad M.
   Proof.
     split; try apply _.
       intros A ? B ?? f ?. pose proof (setoidmor_a f). pose proof (setoidmor_b f).
@@ -198,11 +198,11 @@ Section strong_monad.
     now rewrite E.
   Qed.
 
-  Instance strong_monad_full_monad: FullMonad M.
+  #[global] Instance strong_monad_full_monad: FullMonad M.
   Proof. split; try apply _; auto. Qed.
   End to_monad.
 
-  Instance strong_monad_default_full_monad: FullMonad M.
+  #[global] Instance strong_monad_default_full_monad: FullMonad M.
   Proof.
     apply strong_monad_full_monad; unfold bind, default_mon_bind.
      intros A ?? B ?? f g E1 m n E2.
